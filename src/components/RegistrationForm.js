@@ -45,9 +45,11 @@ function RegistrationForm(props){
                                     'Content-Type': 'application/json'
                             }
                     })
-                    .then(() => {
-
-                    })
+                    .then((response) => {
+                            return response.json();
+                    }).then((data) => {
+                            console.log(data);
+                })
         }
 
     return (
