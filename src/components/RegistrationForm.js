@@ -1,7 +1,8 @@
-import { useRef} from "react";
-import { useHistory } from 'react-router-dom';
+import { useRef } from "react";
+import axios from "axios"
+//import { useHistory } from 'react-router-dom';
 
-function RegistrationForm(props){
+function RegistrationForm(props) {
         const emailRef = useRef();
         const firstNameRef = useRef();
         const lastNameRef = useRef();
@@ -10,8 +11,9 @@ function RegistrationForm(props){
         const roleRef = useRef();
         const usernameRef = useRef();
         const dateOfBirthRef = useRef();
+        const url = 'http://localhost:9001/users'
 
-        function submitHandler(event){
+        function submitHandler(event) {
                 event.preventDefault();
 
                 const enteredEmail = emailRef.current.value;
@@ -36,51 +38,57 @@ function RegistrationForm(props){
 
                 console.log(registrationData);
 
-                fetch(
-                    'http://localhost:9001/users',
-                    {
-                            method: 'POST',
-                            body: JSON.stringify(registrationData),
-                            headers: {
-                                    'Content-Type': 'application/json'
-                            }
-                    })
-                    .then((response) => {
-                            return response.json();
-                    }).then((data) => {
-                            console.log(data);
-                })
+                axios(
+                        url,
+                        {
+                                method: 'POST',
+                                data: JSON.stringify(registrationData),
+                                headers: {
+                                        'Content-Type': 'application/json'
+                                }
+                        })
+                        .then((response) => {
+                                return response.data;
+                        }).then((data) => {
+                                console.log('REGISTER SUCCESSFUL');
+                                console.log(data);
+                        }).catch((e) => {
+                                console.log('REGISTRATION ERROR')
+                                if (e.response.status === 409) {
+                                        console.log('Error 409 (Bad Request) detected. This is likely a duplicate user.')//need an error page responding with duplicae warning
+                                }
+                        });
         }
 
-    return (
-        <section>
-            <label htmlFor={'email'}>Email</label>
-            <input type={'text'} id={'email'} ref={emailRef} />
-            <br/>
-            <label htmlFor={'firstName'}>First Name</label>
-            <input type={'text'} id={'firstName'} ref={firstNameRef} />
-            <br/>
-            <label htmlFor={'lastName'}>Last Name</label>
-            <input type={'text'} id={'lastName'} ref={lastNameRef}/>
-            <br/>
-            <label htmlFor={'password'}>Password</label>
-            <input type={'text'} id={'password'} ref={passwordRef}/>
-            <br/>
-            <label htmlFor={'phone'}>Phone Number</label>
-            <input type={'text'} id={'phone'} ref={phoneRef}/>
-            <br/>
-            <label htmlFor={'role'}>Role</label>
-            <input type={'text'} id={'role'} ref={roleRef}/>
-            <br/>
-            <label htmlFor={'username'}>Username</label>
-            <input type={'text'} id={'username'} ref={usernameRef}/>
-            <br/>
-            <label htmlFor={'dateOfBirth'}>Date of Birth</label>
-            <input type={'text'} id={'dateOfBirth'} ref={dateOfBirthRef}/>
-            <br/>
-            <button type={'submit'} onClick={submitHandler}>Submit</button>
-        </section>
-    )
+        return (
+                <section>
+                        <label htmlFor={'email'}>Email</label>
+                        <input type={'text'} id={'email'} ref={emailRef} />
+                        <br />
+                        <label htmlFor={'firstName'}>First Name</label>
+                        <input type={'text'} id={'firstName'} ref={firstNameRef} />
+                        <br />
+                        <label htmlFor={'lastName'}>Last Name</label>
+                        <input type={'text'} id={'lastName'} ref={lastNameRef} />
+                        <br />
+                        <label htmlFor={'password'}>Password</label>
+                        <input type={'text'} id={'password'} ref={passwordRef} />
+                        <br />
+                        <label htmlFor={'phone'}>Phone Number</label>
+                        <input type={'text'} id={'phone'} ref={phoneRef} />
+                        <br />
+                        <label htmlFor={'role'}>Role</label>
+                        <input type={'text'} id={'role'} ref={roleRef} />
+                        <br />
+                        <label htmlFor={'username'}>Username</label>
+                        <input type={'text'} id={'username'} ref={usernameRef} />
+                        <br />
+                        <label htmlFor={'dateOfBirth'}>Date of Birth</label>
+                        <input type={'text'} id={'dateOfBirth'} ref={dateOfBirthRef} />
+                        <br />
+                        <button type={'submit'} onClick={submitHandler}>Submit</button>
+                </section>
+        )
 }
 
 export default RegistrationForm;
