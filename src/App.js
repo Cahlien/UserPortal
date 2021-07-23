@@ -1,5 +1,6 @@
 import {Route, Switch} from 'react-router-dom';
-import RegistrationForm from "./components/RegistrationForm";
+import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
+import LoginForm from "./components/LoginForm/LoginForm";
 
 function App() {
   return (
@@ -10,7 +11,10 @@ function App() {
                 <a href={'/users'}>Register</a>
             </Route>
             <Route path={'/users'}>
-                <RegistrationForm />
+                <RegistrationForm url={'http://localhost:9001/users'}/>
+            </Route>
+            <Route path={'/login'}>
+                <LoginForm />
             </Route>
         </Switch>
     </div>

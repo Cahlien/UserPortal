@@ -11,7 +11,7 @@ function RegistrationForm(props) {
     const roleRef = useRef();
     const usernameRef = useRef();
     const dateOfBirthRef = useRef();
-    const url = 'http://localhost:9001/users'
+    const url = props.url;
     const history = useHistory();
 
     function cancelHandler(event){
@@ -44,15 +44,14 @@ function RegistrationForm(props) {
         try {
             const response = await axios.post(url, registrationData);
             console.log(response.data);
+            history.replace('/');
         } catch (e) {
-            console.log("Error: " + e.response.data.message);
-        }
 
-        history.replace('/');
+        }
     }
 
     return (
-        <section>
+        <section data-testid={'newRegistrationForm'}>
             <label htmlFor={'email'}>Email</label>
             <input type={'text'} id={'email'} ref={emailRef}/>
             <br/>
@@ -77,8 +76,8 @@ function RegistrationForm(props) {
             <label htmlFor={'dateOfBirth'}>Date of Birth</label>
             <input type={'text'} id={'dateOfBirth'} ref={dateOfBirthRef}/>
             <br/>
-            <button type={'cancel'} onClick={cancelHandler}>Cancel</button>
-            <button type={'submit'} onClick={submitHandler}>Submit</button>
+            <button type={'cancel'} data-testid={'cancelNewRegistrationButton'} onClick={cancelHandler}>Cancel</button>
+            <button type={'submit'} data-testid={'submitNewRegistrationButton'} onClick={submitHandler}>Submit</button>
         </section>
     )
 }
