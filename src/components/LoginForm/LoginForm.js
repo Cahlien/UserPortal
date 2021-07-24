@@ -1,26 +1,41 @@
 import axios from "axios";
-import { useRef } from "react";
-import { useHistory } from 'react-router-dom';
+import {useContext, useRef, useState} from "react";
+import {useHistory} from 'react-router-dom';
+import AuthContext from '../../store/auth-context';
 
 const url = 'http://localhost:9001/users/login';
 
 function LoginForm(props) {
     const history = useHistory();
-    const login = useRef();
+
+    const authContext = useContext(AuthContext)
+
+    const [attemptedLogIn, setAttemptedLogIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
+
+    const email = useRef();
     const password = useRef();
 
     async function submitHandler(event) {
+        if (errorMessage) {
+            setAttemptedLogIn(false);
+            setErrorMessage('');
+        }
         event.preventDefault();
+        setAttemptedLogIn(true);
 
-        const enteredUsername = login.current.value;
+        const enteredEmail = email.current.value;
         const enteredPassword = password.current.value;
 
         const loginData = {
-            email: enteredUsername,
+            email: enteredEmail,
             password: enteredPassword
         }
 
-        try{
+        setIsLoading(true);
+
+        try {
             const response = await axios.post(
                 url,
                 loginData,
@@ -31,35 +46,44 @@ function LoginForm(props) {
                 }
             );
 
-            console.log(response.data.headers);
+            setIsLoading(false);
 
-            if(response.statusText === "OK"){
-                console.log("Login successful");
-                console.log(response.headers);
-                for(let i = 0; i < response.headers.length; i++){
-                    console.log(response.headers[i]);
-                }
-            } else {
-                throw new Error();
+            if (response.status === 200) {
+                const token = response.headers['authorization'];
+                const userId = response.headers['btuid'];
+                authContext.login(token, userId);
+                history.replace('/');
+            } else if (response.status === 403) {
+                console.log(response)
             }
-        } catch(e) {
-            console.log(e);
-        }
+        } catch (e) {
+            setIsLoading(false);
+            setErrorMessage(e.message);
 
-        history.replace('/');
+            if (e.message === "Request failed with status code 403") {
+                setErrorMessage("Authentication failed");
+            } else if (e.message === "Request failed with status code 503") {
+                setErrorMessage("Authentication server error.  Please try again.");
+            } else {
+                setErrorMessage("Something went wrong... Please try again later.");
+            }
+        }
     }
 
     return (
         <section>
             <label htmlFor={'email'}>Email</label>
-            <input type={'text'} id={'email'} ref={login} />
-            <br />
+            <input type={'text'} id={'email'} ref={email}/>
+            <br/>
             <label htmlFor={'password'}>Password</label>
-            <input type={'text'} id={'password'} ref={password} />
-            <br />
+            <input type={'text'} id={'password'} ref={password}/>
+            <br/>
             <button type={'submit'} onClick={submitHandler}>Submit</button>
+            <br/>
+            <br/>
+            {attemptedLogIn && <div>Error Message: {errorMessage}</div>}
         </section>
-    )
+    );
 }
 
 export default LoginForm

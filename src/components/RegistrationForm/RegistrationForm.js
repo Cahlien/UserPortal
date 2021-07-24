@@ -14,7 +14,7 @@ function RegistrationForm(props) {
     const url = props.url;
     const history = useHistory();
 
-    function cancelHandler(event){
+    function cancelHandler(event) {
         history.replace('/')
     }
 
