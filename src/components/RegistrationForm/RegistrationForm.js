@@ -1,6 +1,7 @@
 import {useRef} from "react";
 import {useHistory} from 'react-router-dom';
 import axios from "axios"
+import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "react-bootstrap";
 
 function RegistrationForm(props) {
     const emailRef = useRef();
@@ -15,6 +16,7 @@ function RegistrationForm(props) {
     const history = useHistory();
 
     function cancelHandler(event) {
+        event.preventDefault();
         history.replace('/')
     }
 
@@ -26,7 +28,6 @@ function RegistrationForm(props) {
         const enteredLastName = lastNameRef.current.value;
         const enteredPassword = passwordRef.current.value;
         const enteredPhone = phoneRef.current.value;
-        const enteredRole = roleRef.current.value;
         const enteredUsername = usernameRef.current.value;
         const enteredDateOfBirth = dateOfBirthRef.current.value;
 
@@ -36,7 +37,7 @@ function RegistrationForm(props) {
             lastName: enteredLastName,
             password: enteredPassword,
             phone: enteredPhone,
-            role: enteredRole,
+            role: 'user',
             username: enteredUsername,
             dateOfBirth: enteredDateOfBirth
         }
@@ -51,33 +52,43 @@ function RegistrationForm(props) {
     }
 
     return (
-        <section data-testid={'newRegistrationForm'}>
-            <label htmlFor={'email'}>Email</label>
-            <input type={'text'} id={'email'} ref={emailRef}/>
-            <br/>
-            <label htmlFor={'firstName'}>First Name</label>
-            <input type={'text'} id={'firstName'} ref={firstNameRef}/>
-            <br/>
-            <label htmlFor={'lastName'}>Last Name</label>
-            <input type={'text'} id={'lastName'} ref={lastNameRef}/>
-            <br/>
-            <label htmlFor={'password'}>Password</label>
-            <input type={'text'} id={'password'} ref={passwordRef}/>
-            <br/>
-            <label htmlFor={'phone'}>Phone Number</label>
-            <input type={'text'} id={'phone'} ref={phoneRef}/>
-            <br/>
-            <label htmlFor={'role'}>Role</label>
-            <input type={'text'} id={'role'} ref={roleRef}/>
-            <br/>
-            <label htmlFor={'username'}>Username</label>
-            <input type={'text'} id={'username'} ref={usernameRef}/>
-            <br/>
-            <label htmlFor={'dateOfBirth'}>Date of Birth</label>
-            <input type={'text'} id={'dateOfBirth'} ref={dateOfBirthRef}/>
-            <br/>
-            <button type={'cancel'} data-testid={'cancelNewRegistrationButton'} onClick={cancelHandler}>Cancel</button>
-            <button type={'submit'} data-testid={'submitNewRegistrationButton'} onClick={submitHandler}>Submit</button>
+        <section>
+            <div className={'container'} style={{minHeight: 80 + 'vh', minWidth: 100 + '%', display: 'flex', alignItems:'center'}}>
+                <Form className={'offset-4 col-3'}>
+                    <FormGroup>
+                        <FormLabel for={'username'} className={'col-form-label'}>Username</FormLabel>
+                        <FormControl type={'text'} id={'username'} ref={usernameRef} required/>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'password'}>Password</FormLabel>
+                        <FormControl type={'password'} id={'password'} ref={passwordRef} required/>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'firstName'}>First Name</FormLabel>
+                        <FormControl type={'text'} id={'firstName'} ref={firstNameRef} required/>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'lastName'}>Last Name</FormLabel>
+                        <FormControl type={'text'} id={'lastName'} ref={lastNameRef} required/>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'email'}>Email Address</FormLabel>
+                        <FormControl type={'email'} id={'email'} ref={emailRef} email required/>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'phone'}>Phone Number</FormLabel>
+                        <FormControl type={'text'} id={'phone'} ref={phoneRef} required />
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel for={'dateOfBirth'}>Date of Birth</FormLabel>
+                        <FormControl type={'text'} id={'dateOfbirth'} ref={dateOfBirthRef} required />
+                    </FormGroup>
+                    <ButtonGroup>
+                        <Button type={'cancel'} className={'btn btn-secondary'} onClick={cancelHandler} style={{marginRight: 5 + 'px'}}>Cancel</Button>
+                        <Button type={'submit'} className={'btn btn-primary'} onClick={submitHandler}>Register</Button>
+                    </ButtonGroup>
+                </Form>
+            </div>
         </section>
     )
 }

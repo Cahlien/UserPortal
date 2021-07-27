@@ -2,6 +2,7 @@ import axios from "axios";
 import {useContext, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
+import Form from 'react-bootstrap/Form';
 
 const url = 'http://localhost:9001/users/login';
 
@@ -71,18 +72,22 @@ function LoginForm(props) {
     }
 
     return (
-        <section>
-            <label htmlFor={'email'}>Email</label>
-            <input type={'text'} id={'email'} ref={email}/>
-            <br/>
-            <label htmlFor={'password'}>Password</label>
-            <input type={'text'} id={'password'} ref={password}/>
-            <br/>
-            <button type={'submit'} onClick={submitHandler}>Submit</button>
-            <br/>
-            <br/>
-            {attemptedLogIn && <div>Error Message: {errorMessage}</div>}
-        </section>
+<section id="login" class="col-12 h-75 w-100">
+    <div class="container offset-4 col-4" style={{minHeight: 80 + 'vh', display: 'flex', alignItems:'center'}}>
+        <Form>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" ref={email} />
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group mt-2">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" ref={password} />
+            </div>
+            <button type="submit" class="btn btn-primary mt-2" onClick={submitHandler}>Log In</button>
+        </Form>
+    </div>
+</section>
     );
 }
 
