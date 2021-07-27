@@ -20,7 +20,7 @@ describe('Registration form', () => {
     it('formulates registration data and processes post request when submit button is clicked', async () => {
         const {getByTestId} = render(<RegistrationForm url={'/test'} />);
         axiosMock.post.mockResolvedValueOnce({data: { userId: 'abc-123-xyz-789' }});
-        const submitButton = screen.getByText('Submit');
+        const submitButton = screen.getByText('Register');
         userEvent.click(submitButton);
         expect(axiosMock.post).toBeCalledTimes(1);
     });
@@ -32,11 +32,11 @@ describe('Registration form', () => {
         const {getByTestId} = render(<RegistrationForm url={'/test'} />);
         axiosMock.post.mockResolvedValueOnce({data: { userId: 'abc-123-xyz-789' }});
 
-        const submitButton = screen.getByText('Submit');
+        const submitButton = screen.getByText('Register');
         userEvent.click(submitButton);
         render(<p>Complete</p>);
 
         const paragraph = await screen.findAllByText('Complete');
-        expect(logSpy).toBeCalledWith({"userId": "abc-123-xyz-789"});
+        expect(localStorage.getItem('userId')).toBeCalledWith({"userId": "abc-123-xyz-789"});
     });
 });
