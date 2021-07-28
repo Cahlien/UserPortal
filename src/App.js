@@ -5,7 +5,7 @@ import MainFooter from './components/layout/MainFooter';
 import MainNavigation from './components/layout/MainNavigation';
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
-import ViewUserForm from './ViewUserForm/ViewUserForm';
+import ViewUserForm from './components/ViewUserForm/ViewUserForm';
 
 function App() {
     const authContext = useContext(AuthContext);
