@@ -5,8 +5,6 @@ import RegistrationForm from './RegistrationForm';
 
 const setSpy = jest.spyOn(localStorage.__proto__, 'setItem');
 
-beforeEach(setSpy.mockClear);
-afterEach(cleanup);
 
 /**
  * The tests for the RegistrationForm component.
@@ -14,6 +12,9 @@ afterEach(cleanup);
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
 describe('Registration form', () => {
+    beforeEach(setSpy.mockClear);
+    afterEach(cleanup);
+
     /**
      * This method tests to see if the registration data is submitted via axios.post.
      */

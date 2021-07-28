@@ -7,15 +7,15 @@ import {BrowserRouter} from "react-router-dom";
 
 const setSpy = jest.spyOn(localStorage.__proto__, 'setItem');
 
-beforeEach(setSpy.mockClear);
-afterEach(cleanup);
-
 /**
  * The tests for the RegistrationForm component.
  *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
 describe('Login form', () => {
+    beforeEach(setSpy.mockClear);
+    afterEach(cleanup);
+
     /**
      * This method tests to see if the login data is submitted via axios.post.
      */
