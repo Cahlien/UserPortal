@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
 
+/**
+ * This method returns an auth context.
+ *
+ * @type {React.Context<{isLoggedIn: boolean, login: login, userId: string, token: string}>}
+ */
 const AuthContext = React.createContext({
     token: '',
     isLoggedIn: false,
@@ -8,6 +13,13 @@ const AuthContext = React.createContext({
     }
 });
 
+/**
+ * This method implements the auth context.
+ *
+ * @param props the properties passed into the auth context
+ * @returns {JSX.Element} the component in jsx form
+ * @constructor
+ */
 export const AuthContextProvider = (props) => {
     const initialToken = localStorage.getItem('token');
     const initialUserId = localStorage.getItem('userId');

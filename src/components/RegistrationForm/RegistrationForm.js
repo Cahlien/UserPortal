@@ -65,7 +65,8 @@ function RegistrationForm(props) {
 
         try {
             const response = await axios.post(url, registrationData);
-            localStorage.setItem('userId', response.data);
+            localStorage.setItem('userId', response.data.userId);
+
             history.replace('/');
         } catch (e) {
             setErrorMessage(e.message);
@@ -95,7 +96,7 @@ function RegistrationForm(props) {
                     </FormGroup>
                     <FormGroup>
                         <FormLabel htmlFor={'email'}>Email Address</FormLabel>
-                        <FormControl type={'email'} id={'email'} ref={emailRef} email required/>
+                        <FormControl type={'email'} id={'email'} ref={emailRef} email={'true'} required/>
                     </FormGroup>
                     <FormGroup>
                         <FormLabel htmlFor={'phone'}>Phone Number</FormLabel>

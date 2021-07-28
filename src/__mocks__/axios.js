@@ -1,7 +1,8 @@
 export default {
     post: jest.fn().mockResolvedValue({
         response: {
-            data: {}
+            data: {},
+            headers: {}
         }
     })
 }
