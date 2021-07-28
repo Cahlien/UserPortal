@@ -62,7 +62,8 @@ function LoginForm(props) {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'LR-Type': 'user'
                     }
                 }
             );
