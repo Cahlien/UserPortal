@@ -1,9 +1,9 @@
 import axios from "axios"
-import User from "./components/layout/User"
+import User from "../layout/User"
 import { useState } from "react"
-import AuthContext from "./store/auth-context"
+import AuthContext from "../../store/auth-context"
 import { useContext } from "react"
-import UpdateUserForm from './components/UpdateUserForm/UpdateUserForm'
+import UpdateUserForm from "../UpdateUserForm/UpdateUserForm"
 import { Button } from "react-bootstrap"
 
 function ViewUserForm() {
