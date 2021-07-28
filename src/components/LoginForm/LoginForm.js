@@ -2,9 +2,20 @@ import axios from "axios";
 import {useContext, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
+import Form from 'react-bootstrap/Form';
+import './LoginForm.css';
 
 const url = 'http://localhost:9001/users/login';
 
+/**
+ * The login form component.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @param props the properties passed into the component
+ * @returns {JSX.Element} the login form page to be rendered
+ * @constructor
+ */
 function LoginForm(props) {
     const history = useHistory();
 
@@ -17,12 +28,21 @@ function LoginForm(props) {
     const email = useRef();
     const password = useRef();
 
+    /**
+     * This method submits the login information to the server and returns the server's response code
+     * and, if applicable, headers containing the authorization token and the user id.
+     *
+     * @param event the click event for the log in button
+     * @returns {Promise<void>} the response from the server
+     */
     async function submitHandler(event) {
+        event.preventDefault();
+
         if (errorMessage) {
             setAttemptedLogIn(false);
             setErrorMessage('');
         }
-        event.preventDefault();
+
         setAttemptedLogIn(true);
 
         const enteredEmail = email.current.value;
@@ -41,7 +61,8 @@ function LoginForm(props) {
                 loginData,
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 }
             );
@@ -54,7 +75,7 @@ function LoginForm(props) {
                 authContext.login(token, userId);
                 history.replace('/');
             } else if (response.status === 403) {
-                console.log(response)
+                setErrorMessage(response.statusText);
             }
         } catch (e) {
             setIsLoading(false);
@@ -71,17 +92,24 @@ function LoginForm(props) {
     }
 
     return (
-        <section>
-            <label htmlFor={'email'}>Email</label>
-            <input type={'text'} id={'email'} ref={email}/>
-            <br/>
-            <label htmlFor={'password'}>Password</label>
-            <input type={'text'} id={'password'} ref={password}/>
-            <br/>
-            <button type={'submit'} onClick={submitHandler}>Submit</button>
-            <br/>
-            <br/>
-            {attemptedLogIn && <div>Error Message: {errorMessage}</div>}
+        <section id="login" className="col-12 h-75 w-100">
+            <div className="container offset-4 col-5 vertical-center">
+                <Form>
+                    {errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div>}
+                    <div className="form-group">
+                        <label htmlFor={"email"}>Email</label>
+                        <input type="email" className="form-control" id="email" aria-describedby="emailHelp"
+                               ref={email}/>
+                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone
+                            else.</small>
+                    </div>
+                    <div className="form-group mt-2">
+                        <label htmlFor={"password"}>Password</label>
+                        <input type="password" className="form-control" id="password" ref={password}/>
+                    </div>
+                    <button type="submit" className="btn btn-primary mt-2" onClick={submitHandler}>Log In</button>
+                </Form>
+            </div>
         </section>
     );
 }

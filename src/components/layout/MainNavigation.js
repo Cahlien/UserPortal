@@ -8,19 +8,31 @@ function MainNavigation(props) {
     const isLoggedIn = authContext.isLoggedIn;
 
     return (
-        <header>
-            <Link to={'/'}>
-                <div>BeardTrust</div>
-            </Link>
-            <nav>
-                <ul>
-                    <li>
-                        {!authContext.userIsLoggedIn && <Link to={'/auth'}>Login</Link>}
-                        {authContext.userIsLoggedIn && <Link to={'/'}>Logout</Link>}
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <a className="navbar-brand" href="">Beardtrust</a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon" />
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav">
+                    <li className="nav-item active">
+                        <a className="nav-link" href="/">Home</a>
+                    </li>
+                    <li className="nav-item">
+                        {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/users'}>Register</Link>}
+                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/'}>Profile</Link>}
+                    </li>
+                    <li className="nav-item">
+                       {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
+                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/'}>Logout</Link>}
+                    </li>
+                    <li className="nav-item">
+                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/me'}>My Details</Link>}
                     </li>
                 </ul>
-            </nav>
-        </header>
+            </div>
+        </nav>
     )
 }
 
