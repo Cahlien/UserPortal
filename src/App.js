@@ -6,6 +6,7 @@ import MainNavigation from './components/layout/MainNavigation';
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ViewUserForm from './components/ViewUserForm/ViewUserForm';
+import AccountRegistration from './components/RegisterAccount/AccountRegistry';
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -24,6 +25,11 @@ function App() {
                 <Route path={'/me'}>
                     <MainNavigation />
                     {authContext.userIsLoggedIn && <ViewUserForm />}
+                    <MainFooter />
+                </Route>
+                <Route path={'/accounts'}>
+                    <MainNavigation />
+                    {authContext.userIsLoggedIn && <AccountRegistration />}
                     <MainFooter />
                 </Route>
                 <Route path={'/auth'}>

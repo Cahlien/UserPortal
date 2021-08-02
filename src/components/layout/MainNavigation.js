@@ -30,6 +30,12 @@ function MainNavigation(props) {
                     <li className="nav-item">
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/me'}>My Details</Link>}
                     </li>
+                    <li className="nav-item">
+                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts'}>Register for Account</Link>}
+                    </li>
+                    <li className="nav-item">
+                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts/me'}>My Accounts</Link>}
+                    </li>
                 </ul>
             </div>
         </nav>
