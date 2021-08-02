@@ -1,6 +1,7 @@
 import {useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import axios from "axios"
+import validator from "validator/es";
 import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import './RegistrationForm.css';
 
@@ -14,6 +15,13 @@ import './RegistrationForm.css';
  */
 function RegistrationForm(props) {
     const [errorMessage, setErrorMessage] = useState();
+    const [emailError, setEmailError] = useState(false);
+    const [firstNameError, setFirstNameError] = useState(false);
+    const [lastNameError, setLastNameError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [phoneError, setPhoneError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
+    const [dateOfBirthError, setDateOfBirthError]= useState(false);
 
     const emailRef = useRef();
     const firstNameRef = useRef();
@@ -25,6 +33,58 @@ function RegistrationForm(props) {
     const url = props.url;
     const history = useHistory();
 
+    function formIsValid(form){
+        let isValid = true;
+
+        if(!validator.isEmail(form.email)){
+            setEmailError(true);
+            isValid = false;
+        } else {
+            setEmailError(false);
+        }
+
+        if(!validator.isMobilePhone(form.phone)){
+            setPhoneError(true);
+            isValid = false;
+        } else {
+            setPhoneError(false);
+        }
+
+        if(!validator.isStrongPassword(form.password)) {
+            setPasswordError(true);
+            isValid = false;
+        } else {
+            setPasswordError(false);
+        }
+
+        if(!validator.isAlpha(form.firstName) || validator.isEmpty(form.firstName)) {
+            setFirstNameError(true);
+            isValid = false;
+        } else {
+            setFirstNameError(false);
+        }
+
+        if(!validator.isAlpha(form.lastName)) {
+            setLastNameError(true);
+            isValid = false;
+        }
+
+        if(!validator.isAscii(form.username)) {
+            setUsernameError(true);
+            isValid = false;
+        } else {
+            setLastNameError(false);
+        }
+
+        if(!validator.isDate(form.dateOfBirth)) {
+            setDateOfBirthError(true);
+            isValid = false;
+        } else {
+            setDateOfBirthError(false);
+        }
+
+        return isValid;
+    }
     /**
      * This method cancels the registration and returns the guest to the home page.
      *
@@ -63,56 +123,72 @@ function RegistrationForm(props) {
             dateOfBirth: enteredDateOfBirth
         }
 
+        if(!formIsValid(registrationData)) return;
+
         try {
             const response = await axios.post(url, registrationData);
             localStorage.setItem('userId', response.data.userId);
 
             history.replace('/');
         } catch (e) {
-            setErrorMessage(e.message);
+            console.log(e.response);
+            setErrorMessage(e.response.data.message);
         }
     }
 
     return (
-        <section>
-            <div className={'container vertical-center'}>
-                <Form className={'offset-4 col-3'}>
-                    { errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div> }
-                    <FormGroup>
-                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Username</FormLabel>
-                        <FormControl type={'text'} id={'username'} ref={usernameRef} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'password'}>Password</FormLabel>
-                        <FormControl type={'password'} id={'password'} ref={passwordRef} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'firstName'}>First Name</FormLabel>
-                        <FormControl type={'text'} id={'firstName'} ref={firstNameRef} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'lastName'}>Last Name</FormLabel>
-                        <FormControl type={'text'} id={'lastName'} ref={lastNameRef} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'email'}>Email Address</FormLabel>
-                        <FormControl type={'email'} id={'email'} ref={emailRef} email={'true'} required/>
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'phone'}>Phone Number</FormLabel>
-                        <FormControl type={'text'} id={'phone'} ref={phoneRef} required />
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel htmlFor={'dateOfBirth'}>Date of Birth</FormLabel>
-                        <FormControl type={'text'} id={'dateOfbirth'} ref={dateOfBirthRef} required />
-                    </FormGroup>
-                    <ButtonGroup>
-                        <Button type={'cancel'} className={'btn btn-secondary mt-3'} onClick={cancelHandler} style={{marginRight: 5 + 'px'}}>Cancel</Button>
-                        <Button type={'submit'} className={'btn btn-primary mt-3'} onClick={submitHandler}>Register</Button>
-                    </ButtonGroup>
-                </Form>
-            </div>
+        <section className={'container h-60 smooth-scroll'}>
+            { errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2> }
+            <form className="row g-3 vertical-center">
+                <div className="col-sm-12 col-md-6">
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input type="text" className="form-control" id="username" ref={usernameRef}/>
+                    {usernameError && <p className={'alert-danger mb-3'}>Usernames can contain only numbers and letters</p>}
+                </div>
+                <div className="col-sm-12 col-md-6">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input type="password" className="form-control" id="password" ref={passwordRef}/>
+                    {passwordError && <p className={'alert-danger mb-3'}>Password should contain numbers, special characters, and both cases</p>}
+                </div>
+                <div className="col-sm-12 col-md-6">
+                    <label htmlFor="firstName" className="form-label">First Name</label>
+                    <input type="text" className="form-control" id="firstName" ref={firstNameRef}/>
+                    {firstNameError && <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
+                </div>
+                <div className="col-sm-12 col-md-6">
+                    <label htmlFor="lastName" className="form-label">Last Name</label>
+                    <input type="text" className="form-control" id="lastName" ref={lastNameRef}/>
+                    {lastNameError && <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabe</p>}
+                </div>
+                <div className="col-sm-12 col-md-4">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input type="email" className="form-control" id="email" ref={emailRef}/>
+                    {emailError && <p className={'alert-danger mb-3'}>Please enter a valid email address</p>}
+                </div>
+                <div className="col-sm-12 col-lg-4">
+                    <label htmlFor="phone" className="form-label">Phone</label>
+                    <input type="text" className="form-control" id="phone" placeholder="(xxx) 867-5309" ref={phoneRef}/>
+                    {phoneError && <p className={'alert-danger mb-3'}>Please enter a valid phone number</p>}
+                </div>
+                <div className="col-sm-12 col-lg-4">
+                    <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+                    <input type="date" className="form-control" id="dateOfBirth" ref={dateOfBirthRef}/>
+                    {dateOfBirthError && <p className={'alert-danger mb-1'}>Please enter valid birthdate</p>}
+                </div>
+                <ButtonGroup>
+                    <div className={'col-lg-10'}>
+                        <span></span>
+                    </div>
+                    <div className="col-sm-3 col-md-2 col-lg-1">
+                        <button type={'button'} className="btn btn-secondary mr-2" onClick={cancelHandler}>Cancel</button>
+                    </div>
+                    <div className="col-sm-3 col-md-2 col-lg-1">
+                        <button type={'button'} className="btn btn-primary" onClick={submitHandler}>Register</button>
+                    </div>
+                </ButtonGroup>
+            </form>
         </section>
+
     )
 }
 
