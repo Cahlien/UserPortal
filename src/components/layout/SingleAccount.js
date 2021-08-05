@@ -1,9 +1,9 @@
-import { Table, Button } from "react-bootstrap"
-import { useState, useRef, useContext } from "react"
+import {Button, Table} from "react-bootstrap"
+import {useContext, useRef, useState} from "react"
 import AuthContext from "../../store/auth-context"
 import axios from "axios"
 
-const SingleAccount = ({ accounts }) => {
+const SingleAccount = ({accounts}) => {
 
     var [account, setAccount] = useState({});
     var [amount, setAmount] = useState({});
@@ -12,9 +12,7 @@ const SingleAccount = ({ accounts }) => {
     const withAmt = useRef();
     const depAmt = useRef();
     let dispActs = []
-    let TransferEntity = {
-        amount: 0
-    }
+    const TransferEntity = { amount: amount };
 
     if (!Array.prototype.slice.call(accounts).length === 0) {
         console.log('account checks as empty, dispActs: ', dispActs)
@@ -28,46 +26,46 @@ const SingleAccount = ({ accounts }) => {
             <div>
                 <Table striped bordered hover>
                     <thead>
-                        <tr>
-                            <th>Nickname</th>
-                            <th>Balance</th>
-                            <th>Interest</th>
-                            <th>Date Created</th>
-                            <th>Type</th>
-                            <th>Withdraw</th>
-                            <th>Deposit</th>
-                        </tr>
+                    <tr>
+                        <th>Nickname</th>
+                        <th>Balance</th>
+                        <th>Interest</th>
+                        <th>Date Created</th>
+                        <th>Type</th>
+                        <th>Withdraw</th>
+                        <th>Deposit</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {(dispActs ?? []).map((account, index) => (
-                            <tr data-index={index}>
-                                <td>{account.nickname}</td>
-                                <td>${account.balance}</td>
-                                <td>{account.interest}%</td>
-                                <td>{account.create_date}</td>
-                                <td>{account.type}</td>
-                                <td>$<input
-                                    type="text"
-                                    id="withdraw"
-                                    ref={withAmt} />
-                                    <Button
-                                        variant="success"
-                                        type={'submit'}
-                                        onClick={submitWithdraw}
-                                        id='Review'
-                                    >Withdraw</Button></td>
-                                <td>$<input
-                                    type="int"
-                                    id="deposit"
-                                    ref={depAmt} />
-                                    <Button
-                                        variant="success"
-                                        type={'submit'}
-                                        onClick={submitDeposit}
-                                        id='Review'
-                                    >Deposit</Button></td>
-                            </tr>
-                        ))}
+                    {(dispActs ?? []).map((account, index) => (
+                        <tr data-index={index}>
+                            <td>{account.nickname}</td>
+                            <td>${account.balance}</td>
+                            <td>{account.interest}%</td>
+                            <td>{account.create_date}</td>
+                            <td>{account.type}</td>
+                            <td>$<input
+                                type="text"
+                                id="withdraw"
+                                ref={withAmt}/>
+                                <Button
+                                    variant="success"
+                                    type={'submit'}
+                                    onClick={submitWithdraw}
+                                    id='Review'
+                                >Withdraw</Button></td>
+                            <td>$<input
+                                type="int"
+                                id="deposit"
+                                ref={depAmt}/>
+                                <Button
+                                    variant="success"
+                                    type={'submit'}
+                                    onClick={submitDeposit}
+                                    id='Review'
+                                >Deposit</Button></td>
+                        </tr>
+                    ))}
                     </tbody>
                 </Table>
             </div>
@@ -112,21 +110,15 @@ const SingleAccount = ({ accounts }) => {
         if (!event === null) {
             event.preventDefault();
         }
-        TransferEntity.amount = amount;
-        console.log(TransferEntity.amount)
-        console.log('line 119', accounts[0])
+
+        const headers = {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        };
+
         try {
-            const response = await axios.put(
-                url,
-                {
-                    method: 'PUT',
-                    body: TransferEntity,
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                console.log(response)
+            const response = await axios.put(url, TransferEntity, headers);
+            console.log(response)
         } catch (e) {
             console.log(e)
         }
