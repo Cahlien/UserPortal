@@ -1,25 +1,26 @@
 import axios from "axios"
-import User from "../layout/User"
 import { useState, useEffect } from "react"
 import AuthContext from "../../store/auth-context"
 import { useContext } from "react"
-import UpdateUserForm from "../UpdateUserForm/UpdateUserForm"
+import AccountList from "../layout/AccountList"
 
-function ViewUserForm() {
+function ViewAccount() {
 
     const authContext = useContext(AuthContext);
 
-    var [user, setUser] = useState({})
+    var [actAry, setAccount] = useState({})
     const token = authContext.token;
     const userId = authContext.userId;
 
-    const url = 'http://localhost:9001/users/' + userId
+    const url = "http://localhost:9001/accounts" 
+    const params = new URLSearchParams([['userId', userId]])
 
-    useEffect(() =>
-        axios.get(
+        useEffect(() =>
+            axios.get(
             url,
             {
                 method: 'GET',
+                params: { id: userId },
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
@@ -28,9 +29,11 @@ function ViewUserForm() {
             .then((res) => {
                 if (res.statusText === "OK") {
                     console.log('VIEW SUCCESSFUL');
-                    setUser(res.data)
+                    const actAry = Array.prototype.slice.call(res.data)
+                    console.log('actAry: ', actAry)
+                    setAccount(Array.prototype.slice.call(actAry))
                 } else {
-                    throw new Error('VIEW UNSUCCESSFUL');
+                    console.log('response: ', res)
                 }
             }, [])
             .then((jsonData) => {
@@ -40,20 +43,16 @@ function ViewUserForm() {
                 if (e.response === 403) {
                     console.log('VIEW FAILURE: Code 403 (Forbidden). Your login may be expired or your URL may be incorrect.')
                 }
-                console.log('Error message: ', e.message);
+                console.log('Error message: ', e.message + ', code: ' + e.response);
             }), []
-    )
-
-    return (
-        <section>
-            <ul>
-                <h3 style={{ display: "flex" }}>Your Details:
-                </h3>
-                <User user={user} />
-                <UpdateUserForm user={user} />
-            </ul>
-        </section>
-    )
-
+        )   
+        return (
+            <section>
+                <ul>
+                    <h3 style={{ display: "flex" }}>Your Accounts:</h3> 
+                    <AccountList accounts={actAry}/>
+                </ul>
+            </section>
+        )
 }
-export default ViewUserForm
+export default ViewAccount

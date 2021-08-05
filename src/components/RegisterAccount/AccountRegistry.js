@@ -11,8 +11,22 @@ function AccountRegistration() {
 
     const nickname = useRef();
     const balance = useRef();
-    const test1 = useRef();
+    let test1 = 'default text';
     const url = "http://localhost:9001/accounts";
+
+    function dropHandler(dropInput) {
+        console.log('in drop handler, prop nrcvd: ', dropInput )
+        switch (dropInput) {
+            case "0":
+                test1 = 'Savings'
+                break;
+            case "1":
+                test1 = 'Checking'
+                break;
+            default:
+                test1 = 'Savings'
+        }
+    }
 
     async function submitHandler(event) {
         event.preventDefault();
@@ -21,6 +35,8 @@ function AccountRegistration() {
         const enteredDeposit = balance.current.value;
         let cdate = new Date();
 
+        const typeAns = test1
+
         const registrationData = {
             nickname: enteredNickname,
             balance: enteredDeposit,
@@ -28,9 +44,9 @@ function AccountRegistration() {
             active_status: true,
             interest: 1,
             create_date: cdate,
-            //type: test1
+            type: typeAns
         }
-        console.log('test1: ', test1.current.value)
+
         axios(
             url,
             {
@@ -42,7 +58,6 @@ function AccountRegistration() {
                 }
             }
         ).then((response) => {
-            console.log('test1: ', test1)
             console.log('response returned:', response.data)
             return response.data;
         }).catch((e) => {
@@ -65,14 +80,13 @@ function AccountRegistration() {
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Initial Deposit:</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={balance} required />
                     </FormGroup>
-                    <Dropdown className='mt-3'>
+                    <Dropdown className='mt-3' onSelect={function(evt){ dropHandler(evt) }}>
                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
                             Account Type
                         </Dropdown.Toggle>
-                        <Dropdown.Menu ref={test1}>
-                            <Dropdown.Item href='#'>Debit</Dropdown.Item>
-                            <Dropdown.Item href="#">Savings</Dropdown.Item>
-                            <Dropdown.Item href="#">Checking</Dropdown.Item>
+                        <Dropdown.Menu>
+                            <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
+                            <Dropdown.Item eventKey="1">Checking</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <ButtonGroup>

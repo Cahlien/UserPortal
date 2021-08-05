@@ -104,7 +104,6 @@ function UpdateUserForm({ user }) {
             <div className={'container vertical-center'}>
                 <Form className={'offset-4 col-3'}>
                 <h3>Want to update anything?</h3>
-                    {/* { errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div> } */}
                     <FormGroup>
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Update Username</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={usernameRef} />
@@ -139,16 +138,6 @@ function UpdateUserForm({ user }) {
                 </Form>
             </div>
         </section>
-        // <section>
-        //         <input type={'text'} id={'username'} ref={usernameRef} placeholder="New Username Here" />
-        //         <input type={'text'} id={'email'} ref={passwordRef} placeholder="New Password Here" />
-        //         <input type={'text'} id={'firstName'} ref={firstNameRef} placeholder="New First Name" />
-        //         <input type={'text'} id={'lastName'} ref={lastNameRef} placeholder="New Last Name" />
-        //         <input type={'text'} id={'email'} ref={emailRef} placeholder="New Email Here" />
-        //         <input type={'text'} id={'phone'} ref={phoneRef} placeholder="New Phone # Here" />
-        //         <input type={'text'} id={'dateOfBirth'} ref={dateOfBirthRef} placeholder="New Date of Birth Here" />
-        //         <button type={'submit'} onClick={submitUpdate} id='Update'>Update</button>
-        // </section>
     )
 }
 export default UpdateUserForm

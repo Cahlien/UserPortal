@@ -7,6 +7,8 @@ import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ViewUserForm from './components/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/RegisterAccount/AccountRegistry';
+import ViewAccount from './components/ViewAccounts/ViewAccountList';
+import AccountSingle from './components/ViewAccounts/ViewSingleAccount';
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -25,6 +27,16 @@ function App() {
                 <Route path={'/me'}>
                     <MainNavigation />
                     {authContext.userIsLoggedIn && <ViewUserForm />}
+                    <MainFooter />
+                </Route>
+                <Route path={'/accounts/single/:id'}>
+                    <MainNavigation />
+                    {authContext.userIsLoggedIn && <AccountSingle />}
+                    <MainFooter />
+                </Route>
+                <Route path={'/accounts/me'}>
+                    <MainNavigation />
+                    {authContext.userIsLoggedIn && <ViewAccount />}
                     <MainFooter />
                 </Route>
                 <Route path={'/accounts'}>
