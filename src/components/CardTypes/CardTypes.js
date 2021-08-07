@@ -19,8 +19,8 @@ function CardTypes(props){
     return (
         <section className={'container'}>
             <div className={'offset-4 col-5'} >
-                <p>Sign up for this card!
-                    <button className={'btn btn-primary mx-3'} onClick={onSignUp} id={'cardOne'}>Sign Up</button>
+                <p>Sign up for this totally irrelevant dummy card!
+                    <button className={'btn btn-primary btn-sm mx-3'} onClick={onSignUp} id={'dummy'}>Sign Up</button>
                 </p>
             </div>
         </section>
