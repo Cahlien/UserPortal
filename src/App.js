@@ -35,7 +35,9 @@ function App() {
                     </Layout>
                 </Route>
                 <Route path={'/cardsignup'}>
-                    <CardSignUp />
+                    <Layout>
+                        <CardSignUp />
+                    </Layout>
                 </Route>
             </Switch>
         </div>

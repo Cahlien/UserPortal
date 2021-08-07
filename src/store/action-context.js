@@ -10,7 +10,6 @@ export const ActionContextProvider = (props) => {
     const [targetId, setTargetId] = useState(initialTarget);
 
     const handleAction = (targetId) => {
-        console.log("Action setting target to: " + targetId);
         setTargetId(targetId);
     }
 
