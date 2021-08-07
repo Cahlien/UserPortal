@@ -6,9 +6,10 @@ import MainNavigation from './components/layout/MainNavigation';
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ViewUserForm from './components/ViewUserForm/ViewUserForm';
-import AccountRegistration from './components/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/ViewAccounts/ViewAccountList';
-import AccountSingle from './components/ViewAccounts/ViewSingleAccount';
+import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
+import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
+import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
+import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -27,6 +28,11 @@ function App() {
                 <Route path={'/me'}>
                     <MainNavigation />
                     {authContext.userIsLoggedIn && <ViewUserForm />}
+                    <MainFooter />
+                </Route>
+                <Route path={'/accounts/deactivate'}>
+                    <MainNavigation />
+                    {authContext.userIsLoggedIn && <AccountDeactivator />}
                     <MainFooter />
                 </Route>
                 <Route path={'/accounts/single/:id'}>

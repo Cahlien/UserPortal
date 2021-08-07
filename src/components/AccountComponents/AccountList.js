@@ -1,23 +1,20 @@
-import { Table, Button } from "react-bootstrap"
-import AccountSingle from "../ViewAccounts/ViewSingleAccount"
+import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useState } from "react"
 
 const AccountList = ({ accounts }) => {
 
-    var [account, setAcount] = useState({})
+    var [account, setAccount] = useState({})
     let dispActs = []
+
     if (!Array.prototype.slice.call(accounts).length === 0) {
-        console.log('account checks as empty, dispActs: ', dispActs)
         return null
     } else {
-        console.log('accounts has more than 0, dispActs: ', dispActs)
         dispActs = [].slice.call(accounts)
-        console.log('after dispActs is set: ', dispActs)
 
         return (
             <>
-                <Table striped bordered hover shadow>
+                <Table striped bordered hover style={{marginRight: 5 + 'px'}}>
                     <thead>
                         <tr>
                             <th>Nickname</th>
@@ -30,7 +27,7 @@ const AccountList = ({ accounts }) => {
                     </thead>
                     <tbody>
                         {(dispActs ?? []).map((account, index) => (
-                            <tr data-index={index}>
+                            <tr key={index}>
                                 <td>{account.nickname}</td>
                                 <td>${account.balance}</td>
                                 <td>{account.interest}%</td>
@@ -38,10 +35,10 @@ const AccountList = ({ accounts }) => {
                                 <td>{account.type}</td>
                                 <Link to={'/accounts/single/' + account.accountId}>
                                     <Button
-                                        variant="outline-success"
+                                        variant="success"
                                         type={'submit'}
                                         id='Review'
-                                    >Check Account</Button>
+                                    >Review Account</Button>
                                 </Link>
                             </tr>
                         ))}

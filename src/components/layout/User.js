@@ -4,7 +4,7 @@ const User = ({ user }) => {
     console.log('User is receiving: ', user)
 
     return (
-        <Table striped bordered hover shadow>
+        <Table striped bordered hover>
             <thead>
                 <tr>
                     <th>Username</th>
