@@ -99,13 +99,11 @@ function CardSignUp(props) {
 
         try {
             const response = await axios.post(url + userId, applicationData);
-            localStorage.setItem('userId', response.data.userId);
         } catch (e) {
             if(e.response){
-                console.log(e.response);
                 setErrorMessage(e.response.data.message);
             } else {
-                console.log(e);
+                setErrorMessage("Something went wrong... please try again later")
             }
         }
     }
@@ -130,7 +128,7 @@ function CardSignUp(props) {
                     <label htmlFor="lastName" className="form-label">Last Name</label>
                     <input type="text" className="form-control" id="lastName" ref={lastNameRef}/>
                     {lastNameError &&
-                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabe</p>}
+                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
                 </div>
                 <div className="col-sm-12 col-md-4">
                     <label htmlFor="email" className="form-label">Email</label>

@@ -1,7 +1,7 @@
 import {useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import axios from "axios"
-import validator from "validator/es";
+import validator from "validator";
 import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "react-bootstrap";
 import './RegistrationForm.css';
 
@@ -131,8 +131,12 @@ function RegistrationForm(props) {
 
             history.replace('/');
         } catch (e) {
-            console.log(e.response);
-            setErrorMessage(e.response.data.message);
+            if(e.response){
+                setErrorMessage(e.response.data.message);
+            } else {
+                setErrorMessage("Something went wrong... please try again later");
+            }
+
         }
     }
 
