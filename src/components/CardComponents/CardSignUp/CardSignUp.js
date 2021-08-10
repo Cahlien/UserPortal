@@ -1,169 +1,134 @@
-
-import {useRef, useState} from "react";
-import {useHistory} from 'react-router-dom';
-import axios from "axios"
+import {useContext, useRef, useState} from "react";
+import {useHistory} from "react-router-dom";
+import ActionContext from '../../../store/action-context'
+import {ButtonGroup} from "react-bootstrap";
 import validator from "validator";
-import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "react-bootstrap";
-import './RegistrationForm.css';
+import AuthContext from "../../../store/auth-context";
+import axios from "axios";
 
-/**
- * The Registration Form component.
- * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
- *
- * @param props the properties passed into the form
- * @returns {JSX.Element} the form to be rendered
- * @constructor
- */
-function RegistrationForm(props) {
+function CardSignUp(props) {
+    const actionContext = useContext(ActionContext);
+    const authContext = useContext(AuthContext);
+
+    const [cardId, setCardId] = useState(actionContext.targetId);
+    const [userId, setUserId] = useState(authContext.userId);
     const [errorMessage, setErrorMessage] = useState();
     const [emailError, setEmailError] = useState(false);
     const [firstNameError, setFirstNameError] = useState(false);
     const [lastNameError, setLastNameError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
     const [phoneError, setPhoneError] = useState(false);
-    const [usernameError, setUsernameError] = useState(false);
-    const [dateOfBirthError, setDateOfBirthError]= useState(false);
+    const [dateOfBirthError, setDateOfBirthError] = useState(false);
+    const [nicknameError, setNicknameError] = useState(false);
 
     const emailRef = useRef();
     const firstNameRef = useRef();
     const lastNameRef = useRef();
-    const passwordRef = useRef();
     const phoneRef = useRef();
-    const usernameRef = useRef();
     const dateOfBirthRef = useRef();
-    const url = props.url;
+    const nicknameRef = useRef();
+
+    const url = 'http://localhost:9001/cards/'
     const history = useHistory();
 
-    function formIsValid(form){
+    function formIsValid(form) {
         let isValid = true;
 
-        if(!validator.isEmail(form.email)){
-            setEmailError(true);
-            isValid = false;
-        } else {
-            setEmailError(false);
-        }
-
-        if(!validator.isMobilePhone(form.phone)){
+        if (!validator.isMobilePhone(form.phone)) {
             setPhoneError(true);
             isValid = false;
         } else {
             setPhoneError(false);
         }
 
-        if(!validator.isStrongPassword(form.password)) {
-            setPasswordError(true);
-            isValid = false;
-        } else {
-            setPasswordError(false);
-        }
-
-        if(!validator.isAlpha(form.firstName) || validator.isEmpty(form.firstName)) {
+        if (!validator.isAlpha(form.firstName) || validator.isEmpty(form.firstName)) {
             setFirstNameError(true);
             isValid = false;
         } else {
             setFirstNameError(false);
         }
 
-        if(!validator.isAlpha(form.lastName)) {
+        if (!validator.isAlpha(form.lastName)) {
             setLastNameError(true);
             isValid = false;
         }
 
-        if(!validator.isAscii(form.username)) {
-            setUsernameError(true);
-            isValid = false;
-        } else {
-            setLastNameError(false);
-        }
-
-        if(!validator.isDate(form.dateOfBirth)) {
+        if (!validator.isDate(form.dateOfBirth)) {
             setDateOfBirthError(true);
             isValid = false;
         } else {
             setDateOfBirthError(false);
         }
 
+        if(!validator.isAlphanumeric(form.nickname)){
+            setNicknameError(true);
+            isValid = false;
+        } else {
+            setNicknameError(false);
+        }
+
         return isValid;
     }
-    /**
-     * This method cancels the registration and returns the guest to the home page.
-     *
-     * @param event the click event
-     */
-    function cancelHandler(event) {
+
+    function cancelHandler(event){
         event.preventDefault();
         history.replace('/')
     }
 
-    /**
-     * This method submits the user registration data to the server to be registered and returns the user id.
-     *
-     * @param event the click event for the register button
-     * @returns {Promise<void>} the response from the server containing the user id
-     */
     async function submitHandler(event) {
         event.preventDefault();
 
         const enteredEmail = emailRef.current.value;
         const enteredFirstName = firstNameRef.current.value;
         const enteredLastName = lastNameRef.current.value;
-        const enteredPassword = passwordRef.current.value;
         const enteredPhone = phoneRef.current.value;
-        const enteredUsername = usernameRef.current.value;
         const enteredDateOfBirth = dateOfBirthRef.current.value;
+        const enteredNickname = nicknameRef.current.value;
 
-        const registrationData = {
+        const applicationData = {
             email: enteredEmail,
             firstName: enteredFirstName,
             lastName: enteredLastName,
-            password: enteredPassword,
             phone: enteredPhone,
             role: 'user',
-            username: enteredUsername,
-            dateOfBirth: enteredDateOfBirth
+            dateOfBirth: enteredDateOfBirth,
+            cardType: cardId,
+            nickname: enteredNickname
         }
 
-        if(!formIsValid(registrationData)) return;
+        if(!formIsValid(applicationData)) return;
 
         try {
-            const response = await axios.post(url, registrationData);
-            localStorage.setItem('userId', response.data.userId);
-
-            history.replace('/');
+            const response = await axios.post(url + userId, applicationData);
         } catch (e) {
             if(e.response){
                 setErrorMessage(e.response.data.message);
             } else {
-                setErrorMessage("Something went wrong... please try again later");
+                setErrorMessage("Something went wrong... please try again later")
             }
-
         }
     }
 
     return (
         <section className={'container h-60 smooth-scroll'}>
-            { errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2> }
+            {errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2>}
             <form className="row g-3 vertical-center">
-                <div className="col-sm-12 col-md-6">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" id="username" ref={usernameRef}/>
-                    {usernameError && <p className={'alert-danger mb-3'}>Usernames can contain only numbers and letters</p>}
-                </div>
-                <div className="col-sm-12 col-md-6">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" ref={passwordRef}/>
-                    {passwordError && <p className={'alert-danger mb-3'}>Password should contain numbers, special characters, and both cases</p>}
+                <div className="col-12">
+                    <label htmlFor="nickname" className="form-label">Card Nickname</label>
+                    <input type="text" className="form-control" id="nickname" ref={nicknameRef}/>
+                    {nicknameError &&
+                    <p className={'alert-danger mb-3'}>Nicknames must be alphanumeric</p>}
                 </div>
                 <div className="col-sm-12 col-md-6">
                     <label htmlFor="firstName" className="form-label">First Name</label>
                     <input type="text" className="form-control" id="firstName" ref={firstNameRef}/>
-                    {firstNameError && <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
+                    {firstNameError &&
+                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
                 </div>
                 <div className="col-sm-12 col-md-6">
                     <label htmlFor="lastName" className="form-label">Last Name</label>
                     <input type="text" className="form-control" id="lastName" ref={lastNameRef}/>
-                    {lastNameError && <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabe</p>}
+                    {lastNameError &&
+                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
                 </div>
                 <div className="col-sm-12 col-md-4">
                     <label htmlFor="email" className="form-label">Email</label>
@@ -188,13 +153,14 @@ function RegistrationForm(props) {
                         <button type={'button'} className="btn btn-secondary mr-2" onClick={cancelHandler}>Cancel</button>
                     </div>
                     <div className="col-sm-3 col-md-2 col-lg-1">
-                        <button type={'button'} className="btn btn-primary" onClick={submitHandler}>Register</button>
+                        <button type={'button'} className="btn btn-primary" onClick={submitHandler}>Apply</button>
                     </div>
                 </ButtonGroup>
+                <input id={'userId'} type={'hidden'} value={userId} />
+                <input id={'cardType'} type={'hidden'} value={cardId} />
             </form>
         </section>
-
-    )
+    );
 }
 
-export default RegistrationForm;
+export default CardSignUp;

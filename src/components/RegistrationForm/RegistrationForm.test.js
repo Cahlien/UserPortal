@@ -15,10 +15,15 @@ describe('Registration form', () => {
     beforeEach(setSpy.mockClear);
     afterEach(cleanup);
 
+    it("creates a registration form", () => {
+        const registrationForm = render(<RegistrationForm url={'/test'}/>);
+        expect(registrationForm).toBeTruthy();
+    });
+
     /**
-     * This method tests to see if the registration data is submitted via axios.post.
+     * This method tests that axios.post is not called if form data is invalid.
      */
-    it('processes post request when submit button is clicked', async () => {
+    it('fails to processes post request when submit button is clicked', async () => {
         const promise = Promise.resolve({data: {userId: 'abc-123-xyz-789'}});
         axiosMock.post.mockResolvedValueOnce(promise);
 
@@ -29,11 +34,58 @@ describe('Registration form', () => {
 
         await act(() => promise);
 
+        expect(axiosMock.post).toBeCalledTimes(0);
+    });
+
+    /**
+     * This method tests that axios.post is called if form data is valid.
+     */
+    it('successfully processes post request when submit button is clicked', async () => {
+        const promise = Promise.resolve({data: {userId: 'abc-123-xyz-789'}});
+        axiosMock.post.mockResolvedValueOnce(promise);
+
+        const registrationForm = render(<RegistrationForm url={'/test'}/>);
+        const submitButton = screen.getByText('Register');
+
+        const emailInput = document.getElementById('email');
+        expect(emailInput).toBeTruthy();
+
+        const usernameInput = document.getElementById('username');
+        expect(usernameInput).toBeTruthy();
+
+        const firstNameInput = document.getElementById('firstName');
+        expect(firstNameInput).toBeTruthy();
+
+        const lastNameInput = document.getElementById('lastName');
+        expect(lastNameInput).toBeTruthy();
+
+        const passwordInput = document.getElementById('password');
+        expect(passwordInput).toBeTruthy();
+
+        const phoneInput = document.getElementById('phone');
+        expect(phoneInput).toBeTruthy();
+
+        const dateOfBirthInput = document.getElementById('dateOfBirth');
+        expect(dateOfBirthInput).toBeTruthy();
+
+        emailInput.value = "test@test.com";
+        usernameInput.value = "test";
+        firstNameInput.value = "Test";
+        lastNameInput.value = "Test";
+        passwordInput.value = "Test!123";
+        phoneInput.value = "1234567890";
+        dateOfBirthInput.value = "2021-01-01";
+
+        userEvent.click(submitButton);
+
+        await act(() => promise);
+
         expect(axiosMock.post).toBeCalledTimes(1);
     });
 
     /**
-     * This method tests to see if the form saves user id when the function returns.
+     * This method tests that the registration form saves the userID in localStorage
+     * after a successful registration.
      */
     it('saves the userId into localStorage after registering a user', async () => {
         const promise = Promise.resolve({data: {userId: 'abc-123-xyz-789'}});
@@ -41,6 +93,35 @@ describe('Registration form', () => {
 
         const registrationForm = render(<RegistrationForm url={'/test'}/>);
         const submitButton = screen.getByText('Register');
+
+        const emailInput = document.getElementById('email');
+        expect(emailInput).toBeTruthy();
+
+        const usernameInput = document.getElementById('username');
+        expect(usernameInput).toBeTruthy();
+
+        const firstNameInput = document.getElementById('firstName');
+        expect(firstNameInput).toBeTruthy();
+
+        const lastNameInput = document.getElementById('lastName');
+        expect(lastNameInput).toBeTruthy();
+
+        const passwordInput = document.getElementById('password');
+        expect(passwordInput).toBeTruthy();
+
+        const phoneInput = document.getElementById('phone');
+        expect(phoneInput).toBeTruthy();
+
+        const dateOfBirthInput = document.getElementById('dateOfBirth');
+        expect(dateOfBirthInput).toBeTruthy();
+
+        emailInput.value = "test@test.com";
+        usernameInput.value = "test";
+        firstNameInput.value = "Test";
+        lastNameInput.value = "Test";
+        passwordInput.value = "Test!123";
+        phoneInput.value = "1234567890";
+        dateOfBirthInput.value = "2021-01-01";
 
         userEvent.click(submitButton);
 

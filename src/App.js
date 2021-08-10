@@ -10,6 +10,8 @@ import AccountRegistration from './components/AccountComponents/RegisterAccount/
 import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
 import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
+import Layout from './components/layout/Layout';
+import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -54,6 +56,11 @@ function App() {
                     {!authContext.userIsLoggedIn && <LoginForm />}
                     {authContext.userIsLoggedIn && <Redirect to={'/'} />}
                     <MainFooter />
+                </Route>
+                <Route path={'/cardsignup'}>
+                    <Layout>
+                        <CardSignUp />
+                    </Layout>
                 </Route>
             </Switch>
         </div>

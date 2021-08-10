@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import axiosMock from 'axios';
 import LoginForm from "./LoginForm";
 import {AuthContextProvider} from "../../store/auth-context";
-import {BrowserRouter} from "react-router-dom";
 
 const setSpy = jest.spyOn(localStorage.__proto__, 'setItem');
 
