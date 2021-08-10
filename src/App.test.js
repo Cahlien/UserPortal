@@ -10,8 +10,13 @@ describe('App Component', () => {
                 <App />
             </BrowserRouter>
         );
+<<<<<<< HEAD
+        // const welcomeBanner = screen.getByText('Welcome to BeardTrust!');
+        // expect(welcomeBanner).toBeInTheDocument();
+=======
         const homePage = screen.getAllByText('BeardTrust', {exact: false});
         expect(homePage).toBeTruthy();
+>>>>>>> origin/dev
     });
 });
 
