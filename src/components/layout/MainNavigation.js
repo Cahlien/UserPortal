@@ -1,15 +1,26 @@
-import {useContext} from 'react';
-import {Link} from 'react-router-dom';
+import {useContext, useState} from 'react';
+import {Link, Redirect} from 'react-router-dom';
 
 import AuthContext from '../../store/auth-context';
 
 function MainNavigation(props) {
     const authContext = useContext(AuthContext);
-    const isLoggedIn = authContext.isLoggedIn;
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+
+        authContext.logout();
+    }
 
     return (
+<<<<<<< HEAD
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="">Beardtrust</a>
+=======
+        <nav className="navbar navbar-expand-lg navbar-light bg-light main-navbar mx-2">
+            <a className="navbar-brand" href="/">Beardtrust</a>
+>>>>>>> origin/dev
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon" />
@@ -25,6 +36,7 @@ function MainNavigation(props) {
                     </li>
                     <li className="nav-item">
                        {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
+<<<<<<< HEAD
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/'}>Logout</Link>}
                     </li>
                     <li className="nav-item">
@@ -35,6 +47,9 @@ function MainNavigation(props) {
                     </li>
                     <li className="nav-item">
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts/me'}>My Accounts</Link>}
+=======
+                       {authContext.userIsLoggedIn && <Link className={'nav-link'} onClick={logout} to={'#'}>Logout</Link>}
+>>>>>>> origin/dev
                     </li>
                 </ul>
             </div>
