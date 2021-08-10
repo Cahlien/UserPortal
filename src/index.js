@@ -12,13 +12,6 @@ import {ActionContextProvider} from "./store/action-context";
 
 ReactDOM.render(
     <AuthContextProvider>
-<<<<<<< HEAD
-        <React.StrictMode>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </React.StrictMode>
-=======
         <ActionContextProvider>
             <React.StrictMode>
                 <BrowserRouter>
@@ -26,7 +19,6 @@ ReactDOM.render(
                 </BrowserRouter>
             </React.StrictMode>
         </ActionContextProvider>
->>>>>>> origin/dev
     </AuthContextProvider>,
     document.getElementById('root')
 );

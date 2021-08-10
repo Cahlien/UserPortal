@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-  
-=======
->>>>>>> origin/dev
 import React, { useState } from "react";
 
 const ActionContext = React.createContext({
     targetId: '',
     action: (targetId) => {}
-<<<<<<< HEAD
-    
-=======
->>>>>>> origin/dev
 });
 
 export const ActionContextProvider = (props) => {
@@ -18,10 +10,6 @@ export const ActionContextProvider = (props) => {
     const [targetId, setTargetId] = useState(initialTarget);
 
     const handleAction = (targetId) => {
-<<<<<<< HEAD
-        console.log("Action setting target to: " + targetId);
-=======
->>>>>>> origin/dev
         setTargetId(targetId);
     }
 
