@@ -9,7 +9,9 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import MainFooter from "./components/layout/MainFooter";
 import CardTypes from "./components/CardTypes/CardTypes";
 import CardSignUp from './components/CardSignUp/CardSignUp';
+import UserCards from './components/UserCards/UserCards';
 import ActionContext from "./store/action-context";
+import CardStatus from "./components/CardStatus/CardStatus";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -37,6 +39,16 @@ function App() {
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
+                    </Layout>
+                </Route>
+                <Route path={'/cards/:cardId'}>
+                    <Layout>
+                        <CardStatus />
+                    </Layout>
+                </Route>
+                <Route path={'/cards'}>
+                    <Layout>
+                        <UserCards />
                     </Layout>
                 </Route>
             </Switch>

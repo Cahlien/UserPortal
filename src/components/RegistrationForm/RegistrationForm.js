@@ -143,7 +143,7 @@ function RegistrationForm(props) {
     return (
         <section className={'container h-60 smooth-scroll'}>
             { errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2> }
-            <form className="row g-3 vertical-center">
+            <form className="row g-3 vertical-center registration-form">
                 <div className="col-sm-12 col-md-6">
                     <label htmlFor="username" className="form-label">Username</label>
                     <input type="text" className="form-control" id="username" ref={usernameRef}/>

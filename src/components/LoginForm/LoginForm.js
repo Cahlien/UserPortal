@@ -93,8 +93,8 @@ function LoginForm(props) {
     }
 
     return (
-        <section id="login" className="col-12 h-75 w-100">
-            <div className="container offset-4 col-5 vertical-center">
+        <section id="login" className={"container col-12 h-75 w-100 vertical-center"}>
+            <div className="offset-2 col-5 vertical-center">
                 <Form>
                     {errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div>}
                     <div className="form-group">
