@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import {useContext} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import ActionContext from './store/action-context';
 import MainFooter from './components/layout/MainFooter';
@@ -13,6 +13,8 @@ import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingl
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/layout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
+import UserCards from './components/UserCards/UserCards';
+import CardStatus from "./components/CardStatus/CardStatus";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -21,46 +23,56 @@ function App() {
         <div className="App">
             <Switch>
                 <Route path={'/'} exact={true}>
-                    <MainNavigation />
+                    <MainNavigation/>
                 </Route>
                 <Route path={'/users'}>
-                    <MainNavigation />
-                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'} />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/me'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <ViewUserForm />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {authContext.userIsLoggedIn && <ViewUserForm/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountDeactivator />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {authContext.userIsLoggedIn && <AccountDeactivator/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountSingle />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {authContext.userIsLoggedIn && <AccountSingle/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/accounts/me'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <ViewAccount />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {authContext.userIsLoggedIn && <ViewAccount/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/accounts'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountRegistration />}
-                    <MainFooter />
+                    <MainNavigation/>
+                    {authContext.userIsLoggedIn && <AccountRegistration/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/auth'}>
-                    {!authContext.userIsLoggedIn && <LoginForm />}
-                    {authContext.userIsLoggedIn && <Redirect to={'/'} />}
-                    <MainFooter />
+                    {!authContext.userIsLoggedIn && <LoginForm/>}
+                    {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
+                    <MainFooter/>
                 </Route>
                 <Route path={'/cardsignup'}>
                     <Layout>
-                        <CardSignUp />
+                        <CardSignUp/>
+                    </Layout>
+                </Route>
+                <Route path={'/cards/:cardId'}>
+                    <Layout>
+                        <CardStatus/>
+                    </Layout>
+                </Route>
+                <Route path={'/cards'}>
+                    <Layout>
+                        <UserCards/>
                     </Layout>
                 </Route>
             </Switch>
