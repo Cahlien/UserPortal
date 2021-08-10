@@ -1,4 +1,4 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import AuthContext from "../../../store/auth-context"
 import axios from "axios"
 import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown } from "react-bootstrap";
@@ -8,24 +8,28 @@ function AccountRegistration() {
     const authContext = useContext(AuthContext);
 
     const [errorMessage, setErrorMessage] = useState();
-
+    const [typeTitle, setTitle] = useState();
+    
     const nickname = useRef();
     const balance = useRef();
-    let test1 = 'default text';
+    let actType = 'Recovery';
     const url = "http://localhost:9001/accounts";
+    useEffect(() => {
+        setTitle('Select Account Type')
+    }, [actType])
 
     function dropHandler(dropInput) {
-        console.log('in drop handler, prop nrcvd: ', dropInput )
         switch (dropInput) {
             case "0":
-                test1 = 'Savings'
+                actType = 'Savings'
                 break;
             case "1":
-                test1 = 'Checking'
+                actType = 'Checking'
                 break;
             default:
-                test1 = 'Savings'
+                actType = 'Savings'
         }
+        setTitle(actType);
     }
 
     async function submitHandler(event) {
@@ -35,7 +39,7 @@ function AccountRegistration() {
         const enteredDeposit = balance.current.value;
         let cdate = new Date();
 
-        const typeAns = test1
+        const typeAns = actType
 
         const registrationData = {
             nickname: enteredNickname,
@@ -47,22 +51,12 @@ function AccountRegistration() {
             type: typeAns
         }
 
-        axios(
-            url,
-            {
-                method: 'POST',
-                data: JSON.stringify(registrationData),
-                headers: {
-                    'Authorization': authContext.token,
-                    'Content-Type': 'application/json'
-                }
-            }
-        ).then((response) => {
-            console.log('response returned:', response.data)
-            return response.data;
-        }).catch((e) => {
-            console.log('Error caught: ' + e)
-        });
+        try {
+        const res = await axios.post(url, registrationData);
+        console.log(res);
+        } catch (e) {
+            console.log(e);
+        }
 
 
     }
@@ -80,9 +74,9 @@ function AccountRegistration() {
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Initial Deposit:</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={balance} required />
                     </FormGroup>
-                    <Dropdown className='mt-3' onSelect={function(evt){ dropHandler(evt) }}>
+                    <Dropdown className='mt-3' onSelect={function (evt) { dropHandler(evt) }} required>
                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
-                            Account Type
+                            {typeTitle}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
@@ -90,7 +84,7 @@ function AccountRegistration() {
                         </Dropdown.Menu>
                     </Dropdown>
                     <ButtonGroup>
-                        <Button type={'submit'} className={'btn btn-primary mt-3'} onClick={submitHandler}>Register</Button>
+                        <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={submitHandler}>Register</Button>
                     </ButtonGroup>
                 </Form>
             </div>

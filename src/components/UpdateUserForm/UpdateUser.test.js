@@ -1,8 +1,7 @@
 import axios from 'axios'
 import TestRenderer from 'react-test-renderer'
 import UpdateUserForm from './UpdateUserForm'
-import {act, cleanup, render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen} from '@testing-library/react';
 
 /**
  * The tests for the ViewUserForm component.

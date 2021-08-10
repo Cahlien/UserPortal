@@ -1,10 +1,8 @@
 import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { useState } from "react"
 
 const AccountList = ({ accounts }) => {
-
-    var [account, setAccount] = useState({})
+    
     let dispActs = []
 
     if (!Array.prototype.slice.call(accounts).length === 0) {

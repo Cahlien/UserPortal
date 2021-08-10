@@ -60,29 +60,29 @@ const SingleAccount = ({ accounts }) => {
                             <td>{account ? account.type : null}</td>
                             <td>$<input
                                 type="text"
-                                id="withdraw"
+                                id="withdrawInput"
                                 ref={withAmt} />
                                 <Button
                                     variant="success"
                                     type={'submit'}
                                     onClick={submitWithdraw}
-                                    id='Review'
+                                    title='withdrawButton'
                                 >Withdraw</Button></td>
                             <td>$<input
                                 type="int"
-                                id="deposit"
+                                id="depositInput"
                                 ref={depAmt} />
                                 <Button
                                     variant="success"
                                     type={'submit'}
                                     onClick={submitDeposit}
-                                    id='Review'
+                                    title='depositButton'
                                 >Deposit</Button></td>
                             <td><Button
                                 onClick={handleShow}
                                 variant="danger"
                                 type={'submit'}
-                                id='Review'>
+                                title='deactivate'>
                                 Deactivate Account</Button>
 
                                 <Modal show={show} onHide={handleClose}>
