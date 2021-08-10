@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Account Registration Test Expects the snapshot to match the display 1`] = `
+<section>
+  <div
+    className="container vertical-center"
+  >
+    <form
+      className="offset-4 col-3"
+    >
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          Nickname?
+        </label>
+        <input
+          className="form-control"
+          id="username"
+          required={true}
+          type="text"
+        />
+      </div>
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          Initial Deposit:
+        </label>
+        <input
+          className="form-control"
+          id="username"
+          required={true}
+          type="text"
+        />
+      </div>
+      <div
+        className="mt-3 dropdown"
+        required={true}
+      >
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          className="dropdown-toggle btn btn-success"
+          data-toggle="dropdown"
+          disabled={false}
+          id="dropdown-basic"
+          onClick={[Function]}
+          type="button"
+        >
+          Select Account Type
+        </button>
+      </div>
+      <div
+        className="btn-group"
+        role="group"
+      >
+        <button
+          className="btn btn-primary mt-3 btn btn-primary"
+          disabled={false}
+          onClick={[Function]}
+          title="registerButton"
+          type="submit"
+        >
+          Register
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+`;

@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App';
 
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from './store/auth-context';
 import {ActionContextProvider} from "./store/action-context";
 

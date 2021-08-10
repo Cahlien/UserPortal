@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View Single Account ability Expects the snapshot to match the display 1`] = `
+<div>
+  <table
+    className="table table-striped table-bordered table-hover"
+  >
+    <thead>
+      <tr>
+        <th>
+          Nickname
+        </th>
+        <th>
+          Balance
+        </th>
+        <th>
+          Interest
+        </th>
+        <th>
+          Date Created
+        </th>
+        <th>
+          Type
+        </th>
+        <th>
+          Withdraw
+        </th>
+        <th>
+          Deposit
+        </th>
+        <th>
+          Deactivate
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td />
+        <td>
+          $
+        </td>
+        <td>
+          %
+        </td>
+        <td />
+        <td />
+        <td>
+          $
+          <input
+            id="withdrawInput"
+            type="text"
+          />
+          <button
+            className="btn btn-success"
+            disabled={false}
+            onClick={[Function]}
+            title="withdrawButton"
+            type="submit"
+          >
+            Withdraw
+          </button>
+        </td>
+        <td>
+          $
+          <input
+            id="depositInput"
+            type="int"
+          />
+          <button
+            className="btn btn-success"
+            disabled={false}
+            onClick={[Function]}
+            title="depositButton"
+            type="submit"
+          >
+            Deposit
+          </button>
+        </td>
+        <td>
+          <button
+            className="btn btn-danger"
+            disabled={false}
+            onClick={[Function]}
+            title="deactivate"
+            type="submit"
+          >
+            Deactivate Account
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;
