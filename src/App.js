@@ -13,8 +13,9 @@ import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingl
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/layout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
-import UserCards from './components/UserCards/UserCards';
-import CardStatus from "./components/CardStatus/CardStatus";
+import UserCards from './components/CardComponents/UserCards/UserCards';
+import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
+import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -23,46 +24,54 @@ function App() {
         <div className="App">
             <Switch>
                 <Route path={'/'} exact={true}>
-                    <MainNavigation/>
+                    <Layout>
+
+                    </Layout>
                 </Route>
                 <Route path={'/users'}>
-                    <MainNavigation/>
+                    <Layout>
                     {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
-                    <MainFooter/>
+                    </Layout>
                 </Route>
                 <Route path={'/me'}>
-                    <MainNavigation/>
-                    {authContext.userIsLoggedIn && <ViewUserForm/>}
-                    <MainFooter/>
+                    <Layout>
+                        {authContext.userIsLoggedIn && <ViewUserForm/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
-                    <MainNavigation/>
-                    {authContext.userIsLoggedIn && <AccountDeactivator/>}
-                    <MainFooter/>
+                    <Layout>
+                        {authContext.userIsLoggedIn && <AccountDeactivator/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
-                    <MainNavigation/>
+                    <Layout>
                     {authContext.userIsLoggedIn && <AccountSingle/>}
-                    <MainFooter/>
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/me'}>
-                    <MainNavigation/>
+                    <Layout>
                     {authContext.userIsLoggedIn && <ViewAccount/>}
-                    <MainFooter/>
+                    </Layout>
                 </Route>
                 <Route path={'/accounts'}>
-                    <MainNavigation/>
+                    <Layout>
                     {authContext.userIsLoggedIn && <AccountRegistration/>}
-                    <MainFooter/>
+                    </Layout>
                 </Route>
                 <Route path={'/auth'}>
-                    {!authContext.userIsLoggedIn && <LoginForm/>}
-                    {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
-                    <MainFooter/>
+                    <Layout>
+                        {!authContext.userIsLoggedIn && <LoginForm/>}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
+                    </Layout>
+                </Route>
+                <Route path={'/cardoffers'}>
+                    <Layout>
+                        <CardTypes />
+                    </Layout>
                 </Route>
                 <Route path={'/cardsignup'}>
                     <Layout>
-                        <CardSignUp/>
+                        <CardSignUp />
                     </Layout>
                 </Route>
                 <Route path={'/cards/:cardId'}>

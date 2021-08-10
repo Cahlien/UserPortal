@@ -2,7 +2,7 @@ import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axiosMock from 'axios';
 import CardStatus from "./CardStatus";
-import ActionContext from "../../store/action-context";
+import ActionContext from "../../../store/action-context";
 
 describe("Card Status", () =>{
     it("should create a card status component", () => {

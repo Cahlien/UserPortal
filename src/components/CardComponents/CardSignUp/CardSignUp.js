@@ -1,10 +1,11 @@
 import {useContext, useRef, useState} from "react";
 import {useHistory} from "react-router-dom";
-import ActionContext from '../../../store/action-context'
+import ActionContext from "../../../store/action-context";
 import {ButtonGroup} from "react-bootstrap";
 import validator from "validator";
 import AuthContext from "../../../store/auth-context";
 import axios from "axios";
+import './CardSignUp.css';
 
 function CardSignUp(props) {
     const actionContext = useContext(ActionContext);
@@ -33,33 +34,33 @@ function CardSignUp(props) {
     function formIsValid(form) {
         let isValid = true;
 
-        if (!validator.isMobilePhone(form.phone)) {
+        if (form.phone && !validator.isMobilePhone(form.phone)) {
             setPhoneError(true);
             isValid = false;
         } else {
             setPhoneError(false);
         }
 
-        if (!validator.isAlpha(form.firstName) || validator.isEmpty(form.firstName)) {
+        if (form.firstName && !validator.isAlpha(form.firstName)) {
             setFirstNameError(true);
             isValid = false;
         } else {
             setFirstNameError(false);
         }
 
-        if (!validator.isAlpha(form.lastName)) {
+        if (form.lastName && !validator.isAlpha(form.lastName)) {
             setLastNameError(true);
             isValid = false;
         }
 
-        if (!validator.isDate(form.dateOfBirth)) {
+        if (form.dateOfBirth && !validator.isDate(form.dateOfBirth)) {
             setDateOfBirthError(true);
             isValid = false;
         } else {
             setDateOfBirthError(false);
         }
 
-        if(!validator.isAlphanumeric(form.nickname)){
+        if(form.nickname && !validator.isAlphanumeric(form.nickname)){
             setNicknameError(true);
             isValid = false;
         } else {
@@ -77,9 +78,9 @@ function CardSignUp(props) {
     async function submitHandler(event) {
         event.preventDefault();
 
-        const enteredEmail = emailRef.current.value;
-        const enteredFirstName = firstNameRef.current.value;
-        const enteredLastName = lastNameRef.current.value;
+        const enteredEmail = emailRef.current.value.toLowerCase();
+        const enteredFirstName = firstNameRef.current.value.toLowerCase();
+        const enteredLastName = lastNameRef.current.value.toLowerCase();
         const enteredPhone = phoneRef.current.value;
         const enteredDateOfBirth = dateOfBirthRef.current.value;
         const enteredNickname = nicknameRef.current.value;
@@ -111,9 +112,9 @@ function CardSignUp(props) {
     return (
         <section className={'container h-60 smooth-scroll'}>
             {errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2>}
-            <form className="row g-3 vertical-center">
+            <form className="row g-3 vertical-center registration-form">
                 <div className="col-12">
-                    <label htmlFor="nickname" className="form-label">Card Nickname</label>
+                    <label htmlFor="nickname" className="form-label">Somethind different</label>
                     <input type="text" className="form-control" id="nickname" ref={nicknameRef}/>
                     {nicknameError &&
                     <p className={'alert-danger mb-3'}>Nicknames must be alphanumeric</p>}

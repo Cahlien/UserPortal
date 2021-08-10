@@ -45,7 +45,7 @@ function LoginForm(props) {
 
         setAttemptedLogIn(true);
 
-        const enteredEmail = email.current.value;
+        const enteredEmail = email.current.value.toLowerCase();
         const enteredPassword = password.current.value;
 
         const loginData = {

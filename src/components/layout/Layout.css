@@ -1,3 +1,9 @@
 main{
     min-height: 95vh;
 }
+
+.undecorated, .undecorated:hover, .undecorated:visited, .undecorated:focus, .undecorated:active{
+    color: rgba(0,0,0,.55);
+    text-decoration: none;
+    box-shadow:none;
+}

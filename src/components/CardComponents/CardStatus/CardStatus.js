@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useContext, useEffect, useState} from "react";
-import ActionContext from "../../store/action-context";
-import AuthContext from "../../store/auth-context";
+import ActionContext from "../../../store/action-context";
+import AuthContext from "../../../store/auth-context";
 import {Link, useParams} from "react-router-dom";
 import {Table} from "react-bootstrap";
 

@@ -104,12 +104,12 @@ function RegistrationForm(props) {
     async function submitHandler(event) {
         event.preventDefault();
 
-        const enteredEmail = emailRef.current.value;
-        const enteredFirstName = firstNameRef.current.value;
-        const enteredLastName = lastNameRef.current.value;
+        const enteredEmail = emailRef.current.value.toLowerCase();
+        const enteredFirstName = firstNameRef.current.value.toLowerCase();
+        const enteredLastName = lastNameRef.current.value.toLowerCase();
         const enteredPassword = passwordRef.current.value;
         const enteredPhone = phoneRef.current.value;
-        const enteredUsername = usernameRef.current.value;
+        const enteredUsername = usernameRef.current.value.toLowerCase();
         const enteredDateOfBirth = dateOfBirthRef.current.value;
 
         const registrationData = {

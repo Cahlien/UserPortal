@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import AuthContext from "../../store/auth-context";
+import AuthContext from "../../../store/auth-context";
 import CardsList from "./CardsList";
 
 function UserCards(){

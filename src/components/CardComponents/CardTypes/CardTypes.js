@@ -1,7 +1,7 @@
 
 import React, {useContext, useState} from 'react';
 import {useHistory} from "react-router-dom";
-import ActionContext from "../../store/action-context";
+import ActionContext from "../../../store/action-context";
 
 function CardTypes(props){
     const history = useHistory();
@@ -19,7 +19,7 @@ function CardTypes(props){
 
     return (
         <section className={'container'}>
-            <div className={'offset-4 col-5'} >
+            <div className={'offset-4 col-5 vertical-center'} >
                 <p>Sign up for this totally irrelevant dummy card!
                     <button className={'btn btn-primary btn-sm mx-3'} onClick={onSignUp} id={'dummy'}>Sign Up</button>
                 </p>

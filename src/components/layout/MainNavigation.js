@@ -1,7 +1,8 @@
 import {useContext, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-
+import {Dropdown} from "react-bootstrap";
 import AuthContext from '../../store/auth-context';
+import "./Layout.css"
 
 function MainNavigation(props) {
     const authContext = useContext(AuthContext);
@@ -30,10 +31,6 @@ function MainNavigation(props) {
                         {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/'}>Profile</Link>}
                     </li>
                     <li className="nav-item">
-                       {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
-                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/'}>Logout</Link>}
-                    </li>
-                    <li className="nav-item">
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/me'}>My Details</Link>}
                     </li>
                     <li className="nav-item">
@@ -41,6 +38,20 @@ function MainNavigation(props) {
                     </li>
                     <li className="nav-item">
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts/me'}>My Accounts</Link>}
+                    </li>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="link" className={'undecorated'} id="dropdown-basic">
+                            Cards
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item href="/cardoffers">Apply for Card</Dropdown.Item>
+                            <Dropdown.Item href="/cards">My Cards</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <li className="nav-item">
+                        {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
+                        {authContext.userIsLoggedIn && <Link className={'nav-link'} onClick={logout} to={'/'}>Logout</Link>}
                     </li>
                 </ul>
             </div>
