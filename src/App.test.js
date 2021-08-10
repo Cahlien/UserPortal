@@ -10,8 +10,8 @@ describe('App Component', () => {
                 <App />
             </BrowserRouter>
         );
-        //const welcomeBanner = screen.getByText('Welcome to BeardTrust!');
-        //expect(welcomeBanner).toBeInTheDocument();
+        // const welcomeBanner = screen.getByText('Welcome to BeardTrust!');
+        // expect(welcomeBanner).toBeInTheDocument();
     });
 });
 
