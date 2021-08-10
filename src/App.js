@@ -13,6 +13,7 @@ import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingl
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/layout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
+import CardTypes from './components/CardTypes/CardTypes'
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -21,43 +22,47 @@ function App() {
         <div className="App">
             <Switch>
                 <Route path={'/'} exact={true}>
-                    <MainNavigation />
+                    <Layout>
+                        <p>Welcome to BeardTrust</p>
+                        <CardTypes />
+                    </Layout>
                 </Route>
                 <Route path={'/users'}>
-                    <MainNavigation />
+                    <Layout >
                     {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'} />}
-                    <MainFooter />
+                    </Layout >
                 </Route>
                 <Route path={'/me'}>
-                    <MainNavigation />
+                    <Layout>
                     {authContext.userIsLoggedIn && <ViewUserForm />}
-                    <MainFooter />
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
-                    <MainNavigation />
+                    <Layout>
                     {authContext.userIsLoggedIn && <AccountDeactivator />}
-                    <MainFooter />
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
-                    <MainNavigation />
+                    <Layout>
                     {authContext.userIsLoggedIn && <AccountSingle />}
-                    <MainFooter />
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/me'}>
-                    <MainNavigation />
+                    <Layout>
                     {authContext.userIsLoggedIn && <ViewAccount />}
-                    <MainFooter />
+                    </Layout>
                 </Route>
                 <Route path={'/accounts'}>
-                    <MainNavigation />
+                    <Layout>
                     {authContext.userIsLoggedIn && <AccountRegistration />}
-                    <MainFooter />
+                    </Layout>
                 </Route>
-                <Route path={'/auth'}>
-                    {!authContext.userIsLoggedIn && <LoginForm />}
-                    {authContext.userIsLoggedIn && <Redirect to={'/'} />}
-                    <MainFooter />
-                </Route>
+                <Layout>
+                    <Route path={'/auth'}>
+                        {!authContext.userIsLoggedIn && <LoginForm />}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
+                    </Route>
+                </Layout>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
