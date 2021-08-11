@@ -2,8 +2,6 @@ import { useContext } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import ActionContext from './store/action-context';
-import MainFooter from './components/layout/MainFooter';
-import MainNavigation from './components/layout/MainNavigation';
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ViewUserForm from './components/ViewUserForm/ViewUserForm';
