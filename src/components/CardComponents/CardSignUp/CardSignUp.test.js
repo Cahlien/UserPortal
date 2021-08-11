@@ -2,8 +2,7 @@ import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axiosMock from 'axios';
 import CardSignUp from "./CardSignUp";
-import RegistrationForm from "../RegistrationForm/RegistrationForm";
-import ActionContext from "../../store/action-context";
+import ActionContext from "../../../store/action-context";
 
 describe("CardSignUp", () => {
 
@@ -16,6 +15,10 @@ describe("CardSignUp", () => {
     it("should not submit an axios request if the form is invalid", async () => {
         const component = render(<CardSignUp/>);
         expect(component).toBeTruthy();
+        const nicknameInput = document.getElementById('nickname');
+        expect(nicknameInput).toBeTruthy();
+
+        nicknameInput.value = "what card";
 
         const applyButton = screen.getByText("Apply");
         userEvent.click(applyButton);

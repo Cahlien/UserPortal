@@ -60,7 +60,7 @@ function CardSignUp(props) {
             setDateOfBirthError(false);
         }
 
-        if(form.nickname && !validator.isAlphanumeric(form.nickname)){
+        if (form.nickname && !validator.isAlphanumeric(form.nickname)) {
             setNicknameError(true);
             isValid = false;
         } else {
@@ -70,7 +70,7 @@ function CardSignUp(props) {
         return isValid;
     }
 
-    function cancelHandler(event){
+    function cancelHandler(event) {
         event.preventDefault();
         history.replace('/')
     }
@@ -96,12 +96,12 @@ function CardSignUp(props) {
             nickname: enteredNickname
         }
 
-        if(!formIsValid(applicationData)) return;
+        if (!formIsValid(applicationData)) return;
 
         try {
             const response = await axios.post(url + userId, applicationData);
         } catch (e) {
-            if(e.response){
+            if (e.response) {
                 setErrorMessage(e.response.data.message);
             } else {
                 setErrorMessage("Something went wrong... please try again later")
@@ -114,7 +114,7 @@ function CardSignUp(props) {
             {errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2>}
             <form className="row g-3 vertical-center registration-form">
                 <div className="col-12">
-                    <label htmlFor="nickname" className="form-label">Somethind different</label>
+                    <label htmlFor="nickname" className="form-label">Card Nickname</label>
                     <input type="text" className="form-control" id="nickname" ref={nicknameRef}/>
                     {nicknameError &&
                     <p className={'alert-danger mb-3'}>Nicknames must be alphanumeric</p>}
@@ -151,14 +151,15 @@ function CardSignUp(props) {
                         <span></span>
                     </div>
                     <div className="col-sm-3 col-md-2 col-lg-1">
-                        <button type={'button'} className="btn btn-secondary mr-2" onClick={cancelHandler}>Cancel</button>
+                        <button type={'button'} className="btn btn-secondary mr-2" onClick={cancelHandler}>Cancel
+                        </button>
                     </div>
                     <div className="col-sm-3 col-md-2 col-lg-1">
                         <button type={'button'} className="btn btn-primary" onClick={submitHandler}>Apply</button>
                     </div>
                 </ButtonGroup>
-                <input id={'userId'} type={'hidden'} value={userId} />
-                <input id={'cardType'} type={'hidden'} value={cardId} />
+                <input id={'userId'} type={'hidden'} value={userId}/>
+                <input id={'cardType'} type={'hidden'} value={cardId}/>
             </form>
         </section>
     );

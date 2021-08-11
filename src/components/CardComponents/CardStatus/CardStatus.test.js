@@ -1,26 +1,80 @@
-import {act, cleanup, render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {act, render, screen} from '@testing-library/react';
 import axiosMock from 'axios';
+import {MemoryRouter as Router} from "react-router";
 import CardStatus from "./CardStatus";
-import ActionContext from "../../../store/action-context";
+import AuthContext from "../../../store/auth-context";
 
-describe("Card Status", () =>{
+describe("Card Status", () => {
     it("should create a card status component", () => {
-       const component = render(<CardStatus />);
-       expect(component).toBeTruthy();
+        const component = render(
+            <Router initialEntries={['/cards/abc-123-no-card-for-me']}>
+                <AuthContext.Provider value={{
+                    token: 'Bearer winnie.or.yogi',
+                    userIsLoggedIn: true,
+                    userId: 'not,sure',
+                    login: (token) => {
+                    },
+                    logout: () => {
+                    }
+                }}>
+                    <CardStatus/>
+                </AuthContext.Provider>
+
+            </Router>
+        );
+
+        expect(component).toBeTruthy();
     });
 
-    it("should get card status", () => {
-        localStorage.setItem('userId', 'abc-123-xyz-789');
+    it("should get card status upon page load", async () => {
+        const promise = Promise.resolve({
+            data: {
+                "cardId": "abc-123-no-card-for-me",
+                "userId": "joe-not-sure-bauers",
+                "cardType": "dummy",
+                "balance": 3500000000000,
+                "cardNumber": "0000-0000-0000-0000",
+                "interestRate": 100,
+                "createDate": "2021-04-01",
+                "nickname": "THE_FLEECER",
+                "billCycleLength": 30,
+                "activeStatus": true,
+                "expireDate": "2024-12-25"
+            }
+        });
+        axiosMock.get.mockResolvedValueOnce(promise);
+
         const component = render(
-            <ActionContext.Provider value={{targetId:'d3fn-o712-e41c-a12d', action: (targetId) => {}}}>
-                <CardStatus />
-            </ActionContext.Provider>
+            <Router initialEntries={['/cards/joe-not-sure-bauers']}>
+                <CardStatus/>
+            </Router>
         );
         expect(component).toBeTruthy();
 
-        const getButton = screen.getByText('Get');
-        userEvent.click(getButton);
+        await act(() => promise);
+
+        expect(axiosMock.get).toBeCalledTimes(2);
+
+        const nickname = screen.getByText('THE_FLEECER');
+        expect(nickname).toBeTruthy();
+
+        const balance = screen.getByText('$3500000000000.00');
+        expect(balance).toBeTruthy();
+
+        const interestRate = screen.getByText('100.0%');
+        expect(interestRate).toBeTruthy();
+
+        const expiration = screen.getByText('12/24');
+        expect(expiration).toBeTruthy();
+
+        const cardType = screen.getByText('dummy');
+        expect(cardType).toBeTruthy();
+
+        const activeStatus = screen.getByText('true');
+        expect(activeStatus).toBeTruthy();
+
+        const lastFour = screen.getByText('0000');
+        expect(lastFour).toBeTruthy();
     });
 });
 

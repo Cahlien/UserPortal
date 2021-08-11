@@ -19,20 +19,25 @@ function CardStatus(){
     useEffect(() => {
         if(!hasLoaded){
             async function fetchCardStatus(){
-                const results = await axios.get(url, {
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                if(!hasLoaded){
+                    const results = await axios.get(url, {
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-                setCardStatus(results.data);
-                setHasLoaded(true);
+                    if(results){
+                        setCardStatus(results.data);
+                        setHasLoaded(true);
+                    }
+                }
+
+
             }
 
             try {
                 fetchCardStatus()
-
 
                 console.log(cardStatus);
             } catch (e) {
@@ -63,8 +68,8 @@ function CardStatus(){
                 <tbody>
                 <tr key={cardStatus?.cardNumber}>
                     <td>{cardStatus?.cardNumber.slice(15,19)}</td>
-                    <td>${cardStatus?.balance.toFixed(2)}</td>
-                    <td>{cardStatus?.interestRate.toFixed(1)}%</td>
+                    <td>{'$' + cardStatus?.balance.toFixed(2)}</td>
+                    <td>{cardStatus?.interestRate.toFixed(1) + '%'}</td>
                     <td>{cardStatus?.expireDate.slice(5,7) + '/' + cardStatus?.expireDate.slice(2, 4)}</td>
                     <td>{cardStatus?.cardType}</td>
                     <td>{cardStatus?.activeStatus.toString()}</td>
