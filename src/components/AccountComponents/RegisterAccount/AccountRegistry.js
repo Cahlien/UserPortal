@@ -37,6 +37,14 @@ function AccountRegistration() {
 
         const enteredNickname = nickname.current.value;
         const enteredDeposit = balance.current.value;
+        console.log('balance when empty: ', balance.current.value)
+        console.log('enteredDeposit is: ', enteredDeposit)
+        if (enteredDeposit < 0) {
+            enteredDeposit = 0;
+        }
+        if (enteredDeposit === "") {
+           enteredDeposit = 0;
+        }
         let cdate = new Date();
 
         const typeAns = actType
@@ -48,10 +56,12 @@ function AccountRegistration() {
             active_status: true,
             interest: 1,
             create_date: cdate,
-            type: typeAns
+            type: typeTitle
         }
 
         try {
+            console.log('typetitle: ', typeTitle)
+        console.log('actType: ', actType)
         const res = await axios.post(url, registrationData);
         console.log(res);
         } catch (e) {

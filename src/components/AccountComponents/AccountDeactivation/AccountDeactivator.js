@@ -1,35 +1,15 @@
 import axios from "axios";
-import { Alert } from "react-bootstrap";
-import { useState } from "react";
 
 
 function Deactivator({ account, history }) {
-    const [show, setShow] = useState(true);
-    console.log('in deactivator, recvd: ', account);
     if (account.balance > 0) {
-        console.log('recovery needed')
-        if (show) {
-            window.setTimeout(() => {
-                setShow(false)
-            }, 10000)
-            recovery(account)
-            return (
-                <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-                    <Alert.Heading>Warning! This account still has a Balance!</Alert.Heading>
-                    <p>
-                        You cannot close an account with a balance. It will be placed in Recovery until
-                        the balance reaches zero. Recovery accounts will always have a 0% interest,
-                        meaning no dividends will be accrued from them. Beardtrust reccomends transferring
-                        money to another account or withdrawing everything.
-                    </p>
-                </Alert>
-            );
-        }
-        return null;
+        recovery(account)
+        return true;
     }
+
     else {
-    deactivate(account);
-    return null
+        deactivate(account);
+        return false
     }
 
 

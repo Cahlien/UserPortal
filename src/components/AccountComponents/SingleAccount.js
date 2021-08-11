@@ -1,4 +1,4 @@
-import { Button, Table, Modal } from "react-bootstrap"
+import { Button, Table, Modal, Alert } from "react-bootstrap"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
 import axios from "axios"
@@ -9,9 +9,10 @@ import { useEffect } from "react";
 
 const SingleAccount = ({ accounts }) => {
 
-    var [account, setAccount] = useState({});
-    var [amount, setAmount] = useState({});
+    const [account, setAccount] = useState({});
+    const [amount, setAmount] = useState({});
     const [show, setShow] = useState(false);
+    const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
         setAccount(accounts)
@@ -25,12 +26,15 @@ const SingleAccount = ({ accounts }) => {
     const depAmt = useRef();
     const TransferEntity = { amount };
 
-    function deactivateHandler(account, history) {
-        render(
-            <section>
-                <Deactivator account={account} history={history} />
-            </section>
-        )
+    function deactivateHandler(history) {
+        setErDisp(Deactivator({ account }, { history }));
+        handleClose();
+    }
+
+    if (erdisp) {
+        window.setTimeout(() => {
+            setErDisp(false)
+        }, 10000)
     }
 
     if (accounts === null) {
@@ -38,6 +42,16 @@ const SingleAccount = ({ accounts }) => {
     } else {
         return (
             <div>
+                <Alert variant="danger" onClose={() => setErDisp(false)} show={erdisp} dismissible>
+                    <Alert.Heading>Warning! This account still has a Balance!</Alert.Heading>
+                    <p>
+                        You cannot close an account with a balance. It will be placed in Recovery until
+                        the balance reaches zero. Recovery accounts will always have a 0% interest,
+                        meaning no dividends will be accrued from them. Beardtrust reccomends transferring
+                        money to another account or withdrawing everything.
+                    </p>
+                </Alert>
+
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -94,7 +108,7 @@ const SingleAccount = ({ accounts }) => {
                                         <Button variant="secondary" onClick={handleClose}>
                                             Cancel
                                         </Button>
-                                        <Button variant="primary" onClick={() => deactivateHandler(account, history)}>
+                                        <Button variant="primary" onClick={() => deactivateHandler(history)}>
                                             Deactivate Account
                                         </Button>
                                     </Modal.Footer>
