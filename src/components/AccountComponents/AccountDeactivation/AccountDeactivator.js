@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-function Deactivator({ account, history }) {
+function Deactivator({ account }, { history }) {
     if (account.balance > 0) {
         recovery(account)
         return true;

@@ -27,7 +27,6 @@ const AccountSingle = () => {
             .then((res) => {
                 if (res.statusText === "OK") {
                     console.log('SINGLE VIEW SUCCESSFUL');
-                    console.log('result: ', res.data);
                     setAccount(res.data);
                 } else {
                     console.log('SINGLE VIEW FAILED');

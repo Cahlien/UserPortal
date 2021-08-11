@@ -3,20 +3,32 @@ import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
 import axios from "axios"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
-import { render } from "@testing-library/react";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
 
 const SingleAccount = ({ accounts }) => {
-
+    console.log('incoming accounts: ', accounts)
     const [account, setAccount] = useState({});
     const [amount, setAmount] = useState({});
+    const [isRecovery, setRecovery] = useState(false);
+    const [deactivateText, setDeactText] = useState()
     const [show, setShow] = useState(false);
     const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
         setAccount(accounts)
+        console.log('type: ', account.type)
+        if (accounts.type === 'Recovery' || isRecovery) {
+            setRecovery(true)
+            setDeactText('Recovery Account');
+        }
+        else {
+            setRecovery(false);
+        setDeactText('Deactivate');
+        }
     }, [accounts])
+
+    console.log('recovery status: ', isRecovery)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -26,7 +38,7 @@ const SingleAccount = ({ accounts }) => {
     const depAmt = useRef();
     const TransferEntity = { amount };
 
-    function deactivateHandler(history) {
+    function deactivateHandler() {
         setErDisp(Deactivator({ account }, { history }));
         handleClose();
     }
@@ -45,7 +57,7 @@ const SingleAccount = ({ accounts }) => {
                 <Alert variant="danger" onClose={() => setErDisp(false)} show={erdisp} dismissible>
                     <Alert.Heading>Warning! This account still has a Balance!</Alert.Heading>
                     <p>
-                        You cannot close an account with a balance. It will be placed in Recovery until
+                        You cannot close an account with a balance. Instead, it will be placed in Recovery until
                         the balance reaches zero. Recovery accounts will always have a 0% interest,
                         meaning no dividends will be accrued from them. Beardtrust reccomends transferring
                         money to another account or withdrawing everything.
@@ -62,7 +74,7 @@ const SingleAccount = ({ accounts }) => {
                             <th>Type</th>
                             <th>Withdraw</th>
                             <th>Deposit</th>
-                            <th>Deactivate</th>
+                            <th>Deactivate This Account?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,10 +106,11 @@ const SingleAccount = ({ accounts }) => {
                                 >Deposit</Button></td>
                             <td><Button
                                 onClick={handleShow}
+                                disabled={isRecovery}
                                 variant="danger"
                                 type={'submit'}
                                 title='deactivate'>
-                                Deactivate Account</Button>
+                                {deactivateText}</Button>
 
                                 <Modal show={show} onHide={handleClose}>
                                     <Modal.Header closeButton>
@@ -108,7 +121,7 @@ const SingleAccount = ({ accounts }) => {
                                         <Button variant="secondary" onClick={handleClose}>
                                             Cancel
                                         </Button>
-                                        <Button variant="primary" onClick={() => deactivateHandler(history)}>
+                                        <Button variant="primary" onClick={() => deactivateHandler()}>
                                             Deactivate Account
                                         </Button>
                                     </Modal.Footer>

@@ -2,6 +2,7 @@ import { useRef, useState, useContext, useEffect } from "react";
 import AuthContext from "../../../store/auth-context"
 import axios from "axios"
 import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 function AccountRegistration() {
 
@@ -9,7 +10,9 @@ function AccountRegistration() {
 
     const [errorMessage, setErrorMessage] = useState();
     const [typeTitle, setTitle] = useState();
-    
+    const [show, setShow] = useState(false);
+    const [showWarn, setShowWarn] = useState(false);
+
     const nickname = useRef();
     const balance = useRef();
     let actType = 'Recovery';
@@ -35,15 +38,16 @@ function AccountRegistration() {
     async function submitHandler(event) {
         event.preventDefault();
 
-        const enteredNickname = nickname.current.value;
-        const enteredDeposit = balance.current.value;
-        console.log('balance when empty: ', balance.current.value)
-        console.log('enteredDeposit is: ', enteredDeposit)
+        let enteredNickname = nickname.current.value;
+        let enteredDeposit = balance.current.value;
         if (enteredDeposit < 0) {
             enteredDeposit = 0;
         }
         if (enteredDeposit === "") {
-           enteredDeposit = 0;
+            enteredDeposit = 0;
+        }
+        if (enteredNickname === "") {
+            enteredNickname = 'Account';
         }
         let cdate = new Date();
 
@@ -60,10 +64,15 @@ function AccountRegistration() {
         }
 
         try {
-            console.log('typetitle: ', typeTitle)
-        console.log('actType: ', actType)
-        const res = await axios.post(url, registrationData);
-        console.log(res);
+            if (enteredDeposit === 0 && enteredNickname === "Account") {
+                setShowWarn(true)
+            }
+            else {
+                console.log('dep: ', enteredDeposit)
+                const res = await axios.post(url, registrationData);
+                console.log(res);
+                setShow(true)
+            }
         } catch (e) {
             console.log(e);
         }
@@ -71,9 +80,27 @@ function AccountRegistration() {
 
     }
 
+    if (show) {
+        window.setTimeout(() => {
+            setShow(false)
+        }, 3000)
+    }
+
+    if (showWarn) {
+        window.setTimeout(() => {
+            setShowWarn(false)
+        }, 5000)
+    }
+
     return (
         <section>
-            <div className={'container vertical-center'}>
+            <div>
+                <Alert variant="success" show={show} >
+                    Success
+                </Alert>
+                <Alert variant="warning" show={showWarn} >
+                    No info given!
+                </Alert>
                 <Form className={'offset-4 col-3'}>
                     {errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div>}
                     <FormGroup>
