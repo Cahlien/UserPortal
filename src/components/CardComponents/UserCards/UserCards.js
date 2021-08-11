@@ -3,6 +3,15 @@ import axios from "axios";
 import AuthContext from "../../../store/auth-context";
 import CardsList from "./CardsList";
 
+/**
+ * This function returns a page that retrieves and displays a list of all
+ * cards associated with the currently logged in user.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @returns {JSX.Element} the page that displays the retrieved table
+ * @constructor
+ */
 function UserCards(){
     const authContext = useContext(AuthContext);
     const userId = authContext.userId;
@@ -12,6 +21,11 @@ function UserCards(){
     const [cardsDisplayed, setCardsDisplayed] = useState(false);
 
     useEffect(() => {
+        /**
+         * This function retrieves the list of cards and updates the page's state.
+         *
+         * @returns {Promise<void>}
+         */
         async function getList(){
             const list = await axios.get(url, {
                 headers: {

@@ -5,6 +5,15 @@ import AuthContext from "../../../store/auth-context";
 import {Link, useParams} from "react-router-dom";
 import {Table} from "react-bootstrap";
 
+/**
+ * This function returns a page showing the details and status of a
+ * single, specified card associated with the currently logged in user.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @returns {JSX.Element} the page displaying the card details
+ * @constructor
+ */
 function CardStatus(){
     const {cardId} = useParams();
     const authContext = useContext(AuthContext);
@@ -18,6 +27,12 @@ function CardStatus(){
 
     useEffect(() => {
         if(!hasLoaded){
+            /**
+             * This function retrieves the card details and updates the state of the
+             * card status page.
+             *
+             * @returns {Promise<void>}
+             */
             async function fetchCardStatus(){
                 if(!hasLoaded){
                     const results = await axios.get(url, {

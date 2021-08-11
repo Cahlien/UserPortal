@@ -7,6 +7,15 @@ import AuthContext from "../../../store/auth-context";
 import axios from "axios";
 import './CardSignUp.css';
 
+/**
+ * This function returns a card sign up page.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @param props
+ * @returns {JSX.Element} the card sign up page
+ * @constructor
+ */
 function CardSignUp(props) {
     const actionContext = useContext(ActionContext);
     const authContext = useContext(AuthContext);
@@ -31,6 +40,13 @@ function CardSignUp(props) {
     const url = 'http://localhost:9001/cards/'
     const history = useHistory();
 
+    /**
+     * This function checks that the form data has been filled in and that the
+     * data is valid.
+     *
+     * @param form the form to validate
+     * @returns {boolean} whether the form is valid or not
+     */
     function formIsValid(form) {
         let isValid = true;
 
@@ -70,11 +86,26 @@ function CardSignUp(props) {
         return isValid;
     }
 
+    /**
+     * This function handles a click on the cancel button, returning the use to
+     * the user portal's home page.
+     *
+     * @param event the click event
+     */
     function cancelHandler(event) {
         event.preventDefault();
         history.replace('/')
     }
 
+    /**
+     * This function handles a click on the submit button by processing the user
+     * details form, which can be filled out to update the user's information
+     * at the time of signing up for a card, and submits the card sign up request
+     * to the card service.
+     *
+     * @param event the click event
+     * @returns {Promise<void>}
+     */
     async function submitHandler(event) {
         event.preventDefault();
 

@@ -6,7 +6,8 @@ import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "reac
 import './RegistrationForm.css';
 
 /**
- * The Registration Form component.
+ * This method returns an html element containing a user registration form.
+ *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  *
  * @param props the properties passed into the form
@@ -33,6 +34,12 @@ function RegistrationForm(props) {
     const url = props.url;
     const history = useHistory();
 
+    /**
+     * This function receives a form object and tests the form data to see
+     * if the data is present and meets the validation requirements.
+     * @param form the form object
+     * @returns {boolean} whether or not the form data is valid
+     */
     function formIsValid(form){
         let isValid = true;
 

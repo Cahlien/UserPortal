@@ -1,6 +1,16 @@
 import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
+/**
+ * This function returns a table for displaying a list of cards associated with
+ * the currently logged in user.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @param props
+ * @returns {JSX.Element|null} the table containing the card data
+ * @constructor
+ */
 function CardsList(props){
     const cards = props.cards ?? [];
     if (cards.length ===0){

@@ -4,6 +4,14 @@ import {Dropdown} from "react-bootstrap";
 import AuthContext from '../../store/auth-context';
 import "./Layout.css"
 
+/**
+ * This function returns the html element for the main navigation bar/header
+ * for the application.
+ *
+ * @param props
+ * @returns {JSX.Element} the html element containing the navbar/header
+ * @constructor
+ */
 function MainNavigation(props) {
     const authContext = useContext(AuthContext);
 
