@@ -1,5 +1,13 @@
 import {  Table } from "react-bootstrap"
 
+/**
+ * This component returns an html element that displays a user's details
+ * as a table.
+ *
+ * @param user the user object containing the user details
+ * @returns {JSX.Element} the html element for the table and details
+ * @constructor
+ */
 const User = ({ user }) => {
     console.log('User is receiving: ', user)
 

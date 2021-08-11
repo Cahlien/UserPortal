@@ -11,6 +11,6 @@ describe("Auth context", () => {
    })
 
    it("should create an auth context", () => {
-      expect(authContext).not.toBe(null);
+      expect(authContext).toBeTruthy();
    });
 });

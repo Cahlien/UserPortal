@@ -6,7 +6,8 @@ import {Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel} from "reac
 import './RegistrationForm.css';
 
 /**
- * The Registration Form component.
+ * This method returns an html element containing a user registration form.
+ *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  *
  * @param props the properties passed into the form
@@ -33,6 +34,12 @@ function RegistrationForm(props) {
     const url = props.url;
     const history = useHistory();
 
+    /**
+     * This function receives a form object and tests the form data to see
+     * if the data is present and meets the validation requirements.
+     * @param form the form object
+     * @returns {boolean} whether or not the form data is valid
+     */
     function formIsValid(form){
         let isValid = true;
 
@@ -104,12 +111,12 @@ function RegistrationForm(props) {
     async function submitHandler(event) {
         event.preventDefault();
 
-        const enteredEmail = emailRef.current.value;
-        const enteredFirstName = firstNameRef.current.value;
-        const enteredLastName = lastNameRef.current.value;
+        const enteredEmail = emailRef.current.value.toLowerCase();
+        const enteredFirstName = firstNameRef.current.value.toLowerCase();
+        const enteredLastName = lastNameRef.current.value.toLowerCase();
         const enteredPassword = passwordRef.current.value;
         const enteredPhone = phoneRef.current.value;
-        const enteredUsername = usernameRef.current.value;
+        const enteredUsername = usernameRef.current.value.toLowerCase();
         const enteredDateOfBirth = dateOfBirthRef.current.value;
 
         const registrationData = {
@@ -143,7 +150,7 @@ function RegistrationForm(props) {
     return (
         <section className={'container h-60 smooth-scroll'}>
             { errorMessage && <h2 className={'alert-danger my-3'}>{errorMessage}</h2> }
-            <form className="row g-3 vertical-center">
+            <form className="row g-3 vertical-center registration-form">
                 <div className="col-sm-12 col-md-6">
                     <label htmlFor="username" className="form-label">Username</label>
                     <input type="text" className="form-control" id="username" ref={usernameRef}/>

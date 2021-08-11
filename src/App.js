@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import {useContext} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import ActionContext from './store/action-context';
 import MainFooter from './components/layout/MainFooter';
@@ -13,6 +13,9 @@ import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingl
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/layout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
+import UserCards from './components/CardComponents/UserCards/UserCards';
+import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
+import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -21,46 +24,64 @@ function App() {
         <div className="App">
             <Switch>
                 <Route path={'/'} exact={true}>
-                    <MainNavigation />
+                    <Layout>
+
+                    </Layout>
                 </Route>
                 <Route path={'/users'}>
-                    <MainNavigation />
-                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'} />}
-                    <MainFooter />
+                    <Layout>
+                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
+                    </Layout>
                 </Route>
                 <Route path={'/me'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <ViewUserForm />}
-                    <MainFooter />
+                    <Layout>
+                        {authContext.userIsLoggedIn && <ViewUserForm/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountDeactivator />}
-                    <MainFooter />
+                    <Layout>
+                        {authContext.userIsLoggedIn && <AccountDeactivator/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountSingle />}
-                    <MainFooter />
+                    <Layout>
+                    {authContext.userIsLoggedIn && <AccountSingle/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts/me'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <ViewAccount />}
-                    <MainFooter />
+                    <Layout>
+                    {authContext.userIsLoggedIn && <ViewAccount/>}
+                    </Layout>
                 </Route>
                 <Route path={'/accounts'}>
-                    <MainNavigation />
-                    {authContext.userIsLoggedIn && <AccountRegistration />}
-                    <MainFooter />
+                    <Layout>
+                    {authContext.userIsLoggedIn && <AccountRegistration/>}
+                    </Layout>
                 </Route>
                 <Route path={'/auth'}>
-                    {!authContext.userIsLoggedIn && <LoginForm />}
-                    {authContext.userIsLoggedIn && <Redirect to={'/'} />}
-                    <MainFooter />
+                    <Layout>
+                        {!authContext.userIsLoggedIn && <LoginForm/>}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
+                    </Layout>
+                </Route>
+                <Route path={'/cardoffers'}>
+                    <Layout>
+                        <CardTypes />
+                    </Layout>
                 </Route>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
+                    </Layout>
+                </Route>
+                <Route path={'/cards/:cardId'}>
+                    <Layout>
+                        <CardStatus/>
+                    </Layout>
+                </Route>
+                <Route path={'/cards'}>
+                    <Layout>
+                        <UserCards/>
                     </Layout>
                 </Route>
             </Switch>

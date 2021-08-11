@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-  
-=======
->>>>>>> origin/dev
 .vertical-center{
     display:block;
-    width:80%;
     height:50%;
     margin:0 auto;
+}
+
+.registration-form{
+    min-width: 80%;
 }

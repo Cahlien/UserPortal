@@ -1,6 +1,17 @@
 import MainNavigation from "./MainNavigation";
 import MainFooter from "./MainFooter";
 
+/**
+ * This function returns a page that renders the standard layout with header on top, any
+ * content passed into the component in the middle, and the footer at the bottom of the
+ * page.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ *
+ * @param props properties including the child jsx elements
+ * @returns {JSX.Element} the page with the standard layout applied
+ * @constructor
+ */
 function Layout(props){
     return (
         <div className={'d-flex flex-column min-vh-100'}>
