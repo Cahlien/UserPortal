@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AuthContext from './store/auth-context';
-import ActionContext from './store/action-context';
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ViewUserForm from './components/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
-import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
+import ViewAccount from './components/AccountComponents/ViewAccounts/AccountListLogic';
+import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAccountLogic';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/layout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
@@ -15,7 +14,6 @@ import CardTypes from './components/CardTypes/CardTypes'
 
 function App() {
     const authContext = useContext(AuthContext);
-    const actionContext = useContext(ActionContext);
     return (
         <div className="App">
             <Switch>
