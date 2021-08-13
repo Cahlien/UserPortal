@@ -109,20 +109,10 @@ function CardSignUp(props) {
     async function submitHandler(event) {
         event.preventDefault();
 
-        const enteredEmail = emailRef.current.value.toLowerCase();
-        const enteredFirstName = firstNameRef.current.value.toLowerCase();
-        const enteredLastName = lastNameRef.current.value.toLowerCase();
-        const enteredPhone = phoneRef.current.value;
-        const enteredDateOfBirth = dateOfBirthRef.current.value;
         const enteredNickname = nicknameRef.current.value;
 
         const applicationData = {
-            email: enteredEmail,
-            firstName: enteredFirstName,
-            lastName: enteredLastName,
-            phone: enteredPhone,
             role: 'user',
-            dateOfBirth: enteredDateOfBirth,
             cardType: cardId,
             nickname: enteredNickname
         }
@@ -138,6 +128,8 @@ function CardSignUp(props) {
                 setErrorMessage("Something went wrong... please try again later")
             }
         }
+
+        history.push('/');
     }
 
     return (
@@ -149,33 +141,6 @@ function CardSignUp(props) {
                     <input type="text" className="form-control" id="nickname" ref={nicknameRef}/>
                     {nicknameError &&
                     <p className={'alert-danger mb-3'}>Nicknames must be alphanumeric</p>}
-                </div>
-                <div className="col-sm-12 col-md-6">
-                    <label htmlFor="firstName" className="form-label">First Name</label>
-                    <input type="text" className="form-control" id="firstName" ref={firstNameRef}/>
-                    {firstNameError &&
-                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
-                </div>
-                <div className="col-sm-12 col-md-6">
-                    <label htmlFor="lastName" className="form-label">Last Name</label>
-                    <input type="text" className="form-control" id="lastName" ref={lastNameRef}/>
-                    {lastNameError &&
-                    <p className={'alert-danger mb-3'}>Name fields can only contain letters of the alphabet</p>}
-                </div>
-                <div className="col-sm-12 col-md-4">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" ref={emailRef}/>
-                    {emailError && <p className={'alert-danger mb-3'}>Please enter a valid email address</p>}
-                </div>
-                <div className="col-sm-12 col-lg-4">
-                    <label htmlFor="phone" className="form-label">Phone</label>
-                    <input type="text" className="form-control" id="phone" placeholder="(xxx) 867-5309" ref={phoneRef}/>
-                    {phoneError && <p className={'alert-danger mb-3'}>Please enter a valid phone number</p>}
-                </div>
-                <div className="col-sm-12 col-lg-4">
-                    <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
-                    <input type="date" className="form-control" id="dateOfBirth" ref={dateOfBirthRef}/>
-                    {dateOfBirthError && <p className={'alert-danger mb-1'}>Please enter valid birthdate</p>}
                 </div>
                 <ButtonGroup>
                     <div className={'col-lg-10'}>

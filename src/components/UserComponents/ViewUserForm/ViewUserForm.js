@@ -1,7 +1,7 @@
 import axios from "axios"
-import User from "../layout/User"
+import User from "../User/User"
 import { useState, useEffect } from "react"
-import AuthContext from "../../store/auth-context"
+import AuthContext from "../../../store/auth-context"
 import { useContext } from "react"
 import UpdateUserForm from "../UpdateUserForm/UpdateUserForm"
 

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useRef } from "react"
-import AuthContext from "../../store/auth-context"
+import AuthContext from "../../../store/auth-context"
 import { useContext, useState } from "react"
 import { Form, FormGroup, FormLabel, FormControl, ButtonGroup, Button } from "react-bootstrap"
 
