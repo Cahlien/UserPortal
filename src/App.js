@@ -2,20 +2,19 @@ import {useContext} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import ActionContext from './store/action-context';
-import MainFooter from './components/layout/MainFooter';
-import MainNavigation from './components/layout/MainNavigation';
-import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
-import LoginForm from "./components/LoginForm/LoginForm";
-import ViewUserForm from './components/ViewUserForm/ViewUserForm';
+import RegistrationForm from "./components/AuthComponents/RegistrationForm/RegistrationForm";
+import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
+import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
 import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
 import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
-import Layout from './components/layout/Layout';
+import Layout from './components/LayoutComponents/PageLayout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
 import UserCards from './components/CardComponents/UserCards/UserCards';
 import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
 import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
+import HomePage from "./components/Pages/HomePage/HomePage";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -24,9 +23,7 @@ function App() {
         <div className="App">
             <Switch>
                 <Route path={'/'} exact={true}>
-                    <Layout>
-
-                    </Layout>
+                    <HomePage />
                 </Route>
                 <Route path={'/users'}>
                     <Layout>

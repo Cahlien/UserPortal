@@ -41,27 +41,8 @@ describe("CardSignUp", () => {
         const nicknameInput = document.getElementById('nickname');
         expect(nicknameInput).toBeTruthy();
 
-        const emailInput = document.getElementById('email');
-        expect(emailInput).toBeTruthy();
-
-        const firstNameInput = document.getElementById('firstName');
-        expect(firstNameInput).toBeTruthy();
-
-        const lastNameInput = document.getElementById('lastName');
-        expect(lastNameInput).toBeTruthy();
-
-        const phoneInput = document.getElementById('phone');
-        expect(phoneInput).toBeTruthy();
-
-        const dateOfBirthInput = document.getElementById('dateOfBirth');
-        expect(dateOfBirthInput).toBeTruthy();
 
         nicknameInput.value = "test";
-        emailInput.value = "test@test.com";
-        firstNameInput.value = "Test";
-        lastNameInput.value = "Test";
-        phoneInput.value = "1234567890";
-        dateOfBirthInput.value = "2021-01-01";
 
         userEvent.click(submitButton);
 

@@ -2,7 +2,7 @@ import {render, screen, cleanup, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axiosMock from 'axios';
 import LoginForm from "./LoginForm";
-import {AuthContextProvider} from "../../store/auth-context";
+import {AuthContextProvider} from "../../../store/auth-context";
 
 const setSpy = jest.spyOn(localStorage.__proto__, 'setItem');
 
