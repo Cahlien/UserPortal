@@ -1,4 +1,4 @@
-import { Table, Button, } from "react-bootstrap"
+import { Table, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 /**
@@ -21,23 +21,23 @@ function CardsList(props){
                 <Table striped bordered hover style={{marginRight: 5 + 'px'}}>
                     <thead>
                     <tr>
-                        <th>Nickname</th>
-                        <th>Balance</th>
-                        <th>Interest Rate</th>
-                        <th>Expires</th>
-                        <th>Type</th>
-                        <th>Details</th>
+                        <th className={'align-middle text-center'}>Nickname</th>
+                        <th className={'align-middle text-center'}>Balance</th>
+                        <th className={'align-middle text-center'}>Interest Rate</th>
+                        <th className={'align-middle text-center'}>Expires</th>
+                        <th className={'align-middle text-center'}>Type</th>
+                        <th className={'align-middle text-center'}>Details</th>
                     </tr>
                     </thead>
                     <tbody>
                     {(cards ?? []).map((card, index) => (
                         <tr key={index}>
-                            <td>{card.nickname}</td>
-                            <td>${card.balance.toFixed(2)}</td>
-                            <td>{card.interestRate.toFixed(1)}%</td>
-                            <td>{card.expireDate.slice(5, 7) + '/' + card.expireDate.slice(2, 4)}</td>
-                            <td>{card.cardType}</td>
-                            <td>
+                            <td className={'align-middle text-center'}>{card.nickname}</td>
+                            <td className={'align-middle text-center'}>${card.balance.toFixed(2)}</td>
+                            <td className={'align-middle text-center'}>{card.interestRate.toFixed(1)}%</td>
+                            <td className={'align-middle text-center'}>{card.expireDate.slice(5, 7) + '/' + card.expireDate.slice(2, 4)}</td>
+                            <td className={'align-middle text-center'}>{card.cardType}</td>
+                            <td className={'align-middle text-center'}>
                                 <Link to={'/cards/' + card.cardId}>
                                     <Button
                                         className={'btn-sm'}
