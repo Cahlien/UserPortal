@@ -23,9 +23,9 @@ function CardTypes(props) {
     const token = authContext.token;
     const [availableCards, setAvailableCards] = useState();
     const [cardsDisplayed, setCardsDisplayed] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [searchCriteria, setSearchCriteria] = useState();
+    const [searchCriteria, setSearchCriteria] = useState('');
     const [sortBy, setSortBy] = useState("id,asc");
     const [sortByTypeName, setSortByTypeName] = useState({active: false, name: 'typeName', direction: 'asc'});
     const [sortByDescription, setSortByDescription] = useState({active: false, name: 'description', direction: 'asc'});
@@ -34,7 +34,13 @@ function CardTypes(props) {
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [2, 5, 10, 15, 20, 25]
     const getList = useCallback(async () => {
-        const params = {search: searchCriteria, page: currentPage, size: pageSize, sortBy: sortBy};
+        let params = null;
+        if(searchCriteria !== ''){
+            params = {search: searchCriteria, page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy};
+        } else {
+            params = {page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy};
+        }
+
 
         const list = await axios.get(url, {
             params: params,
@@ -45,9 +51,10 @@ function CardTypes(props) {
         });
 
         if (list.data.content !== availableCards) {
-            setAvailableCards(list.data.content);
-            setNumberOfPages(list.data.content.totalPages);
             setCardsDisplayed(true);
+            setAvailableCards(list.data.content);
+            console.log("Current page is: " + currentPage);
+            setNumberOfPages(list.data.totalPages);
         }
     }, [availableCards, token, pageSize, currentPage, searchCriteria, sortBy]);
 
@@ -78,7 +85,7 @@ function CardTypes(props) {
      */
     function handlePageChange(event, value) {
         setCardsDisplayed(false);
-        setCurrentPage(value - 1);
+        setCurrentPage(value);
     }
 
     /**
@@ -91,6 +98,7 @@ function CardTypes(props) {
      */
     function handleSearchCriteriaChange(event) {
         setSearchCriteria(event.target.value);
+        setCurrentPage(1);
     }
 
     /**
@@ -99,9 +107,9 @@ function CardTypes(props) {
      * @param event the event fired by selecting a new page size
      */
     function handlePageSizeChange(event) {
-        setPageSize(event.target.value);
-        setCurrentPage(0);
         setCardsDisplayed(false);
+        setPageSize(event.target.value);
+        setCurrentPage(1);
     }
 
     /**
@@ -115,6 +123,13 @@ function CardTypes(props) {
         history.push('/cardsignup');
     }
 
+    /**
+     * This function receives a click event on the table header of the column to add to the sort list and
+     * then formulates a new sort list using the existing sort list and the clicked-on header and its
+     * current direction for sorting (ascending or descending order).
+     *
+     * @param event the click event fired by clicking on the header of the column to sort bys
+     */
     function addToSort(event) {
         let sort = '';
         let field = {};
@@ -177,9 +192,15 @@ function CardTypes(props) {
 
         setCardsDisplayed(false);
         setSortBy(sort);
-        console.log("clicked to sort");
     }
 
+    /**
+     * This function receives a query parameter, field, and toggles its direction for
+     * the purpose of sorting.
+     *
+     * @param field the query parameter to change
+     * @returns {*} the desired new value of the query parameter passed to the function
+     */
     function toggleDirection(field) {
         if (field.direction === 'asc') {
             field.direction = 'desc';
@@ -247,7 +268,7 @@ function CardTypes(props) {
                             <td className={'align-middle'}>{card.description}</td>
                             <td className={'align-middle text-center'}>{card.baseInterestRate.toFixed(1) + '%'}</td>
                             <td className={'align-middle text-center'}>
-                                <button className={'btn btn-primary btn-sm mx-3'} onClick={handleSignUp}
+                                <button className={'btn btn-primary btn mx-3'} onClick={handleSignUp}
                                         id={card.id}>Apply
                                 </button>
                             </td>
