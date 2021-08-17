@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
@@ -27,17 +27,14 @@ function CardTypes(props) {
     const [pageSize, setPageSize] = useState(10);
     const [searchCriteria, setSearchCriteria] = useState();
     const [sortBy, setSortBy] = useState("id,asc");
+    const [sortByTypeName, setSortByTypeName] = useState({active: false, name: 'typeName', direction: 'asc'});
+    const [sortByDescription, setSortByDescription] = useState({active: false, name: 'description', direction: 'asc'});
+    const [sortByInterest, setSortByInterest] = useState({active: false, name: 'baseInterestRate', direction: 'asc'});
     const url = 'http://localhost:9001/cards/available'
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [2, 5, 10, 15, 20, 25]
-
-    /**
-     * This function retrieves the list of cards the bank offers and updates the page's state.
-     *
-     * @returns {Promise<void>}
-     */
-    async function getList() {
-        const params = {search: searchCriteria, page: currentPage, size: pageSize, sortBy:sortBy};
+    const getList = useCallback(async () => {
+        const params = {search: searchCriteria, page: currentPage, size: pageSize, sortBy: sortBy};
 
         const list = await axios.get(url, {
             params: params,
@@ -52,14 +49,14 @@ function CardTypes(props) {
             setNumberOfPages(list.data.content.totalPages);
             setCardsDisplayed(true);
         }
-    }
+    }, [availableCards, token, pageSize, currentPage, searchCriteria, sortBy]);
 
     useEffect(() => {
         if (!cardsDisplayed) {
             getList();
         }
 
-    }, [availableCards, cardsDisplayed, token, url]);
+    }, [getList, availableCards, cardsDisplayed, token, url]);
 
     /**
      * This function handles a click on the sign up button.
@@ -79,9 +76,9 @@ function CardTypes(props) {
      * @param event the event fired by changing the page number
      * @param value the value selected for the new current page
      */
-    function handlePageChange(event, value){
+    function handlePageChange(event, value) {
         setCardsDisplayed(false);
-        setCurrentPage(value-1);
+        setCurrentPage(value - 1);
     }
 
     /**
@@ -92,7 +89,7 @@ function CardTypes(props) {
      * @param event the event fired by changing the search criteria
      * @param value the value entered for the new search criteria
      */
-    function handleSearchCriteriaChange(event){
+    function handleSearchCriteriaChange(event) {
         setSearchCriteria(event.target.value);
     }
 
@@ -101,7 +98,7 @@ function CardTypes(props) {
      *
      * @param event the event fired by selecting a new page size
      */
-    function handlePageSizeChange(event){
+    function handlePageSizeChange(event) {
         setPageSize(event.target.value);
         setCurrentPage(0);
         setCardsDisplayed(false);
@@ -118,6 +115,81 @@ function CardTypes(props) {
         history.push('/cardsignup');
     }
 
+    function addToSort(event) {
+        let sort = '';
+        let field = {};
+
+        if(event.target.id === 'typeName') {
+            if (sortByTypeName.active === true) {
+                field = toggleDirection(sortByTypeName);
+                sort = field.name + ',' + field.direction;
+            } else {
+                setSortByTypeName({active: true, name: 'typeName', direction: 'asc'});
+                sort = sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if(sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if(sortByInterest.active === true) {
+                sort += + ',' + sortByInterest.name + ',' + sortByInterest.direction;
+            }
+        }
+
+        if (event.target.id === 'description') {
+            if (sortByDescription.active === true) {
+
+                field = toggleDirection(sortByDescription);
+                sort = field.name + ',' + field.direction;
+            } else {
+                setSortByDescription({active: true, name: 'description', direction: 'asc'});
+                sort = sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if(setSortByTypeName.active === true) {
+                sort += + ',' + setSortByTypeName.name + ',' + setSortByTypeName.direction;
+            }
+
+            if(sortByTypeName.active === true) {
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+        }
+
+        if (event.target.id === 'baseInterestRate') {
+            if (sortByInterest.active === true) {
+
+                field = toggleDirection(sortByInterest);
+                sort = field.name + ',' + field.direction;
+            } else {
+                setSortByInterest({active: true, name: 'baseInterestRate', direction: 'asc'});
+                sort = sortByInterest.name + ',' + sortByInterest.direction;
+            }
+
+            if(sortByTypeName.active === true) {
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if(sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+        }
+
+        setCardsDisplayed(false);
+        setSortBy(sort);
+        console.log("clicked to sort");
+    }
+
+    function toggleDirection(field) {
+        if (field.direction === 'asc') {
+            field.direction = 'desc';
+        } else {
+            field.direction = 'asc';
+        }
+
+        return field;
+    }
+
     return (
         <section className={'container'}>
             <h1 className={'text-center mt-5'}>The Cards of BeardTrust</h1>
@@ -128,34 +200,46 @@ function CardTypes(props) {
                         <span className={'align-middle'}>
                             {'Items per Page: '}
                         </span>
-                            <select className={'text-center align-middle'} onChange={handlePageSizeChange} value={pageSize}>
+                            <select className={'text-center align-middle'} onChange={handlePageSizeChange}
+                                    value={pageSize}>
                                 {pageSizes.map((size) => (
                                     <option key={size} value={size}>{size}</option>
                                 ))}
                             </select>
                         </div>
-                        <span className={'text-center col-sm-0 col-md-4 col-lg-6 col-xl-7'}></span>
+                        <span className={'text-center col-sm-0 col-md-4 col-lg-6'}/>
 
-                        <input type={'text'} className={'form-control col-xs-12 col-md-2'} placeholder={'Search'} value={searchCriteria}
+                        <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
                                onChange={handleSearchCriteriaChange}/>
-                            <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}>Search</button>
+                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}>Search
+                        </button>
 
                     </div>
                 </div>
 
-                <Table striped bordered hover style={{marginRight: 5 + 'px'}}>
+                <Table striped bordered hover className={'me-3 table-responsive'} data-sortable={'true'}
+                       data-toggle={'table'} id={'table'}>
                     <thead>
                     <tr>
                         <th></th>
-                        <th className={'align-middle text-center'}>Card</th>
-                        <th>Description</th>
-                        <th className={'align-middle text-center'}>Interest Rate</th>
+                        <th className={'align-middle text-center'} data-sortable={'true'}
+                            scope={'col'} onClick={addToSort}
+                            id={'typeName'}>Card
+                            {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
+                        </th>
+                        <th data-sortable={'true'} scope={'col'} id={'description'} onClick={addToSort}>Description
+                            {sortByDescription.active === true && (sortByDescription.direction === 'asc' ? '  ↑' : '  ↓')}
+                        </th>
+                        <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                            id={'baseInterestRate'} onClick={addToSort}>Interest Rate
+                            {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                        </th>
                         <th className={'align-middle text-center'}>Sign Up</th>
                     </tr>
                     </thead>
                     <tbody>
                     {availableCards && availableCards.map(card => (
-                        <tr>
+                        <tr key={card.id}>
                             <td className={'align-middle text-center'}><img src={card.previewURL}
                                                                             alt={'Preview of credit card with the id ' + card.id}/>
                             </td>
@@ -163,7 +247,7 @@ function CardTypes(props) {
                             <td className={'align-middle'}>{card.description}</td>
                             <td className={'align-middle text-center'}>{card.baseInterestRate.toFixed(1) + '%'}</td>
                             <td className={'align-middle text-center'}>
-                                <button className={'btn btn-primary btn-sm mx-3'} onClick={onSignUp}
+                                <button className={'btn btn-primary btn-sm mx-3'} onClick={handleSignUp}
                                         id={card.id}>Apply
                                 </button>
                             </td>
@@ -171,8 +255,10 @@ function CardTypes(props) {
                     ))}
                     </tbody>
                 </Table>
-                <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1} boundaryCount={1} onChange={handlePageChange} />
+                <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
+                            boundaryCount={1} onChange={handlePageChange}/>
             </div>
+            <script>$('#table').DataTable()</script>
         </section>
     );
 }
