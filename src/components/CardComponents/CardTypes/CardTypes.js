@@ -38,8 +38,8 @@ function CardTypes(props) {
                 }
             });
 
-            if (list.data !== availableCards) {
-                setAvailableCards(list.data);
+            if (list.data.content !== availableCards) {
+                setAvailableCards(list.data.content);
                 setCardsDisplayed(true);
             }
         }
