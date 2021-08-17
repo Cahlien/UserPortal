@@ -27,12 +27,14 @@ function CardTypes(props) {
     const [pageSize, setPageSize] = useState(10);
     const [searchCriteria, setSearchCriteria] = useState('');
     const [sortBy, setSortBy] = useState("id,asc");
+    const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({active: false, name: 'typeName', direction: 'asc'});
     const [sortByDescription, setSortByDescription] = useState({active: false, name: 'description', direction: 'asc'});
     const [sortByInterest, setSortByInterest] = useState({active: false, name: 'baseInterestRate', direction: 'asc'});
     const url = 'http://localhost:9001/cards/available'
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [2, 5, 10, 15, 20, 25]
+
     const getList = useCallback(async () => {
         let params = null;
         if(searchCriteria !== ''){
@@ -51,6 +53,11 @@ function CardTypes(props) {
         });
 
         if (list.data.content !== availableCards) {
+            if(searchCriteriaChanged){
+                setCurrentPage(1);
+                setSearchCriteriaChanged(false);
+            }
+
             setCardsDisplayed(true);
             setAvailableCards(list.data.content);
             console.log("Current page is: " + currentPage);
@@ -85,7 +92,12 @@ function CardTypes(props) {
      */
     function handlePageChange(event, value) {
         setCardsDisplayed(false);
-        setCurrentPage(value);
+        if(searchCriteriaChanged){
+            setCurrentPage(1);
+        } else {
+            setCurrentPage(value);
+        }
+
     }
 
     /**
@@ -97,8 +109,8 @@ function CardTypes(props) {
      * @param value the value entered for the new search criteria
      */
     function handleSearchCriteriaChange(event) {
+        setSearchCriteriaChanged(true);
         setSearchCriteria(event.target.value);
-        setCurrentPage(1);
     }
 
     /**
@@ -232,7 +244,7 @@ function CardTypes(props) {
 
                         <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
                                onChange={handleSearchCriteriaChange}/>
-                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}>Search
+                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList} id={'searchBar'}>Search
                         </button>
 
                     </div>
