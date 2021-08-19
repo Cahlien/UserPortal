@@ -18,7 +18,7 @@ describe("Centerpiece", () => {
               }
           }
       }/>);
-      const submitButton = screen.getByText('submit');
+      const submitButton = screen.getByText('Submit');
 
       expect(component).toBeTruthy();
       expect(submitButton).toBeTruthy();

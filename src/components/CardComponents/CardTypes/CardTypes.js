@@ -33,12 +33,17 @@ function CardTypes(props) {
     const [sortByInterest, setSortByInterest] = useState({active: false, name: 'baseInterestRate', direction: 'asc'});
     const url = 'http://localhost:9001/cards/available'
     const [numberOfPages, setNumberOfPages] = useState(10);
-    const pageSizes = [2, 5, 10, 15, 20, 25]
+    const pageSizes = [5, 10, 15, 20, 25, 50, 100]
 
     const getList = useCallback(async () => {
         let params = null;
-        if(searchCriteria !== ''){
-            params = {search: searchCriteria, page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy};
+        if (searchCriteria !== '') {
+            params = {
+                search: searchCriteria,
+                page: currentPage === 0 ? 0 : currentPage - 1,
+                size: pageSize,
+                sortBy: sortBy
+            };
         } else {
             params = {page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy};
         }
@@ -53,17 +58,16 @@ function CardTypes(props) {
         });
 
         if (list.data.content !== availableCards) {
-            if(searchCriteriaChanged){
+            if (searchCriteriaChanged) {
                 setCurrentPage(1);
                 setSearchCriteriaChanged(false);
             }
 
             setCardsDisplayed(true);
             setAvailableCards(list.data.content);
-            console.log("Current page is: " + currentPage);
             setNumberOfPages(list.data.totalPages);
         }
-    }, [availableCards, token, pageSize, currentPage, searchCriteria, sortBy]);
+    }, [availableCards, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy]);
 
     useEffect(() => {
         if (!cardsDisplayed) {
@@ -92,7 +96,7 @@ function CardTypes(props) {
      */
     function handlePageChange(event, value) {
         setCardsDisplayed(false);
-        if(searchCriteriaChanged){
+        if (searchCriteriaChanged) {
             setCurrentPage(1);
         } else {
             setCurrentPage(value);
@@ -146,7 +150,7 @@ function CardTypes(props) {
         let sort = '';
         let field = {};
 
-        if(event.target.id === 'typeName') {
+        if (event.target.id === 'typeName') {
             if (sortByTypeName.active === true) {
                 field = toggleDirection(sortByTypeName);
                 sort = field.name + ',' + field.direction;
@@ -155,12 +159,12 @@ function CardTypes(props) {
                 sort = sortByTypeName.name + ',' + sortByTypeName.direction;
             }
 
-            if(sortByDescription.active === true) {
+            if (sortByDescription.active === true) {
                 sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
             }
 
-            if(sortByInterest.active === true) {
-                sort += + ',' + sortByInterest.name + ',' + sortByInterest.direction;
+            if (sortByInterest.active === true) {
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
             }
         }
 
@@ -174,11 +178,11 @@ function CardTypes(props) {
                 sort = sortByDescription.name + ',' + sortByDescription.direction;
             }
 
-            if(setSortByTypeName.active === true) {
-                sort += + ',' + setSortByTypeName.name + ',' + setSortByTypeName.direction;
+            if (setSortByTypeName.active === true) {
+                sort += +',' + setSortByTypeName.name + ',' + setSortByTypeName.direction;
             }
 
-            if(sortByTypeName.active === true) {
+            if (sortByTypeName.active === true) {
                 sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
             }
         }
@@ -193,11 +197,11 @@ function CardTypes(props) {
                 sort = sortByInterest.name + ',' + sortByInterest.direction;
             }
 
-            if(sortByTypeName.active === true) {
+            if (sortByTypeName.active === true) {
                 sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
             }
 
-            if(sortByDescription.active === true) {
+            if (sortByDescription.active === true) {
                 sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
             }
         }
@@ -230,10 +234,10 @@ function CardTypes(props) {
                 <div>
                     <div className={'input-group mb-3'}>
                         <div className={'me-5 col-xs-12 col-lg-2'}>
-                        <span className={'align-middle'}>
-                            {'Items per Page: '}
-                        </span>
-                            <select className={'text-center align-middle'} onChange={handlePageSizeChange}
+                            <span className={'align-middle'}>
+                                {'Items per Page: '}
+                            </span>
+                            <select data-testid={'pageSizeSelector'} className={'text-center align-middle'} onChange={handlePageSizeChange}
                                     value={pageSize}>
                                 {pageSizes.map((size) => (
                                     <option key={size} value={size}>{size}</option>
@@ -241,15 +245,13 @@ function CardTypes(props) {
                             </select>
                         </div>
                         <span className={'text-center col-sm-0 col-md-4 col-lg-6'}/>
-
                         <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
                                onChange={handleSearchCriteriaChange}/>
-                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList} id={'searchBar'}>Search
+                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
+                                id={'searchBar'}>Search
                         </button>
-
                     </div>
                 </div>
-
                 <Table striped bordered hover className={'me-3 table-responsive'} data-sortable={'true'}
                        data-toggle={'table'} id={'table'}>
                     <thead>

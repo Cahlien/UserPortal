@@ -52,8 +52,6 @@ function CardStatus(){
 
             try {
                 fetchCardStatus()
-
-                console.log(cardStatus);
             } catch (e) {
                 if (e.response) {
                     setErrorMessage(e.response.data.message);
