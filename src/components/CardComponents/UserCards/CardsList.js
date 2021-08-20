@@ -36,7 +36,7 @@ function CardsList(props){
                             <td className={'align-middle text-center'}>${card.balance.toFixed(2)}</td>
                             <td className={'align-middle text-center'}>{card.interestRate.toFixed(1)}%</td>
                             <td className={'align-middle text-center'}>{card.expireDate.slice(5, 7) + '/' + card.expireDate.slice(2, 4)}</td>
-                            <td className={'align-middle text-center'}>{card.cardType}</td>
+                            <td className={'align-middle text-center'}>{card.cardType.typeName}</td>
                             <td className={'align-middle text-center'}>
                                 <Link to={'/cards/' + card.cardId}>
                                     <Button
