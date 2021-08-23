@@ -27,7 +27,7 @@ const AccountList = ({ accounts }) => {
                         {(dispActs ?? []).map((account, index) => (
                             <tr key={index}>
                                 <td>{account.nickname}</td>
-                                <td>${account.balance}</td>
+                                <td>${account.balance['dollars'] + '.' + account.balance['cents']}</td>
                                 <td>{account.interest}%</td>
                                 <td>{account.create_date}</td>
                                 <td>{account.type}</td>

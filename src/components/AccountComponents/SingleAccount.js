@@ -54,7 +54,7 @@ const SingleAccount = ({ accounts }) => {
                     <tbody>
                         <tr>
                             <td>{account ? account.nickname : null}</td>
-                            <td>${account ? account.balance : null}</td>
+                            <td>${account.balance ? account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
                             <td>{account ? account.interest : null}%</td>
                             <td>{account ? account.create_date : null}</td>
                             <td>{account ? account.type : null}</td>

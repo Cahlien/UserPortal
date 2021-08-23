@@ -69,7 +69,8 @@ function CardStatus(){
             <Centerpiece content={
                 {
                     title: cardStatus?.nickname + '   ...' + cardStatus?.cardNumber.slice(15,19),
-                    lead: 'Current Balance: $' + cardStatus?.balance.toFixed(2),
+                    lead: 'Current Balance: $' + cardStatus?.balance.dollars + '.' + (cardStatus?.balance.cents > 10 ?
+                        cardStatus?.balance.cents : '0' + cardStatus?.balance.cents),
                     body: 'TODO: add transactions, minimum payment, due date, and write user\'s name and card number' +
                         ' on card image',
                     imageText: cardStatus?.nickname,
