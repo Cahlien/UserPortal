@@ -35,7 +35,7 @@ function UserCards(){
             });
 
             if(list.data !== cardsList){
-                setCardsList(list.data);
+                setCardsList(list.data.content);
                 setCardsDisplayed(true);
             }
         }
