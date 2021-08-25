@@ -33,7 +33,7 @@ function CardsList(props){
                     {(cards ?? []).map((card, index) => (
                         <tr key={index}>
                             <td className={'align-middle text-center'}>{card.nickname}</td>
-                            <td className={'align-middle text-center'}>${card.balance.toFixed(2)}</td>
+                            <td className={'align-middle text-center'}>${card.balance.dollars + '.' + (card.balance.cents > 10 ? card.balance.cents : '0' + card.balance.cents)}</td>
                             <td className={'align-middle text-center'}>{card.interestRate.toFixed(1)}%</td>
                             <td className={'align-middle text-center'}>{card.expireDate.slice(5, 7) + '/' + card.expireDate.slice(2, 4)}</td>
                             <td className={'align-middle text-center'}>{card.cardType.typeName}</td>
