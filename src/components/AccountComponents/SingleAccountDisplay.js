@@ -13,6 +13,8 @@ const SingleAccount = ({ accounts }) => {
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
     const [show, setShow] = useState(false);
+    const [showWarn, setShowWarn] = useState(false);
+    const [showMsg, setWarnMsg] = useState(false);
     const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
