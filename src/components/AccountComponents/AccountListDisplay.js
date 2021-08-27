@@ -29,7 +29,7 @@ const AccountList = ({ accounts }) => {
                                 <td>{account.nickname}</td>
                                 <td>${(account.balance / 100)}</td>
                                 <td>{account.interest}%</td>
-                                <td>{account.create_date}</td>
+                                <td>{account.createDate}</td>
                                 <td>{account.type}</td>
                                 <Link to={'/accounts/single/' + account.accountId}>
                                     <Button

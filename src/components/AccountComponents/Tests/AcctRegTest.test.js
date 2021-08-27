@@ -16,8 +16,8 @@ describe('Account Registration Test', () => {
                 interest: '1',
                 nickname: 'name',
                 type: 'Recovery',
-                active_status: 'true',
-                create_date: '2001-01-01'
+                activeStatus: 'true',
+                createDate: '2001-01-01'
             }
         }
     };

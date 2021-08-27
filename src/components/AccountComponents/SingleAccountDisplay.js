@@ -61,7 +61,7 @@ const SingleAccount = ({ accounts }) => {
                             <td>{account ? account.nickname : null}</td>
                             <td>${account ? (account.balance / 100) : null}</td>
                             <td>{account ? account.interest : null}%</td>
-                            <td>{account ? account.create_date : null}</td>
+                            <td>{account ? account.createDate : null}</td>
                             <td>{account ? account.type : null}</td>
                             <td>$<input
                                 type="text"

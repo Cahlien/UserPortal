@@ -59,9 +59,9 @@ function AccountRegistration() {
             nickname: enteredNickname,
             balance: pennies,
             userId: authContext.userId,
-            active_status: true,
+            activeStatus: true,
             interest: 1,
-            create_date: cdate,
+            createDate: cdate,
             type: typeTitle
         }
 
@@ -122,7 +122,7 @@ function AccountRegistration() {
                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
                             {typeTitle}
                         </Dropdown.Toggle>
-                        <Dropdown.Menu>
+                        <Dropdown.Menu required>
                             <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
                             <Dropdown.Item eventKey="1">Checking</Dropdown.Item>
                         </Dropdown.Menu>
