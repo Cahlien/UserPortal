@@ -1,7 +1,6 @@
 import {useContext} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthContext from './store/auth-context';
-import ActionContext from './store/action-context';
 import RegistrationForm from "./components/AuthComponents/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
 import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
@@ -15,6 +14,8 @@ import UserCards from './components/CardComponents/UserCards/UserCards';
 import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
 import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
+import LoanRegistration from "./components/Loans Components/LoanSignUp/LoanRegistration"
+import LoansOnOffer from "./components/Loans Components/LoanViews/LoansOnOffer"
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -52,6 +53,16 @@ function App() {
                 <Route path={'/accounts'}>
                     <Layout>
                     {authContext.userIsLoggedIn && <AccountRegistration/>}
+                    </Layout>
+                </Route>
+                <Route path={'/loans'}>
+                    <Layout>
+                    {authContext.userIsLoggedIn && <LoanRegistration/>}
+                    </Layout>
+                </Route>
+                <Route path={'/loanoffers'}>
+                    <Layout>
+                    {authContext.userIsLoggedIn && <LoansOnOffer/>}
                     </Layout>
                 </Route>
                 <Route path={'/auth'}>
