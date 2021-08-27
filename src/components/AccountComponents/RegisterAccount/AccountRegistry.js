@@ -8,7 +8,6 @@ function AccountRegistration() {
 
     const authContext = useContext(AuthContext);
 
-    const [errorMessage, setErrorMessage] = useState();
     const [typeTitle, setTitle] = useState();
     const [show, setShow] = useState(false);
     const [showWarn, setShowWarn] = useState(false);
@@ -37,6 +36,9 @@ function AccountRegistration() {
 
     async function submitHandler(event) {
         event.preventDefault();
+        if (typeTitle === 'Select Account Type') {
+            setTitle('Recovery')
+        }
 
         let enteredNickname = nickname.current.value;
         let enteredDeposit = balance.current.value;
@@ -51,13 +53,11 @@ function AccountRegistration() {
         }
         let cdate = new Date();
 
-        const typeAns = actType
-
         const registrationData = {
             nickname: enteredNickname,
             balance: enteredDeposit * 100,
             userId: authContext.userId,
-            active_status: true,
+            activeStatus: true,
             interest: 1,
             create_date: cdate,
             type: typeTitle
@@ -102,7 +102,6 @@ function AccountRegistration() {
                     No info given!
                 </Alert>
                 <Form className={'offset-4 col-3'}>
-                    {errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div>}
                     <FormGroup>
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Nickname?</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={nickname} required />
@@ -115,7 +114,7 @@ function AccountRegistration() {
                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
                             {typeTitle}
                         </Dropdown.Toggle>
-                        <Dropdown.Menu>
+                        <Dropdown.Menu required>
                             <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
                             <Dropdown.Item eventKey="1">Checking</Dropdown.Item>
                         </Dropdown.Menu>

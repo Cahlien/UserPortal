@@ -2,7 +2,7 @@ import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 const AccountList = ({ accounts }) => {
-    
+
     let dispActs = []
 
     if (!Array.prototype.slice.call(accounts).length === 0) {
@@ -11,8 +11,8 @@ const AccountList = ({ accounts }) => {
         dispActs = [].slice.call(accounts)
 
         return (
-            <>
-                <Table striped bordered hover style={{marginRight: 5 + 'px'}}>
+            <div>
+                <Table striped bordered hover style={{ marginRight: 5 + 'px' }}>
                     <thead>
                         <tr>
                             <th>Nickname</th>
@@ -29,7 +29,7 @@ const AccountList = ({ accounts }) => {
                                 <td>{account.nickname}</td>
                                 <td>${account.balance['dollars'] + '.' + account.balance['cents']}</td>
                                 <td>{account.interest}%</td>
-                                <td>{account.create_date}</td>
+                                <td>{account.createDate}</td>
                                 <td>{account.type}</td>
                                 <Link to={'/accounts/single/' + account.accountId}>
                                     <Button
@@ -42,7 +42,7 @@ const AccountList = ({ accounts }) => {
                         ))}
                     </tbody>
                 </Table>
-            </>
+            </div>
         )
     }
 }

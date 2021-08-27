@@ -82,7 +82,7 @@ const SingleAccount = ({ accounts }) => {
                             <td>{account ? account.nickname : null}</td>
                             <td>${account.balance ? account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
                             <td>{account ? account.interest : null}%</td>
-                            <td>{account ? account.create_date : null}</td>
+                            <td>{account ? account.createDate : null}</td>
                             <td>{account ? account.type : null}</td>
                             <td>$<input
                                 type="text"
@@ -137,11 +137,11 @@ const SingleAccount = ({ accounts }) => {
         if (!event === null) {
             event.preventDefault();
         }
-        console.log('withdrw value:', withAmt.current.value);
-        let amount = parseInt(withAmt.current.value, 10);
-        if (amount === parseInt(amount, 10)) {
+        let amount = parseFloat(withAmt.current.value, 10) * 100;
+        console.log('withdraw value:', parseFloat(withAmt.current.value, 10));
+        if (amount === parseFloat(amount, 10)) {
             if (amount > 0) {
-                amount *= -1
+                setAmount(amount *= -1);
             }
             changeMoney(amount)
         } else {
@@ -155,10 +155,10 @@ const SingleAccount = ({ accounts }) => {
             event.preventDefault();
         }
         console.log('dpst value:', depAmt.current.value);
-        let amount = parseInt(depAmt.current.value, 10);
-        if (amount === parseInt(amount, 10)) {
+        let amount = parseFloat(depAmt.current.value, 10) * 100;
+        if (amount === parseFloat(amount, 10)) {
             if (amount < 0) {
-                amount *= -1
+                setAmount(amount *= -1)
             }
             changeMoney(amount);
         } else {
@@ -168,20 +168,27 @@ const SingleAccount = ({ accounts }) => {
     }
 
     async function changeMoney(amount) {
-        TransferEntity.amount = amount
+        TransferEntity.amount = amount;
         const url = 'http://localhost:9001/accounts/' + account.accountId
         const headers = {
             'Authorization': token,
             'Content-Type': 'application/json'
         };
-
-        try {
-            const response = await axios.put(url, TransferEntity);
-            console.log(response.data)
-            setAccount(response.data)
-            window.location.reload();
-        } catch (e) {
-            console.log(e)
+        if (account.balance + TransferEntity.amount >= 0) {
+            try {
+                console.log('amount: ', amount)
+                console.log('TE.A: ', TransferEntity.amount)
+                const response = await axios.put(url, TransferEntity, headers);
+                console.log('put response: ', response.data)
+                setAccount(response.data)
+                window.location.reload();
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        else if (account.balance + TransferEntity.amount < 0) {
+            setWarnMsg('No overdraft allowance present, cannot withdraw more than your current balance of $' + accounts.balance / 100)
+            setShowWarn(true);
         }
     }
 }

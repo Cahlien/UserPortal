@@ -93,6 +93,9 @@ function UpdateUserForm({ user }) {
                 }
                 if (e.response.status === 503) {
                     console.log('Error 503 (Service Unavailablet) detected. The server is likely down.')//need an error page responding with duplicae warning
+                } 
+                else {
+                    console.log('Unexpected error: ', errorMessage + ' please contact an admin.')
                 }
             });
 

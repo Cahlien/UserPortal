@@ -6,8 +6,8 @@ import RegistrationForm from "./components/AuthComponents/RegistrationForm/Regis
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
 import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
-import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
+import ViewAccount from './components/AccountComponents/ViewAccounts/AccountListLogic';
+import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAccountLogic';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/LayoutComponents/PageLayout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
@@ -18,7 +18,6 @@ import HomePage from "./components/Pages/HomePage/HomePage";
 
 function App() {
     const authContext = useContext(AuthContext);
-    const actionContext = useContext(ActionContext);
     return (
         <div className="App">
             <Switch>
@@ -66,6 +65,12 @@ function App() {
                         <CardTypes />
                     </Layout>
                 </Route>
+                <Layout>
+                    <Route path={'/auth'}>
+                        {!authContext.userIsLoggedIn && <LoginForm />}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
+                    </Route>
+                </Layout>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
