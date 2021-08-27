@@ -55,7 +55,7 @@ function AccountRegistration() {
 
         const registrationData = {
             nickname: enteredNickname,
-            balance: enteredDeposit,
+            balance: enteredDeposit * 100,
             userId: authContext.userId,
             active_status: true,
             interest: 1,

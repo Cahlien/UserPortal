@@ -1,20 +1,20 @@
-import MainNavigation from "./MainNavigation";
-import MainFooter from "./MainFooter";
+import MainNavigation from "../NavBar/MainNavigation";
+import MainFooter from "../Footer/MainFooter";
 
 /**
- * This function returns a page that renders the standard layout with header on top, any
+ * This function returns a page that renders the standard LayoutComponents with header on top, any
  * content passed into the component in the middle, and the footer at the bottom of the
  * page.
  *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  *
  * @param props properties including the child jsx elements
- * @returns {JSX.Element} the page with the standard layout applied
+ * @returns {JSX.Element} the page with the standard LayoutComponents applied
  * @constructor
  */
 function Layout(props){
     return (
-        <div className={'d-flex flex-column min-vh-100'}>
+        <div className={'d-flex flex-column h-75'}>
             <MainNavigation />
                 <main className={'main'}>
                     {props.children}

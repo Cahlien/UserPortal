@@ -1,8 +1,8 @@
 import {useContext, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Dropdown} from "react-bootstrap";
-import AuthContext from '../../store/auth-context';
-import "./Layout.css"
+import AuthContext from '../../../store/auth-context';
+import "../PageLayout/Layout.css"
 
 /**
  * This function returns the html element for the main navigation bar/header
@@ -41,14 +41,19 @@ function MainNavigation(props) {
                     <li className="nav-item">
                        {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/me'}>My Details</Link>}
                     </li>
-                    <li className="nav-item">
-                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts'}>Register for Account</Link>}
-                    </li>
-                    <li className="nav-item">
-                       {authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/accounts/me'}>My Accounts</Link>}
-                    </li>
+                    {authContext.userIsLoggedIn &&
                     <Dropdown>
-                        <Dropdown.Toggle variant="link" className={'undecorated'} id="dropdown-basic">
+                        <Dropdown.Toggle variant="link" className={'undecorated'} id="accounts-dropdown">
+                            Accounts
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item href="/accounts">Apply for Account</Dropdown.Item>
+                            <Dropdown.Item href="/accounts/me">My Accounts</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>}
+                    {authContext.userIsLoggedIn &&
+                    <Dropdown>
+                        <Dropdown.Toggle variant="link" className={'undecorated'} id="cards-dropdown">
                             Cards
                         </Dropdown.Toggle>
 
@@ -56,7 +61,7 @@ function MainNavigation(props) {
                             <Dropdown.Item href="/cardoffers">Apply for Card</Dropdown.Item>
                             <Dropdown.Item href="/cards">My Cards</Dropdown.Item>
                         </Dropdown.Menu>
-                    </Dropdown>
+                    </Dropdown>}
                     <li className="nav-item">
                         {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
                         {authContext.userIsLoggedIn && <Link className={'nav-link'} onClick={logout} to={'/'}>Logout</Link>}
