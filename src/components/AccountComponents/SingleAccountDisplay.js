@@ -13,8 +13,8 @@ const SingleAccount = ({ accounts }) => {
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
     const [show, setShow] = useState(false);
-    const [showWarn, setShowWarn] = useState(false);
-    const [showMsg, setWarnMsg] = useState(false);
+    // const [showWarn, setShowWarn] = useState(false);
+    // const [showMsg, setWarnMsg] = useState(false);
     const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
@@ -189,8 +189,8 @@ const SingleAccount = ({ accounts }) => {
             }
         }
         else if (account.balance + TransferEntity.amount < 0) {
-            setWarnMsg('No overdraft allowance present, cannot withdraw more than your current balance of $' + accounts.balance / 100)
-            setShowWarn(true);
+            // setWarnMsg('No overdraft allowance present, cannot withdraw more than your current balance of $' + accounts.balance / 100)
+            // setShowWarn(true);
         }
     }
 }

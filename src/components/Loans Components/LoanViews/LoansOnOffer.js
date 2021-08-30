@@ -15,7 +15,7 @@ function LoansOnOffer(props) {
     const [loansDisplayed, setLoansDisplayed] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [searchCriteria, setSearchCriteria] = useState('');
+    const [searchCriteria, setSearchCriteria] = useState("");
     const [sortBy, setSortBy] = useState("id,asc");
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'typeName', direction: 'asc' });
@@ -26,6 +26,10 @@ function LoansOnOffer(props) {
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
 
     const getList = useCallback(async () => {
+        if (searchCriteria === "") {
+            setSearchCriteria('');
+        }
+        console.log("search: ", searchCriteria);
         let params = null;
         if (searchCriteria !== '') {
             params = {
@@ -46,6 +50,7 @@ function LoansOnOffer(props) {
                 'Content-Type': 'application/json'
             }
         });
+        console.log("outbound url: ", url);
 
         if (list.data.content !== availableLoans) {
             if (searchCriteriaChanged) {
@@ -138,13 +143,13 @@ function LoansOnOffer(props) {
             }
         }
 
-        if (event.target.id === 'baseInterestRate') {
+        if (event.target.id === 'apr') {
             if (sortByInterest.active === true) {
 
                 field = toggleDirection(sortByInterest);
                 sort = field.name + ',' + field.direction;
             } else {
-                setSortByInterest({ active: true, name: 'baseInterestRate', direction: 'asc' });
+                setSortByInterest({ active: true, name: 'apr', direction: 'asc' });
                 sort = sortByInterest.name + ',' + sortByInterest.direction;
             }
 
@@ -202,7 +207,7 @@ function LoansOnOffer(props) {
                         <tr>
                             <th className={'align-middle text-center'} data-sortable={'true'}
                                 scope={'col'} onClick={addToSort}
-                                id={'name'}>Loan
+                                id={'typeName'}>Loan
                                 {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th data-sortable={'true'} scope={'col'} id={'description'} onClick={addToSort}>Description
