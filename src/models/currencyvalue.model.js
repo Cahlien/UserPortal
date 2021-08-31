@@ -7,7 +7,7 @@
  * positive or negative aspect is represented solely by the
  * isNegative boolean flag.
  *
- * @auther Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
 export class CurrencyValue{
     isNegative;
