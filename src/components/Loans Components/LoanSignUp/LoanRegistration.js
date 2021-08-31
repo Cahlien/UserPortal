@@ -17,7 +17,6 @@ const LoanRegistration = () => {
     const [loanDisplay, setLoanDisplay] = useState(false);
     const [show, setShow] = useState(false);
     const [warn, showWarn] = useState(false);
-    const handleClose = () => setShow(false);
     const today = new Date();
     useEffect(() => {
         if (loanType === undefined) {
@@ -66,23 +65,31 @@ const LoanRegistration = () => {
             }
         });
         console.log('accept response: ', response.data)
-        history.push("/")
+        setShow(true);
+        window.setTimeout(() => {
+            setShow(false);
+            history.push("/");
+        }, 1000)
     }
 
     function cancelHandler(event) {
         event.preventDefault();
-        history.push("/")
+        showWarn(true);
+        window.setTimeout(() => {
+            showWarn(false);
+            history.push("/");
+        }, 1000)
 
     }
 
     return (
         <section>
-            <div>
+            <div className={'container w-50 my-5 centerpiece'}>
                 <Alert variant="success" show={show} >
                     Success
                 </Alert>
                 <Alert variant="warning" show={warn} >
-                    No info given!
+                    Cancelling...
                 </Alert>
                 <Form className={'offset-4 col-3'}>
                     <FormGroup>
