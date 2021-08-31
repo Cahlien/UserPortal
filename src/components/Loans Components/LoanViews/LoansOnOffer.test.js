@@ -1,9 +1,6 @@
-import { act } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import axios from "axios";
+
 import TestRenderer from 'react-test-renderer'
 import LoansOnOffer from './LoansOnOffer'
-import { render, screen } from '@testing-library/react';
 
 jest.mock('axios')
 describe('View Account List ability', () => {

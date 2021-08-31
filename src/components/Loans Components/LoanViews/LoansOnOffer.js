@@ -7,7 +7,7 @@ import AuthContext from "../../../store/auth-context";
 import { Table, Modal, Button } from "react-bootstrap"
 import LoanRegistration from '../LoanSignUp/LoanRegistration';
 
-function LoansOnOffer(props) {
+function LoansOnOffer() {
     const history = useHistory();
     const actionContext = useContext(ActionContext);
     const authContext = useContext(AuthContext);
@@ -81,8 +81,9 @@ function LoansOnOffer(props) {
 
     function applyHandler() {
         console.log('attempting to apply')
-        LoanRegistration(applyLoan, userId, token)
+        actionContext.action(applyLoan.id);
         handleClose();
+        history.push('/loansignup');
     }
 
     function handlePageChange(event, value) {
@@ -247,7 +248,7 @@ function LoansOnOffer(props) {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Applying for Loan</Modal.Title>
+                    <Modal.Title>Loan Information:</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Loan Type: {applyLoan ? applyLoan.typeName : null}</Modal.Body>
                 <Modal.Body>APR: {applyLoan ? applyLoan.apr : null}%</Modal.Body>
@@ -258,7 +259,7 @@ function LoansOnOffer(props) {
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={() => applyHandler()}>
-                        Apply for this Loan
+                        Proceed to registration
                     </Button>
                 </Modal.Footer>
             </Modal>
