@@ -4,13 +4,20 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import ActionContext from "../../../store/action-context";
 import AuthContext from "../../../store/auth-context";
-import { Table } from "react-bootstrap"
+import { Table, Modal, Button } from "react-bootstrap"
+import LoanRegistration from '../LoanSignUp/LoanRegistration';
 
 function LoansOnOffer(props) {
     const history = useHistory();
     const actionContext = useContext(ActionContext);
     const authContext = useContext(AuthContext);
     const token = authContext.token;
+    const userId = authContext.userId;
+    //modal items
+    const [applyLoan, setApplyLoan] = useState();
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    //page items
     const [availableLoans, setavailableLoans] = useState();
     const [loansDisplayed, setLoansDisplayed] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,6 +58,7 @@ function LoansOnOffer(props) {
             }
         });
         console.log("outbound url: ", url);
+        console.log('inbound list: ', list)
 
         if (list.data.content !== availableLoans) {
             if (searchCriteriaChanged) {
@@ -71,12 +79,14 @@ function LoansOnOffer(props) {
 
     }, [getList, availableLoans, loansDisplayed, token, url]);
 
-    function handleSignUp(event) {
-        event.preventDefault();
-        onSignUp(event);
+    function applyHandler() {
+        console.log('attempting to apply')
+        LoanRegistration(applyLoan, userId, token)
+        handleClose();
     }
 
     function handlePageChange(event, value) {
+        event.preventDefault();
         setLoansDisplayed(false);
         if (searchCriteriaChanged) {
             setCurrentPage(1);
@@ -95,11 +105,6 @@ function LoansOnOffer(props) {
         setLoansDisplayed(false);
         setPageSize(event.target.value);
         setCurrentPage(1);
-    }
-
-    function onSignUp(event) {
-        actionContext.action(event.currentTarget.id);
-        history.push('/loansignup');
     }
 
     function addToSort(event) {
@@ -225,9 +230,9 @@ function LoansOnOffer(props) {
                             <tr key={loan.id}>
                                 <td className={'align-middle text-center'}>{loan.typeName}</td>
                                 <td className={'align-middle'}>{loan.description}</td>
-                                <td className={'align-middle text-center'}>{loan.apr.toFixed(1) + '%'}</td>
+                                <td className={'align-middle text-center'}>{loan.apr + '%'}</td>
                                 <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'} onClick={handleSignUp}
+                                    <button className={'btn btn-primary btn mx-3'} onClick={function (event) { setApplyLoan(loan); setShow(true) }}
                                         id={loan.id}>Apply
                                     </button>
                                 </td>
@@ -239,6 +244,24 @@ function LoansOnOffer(props) {
                     boundaryCount={1} onChange={handlePageChange} />
             </div>
             <script>$('#table').DataTable()</script>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Applying for Loan</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Loan Type: {applyLoan ? applyLoan.typeName : null}</Modal.Body>
+                <Modal.Body>APR: {applyLoan ? applyLoan.apr : null}%</Modal.Body>
+                <Modal.Body>Length: {applyLoan ? applyLoan.numMonths : null} months</Modal.Body>
+                <Modal.Body>Description: {applyLoan ? applyLoan.description : null}</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={() => applyHandler()}>
+                        Apply for this Loan
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </section>
     );
 }

@@ -55,7 +55,7 @@ function App() {
                     {authContext.userIsLoggedIn && <AccountRegistration/>}
                     </Layout>
                 </Route>
-                <Route path={'/loans'}>
+                <Route path={'/loansignup'}>
                     <Layout>
                     {authContext.userIsLoggedIn && <LoanRegistration/>}
                     </Layout>
