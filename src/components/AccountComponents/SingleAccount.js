@@ -6,11 +6,12 @@ import Deactivator from "./AccountDeactivation/AccountDeactivator";
 import { render } from "@testing-library/react";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
+import {CurrencyValue} from "../../models/currencyvalue.model";
 
 const SingleAccount = ({ accounts }) => {
 
     var [account, setAccount] = useState({});
-    var [amount, setAmount] = useState({});
+    var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
     const history = useHistory();
     useEffect(() => {
@@ -54,7 +55,7 @@ const SingleAccount = ({ accounts }) => {
                     <tbody>
                         <tr>
                             <td>{account ? account.nickname : null}</td>
-                            <td>${account.balance ? account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
+                            <td>${account.balance ? (account.isNegative ? '-$' : '$') + account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
                             <td>{account ? account.interest : null}%</td>
                             <td>{account ? account.create_date : null}</td>
                             <td>{account ? account.type : null}</td>
