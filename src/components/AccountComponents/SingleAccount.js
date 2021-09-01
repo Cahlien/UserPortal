@@ -55,7 +55,7 @@ const SingleAccount = ({ accounts }) => {
                     <tbody>
                         <tr>
                             <td>{account ? account.nickname : null}</td>
-                            <td>${account.balance ? (account.isNegative ? '-$' : '$') + account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
+                            <td>{account.balance ? CurrencyValue.from(account?.balance).toString() : '$0.00'}</td>
                             <td>{account ? account.interest : null}%</td>
                             <td>{account ? account.create_date : null}</td>
                             <td>{account ? account.type : null}</td>
@@ -108,55 +108,58 @@ const SingleAccount = ({ accounts }) => {
     }
 
     function submitWithdraw(event) {
-        if (!event === null) {
-            event.preventDefault();
-        }
-        console.log('withdrw value:', withAmt.current.value);
-        let amount = parseInt(withAmt.current.value, 10);
-        if (amount === parseInt(amount, 10)) {
-            if (amount > 0) {
-                amount *= -1
-            }
-            changeMoney(amount)
-        } else {
-            console.log('amount not an integer')
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // if (!event === null) {
+        //     event.preventDefault();
+        // }
+        // console.log('withdrw value:', withAmt.current.value);
+        // let amount = parseInt(withAmt.current.value, 10);
+        // if (amount === parseInt(amount, 10)) {
+        //     if (amount > 0) {
+        //         amount *= -1
+        //     }
+        //     changeMoney(amount)
+        // } else {
+        //     console.log('amount not an integer')
+        // }
 
     }
 
     function submitDeposit(event) {
-        if (!event === null) {
-            event.preventDefault();
-        }
-        console.log('dpst value:', depAmt.current.value);
-        let amount = parseInt(depAmt.current.value, 10);
-        if (amount === parseInt(amount, 10)) {
-            if (amount < 0) {
-                amount *= -1
-            }
-            changeMoney(amount);
-        } else {
-            console.log('amount not an integer')
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // if (!event === null) {
+        //     event.preventDefault();
+        // }
+        // console.log('dpst value:', depAmt.current.value);
+        // let amount = parseInt(depAmt.current.value, 10);
+        // if (amount === parseInt(amount, 10)) {
+        //     if (amount < 0) {
+        //         amount *= -1
+        //     }
+        //     changeMoney(amount);
+        // } else {
+        //     console.log('amount not an integer')
+        // }
 
     }
 
     async function changeMoney(amount) {
-        TransferEntity.amount = amount
-        const url = 'http://localhost:9001/accounts/' + account.accountId
-        const headers = {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        };
-
-        try {
-            const response = await axios.put(url, TransferEntity);
-            console.log(response.data)
-            setAccount(response.data)
-            window.location.reload();
-        } catch (e) {
-            console.log(e)
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // TransferEntity.amount = amount
+        // const url = 'http://localhost:9001/accounts/' + account.accountId
+        // const headers = {
+        //     'Authorization': token,
+        //     'Content-Type': 'application/json'
+        // };
+        //
+        // try {
+        //     const response = await axios.put(url, TransferEntity);
+        //     console.log(response.data)
+        //     setAccount(response.data)
+        //     window.location.reload();
+        // } catch (e) {
+        //     console.log(e)
+        // }
     }
 }
 
