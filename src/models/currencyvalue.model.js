@@ -21,9 +21,9 @@ export class CurrencyValue{
      * @param cents integer the number of cents
      */
     constructor(isNegative, dollars, cents) {
-        this._isNegative = isNegative;
-        this._dollars = Math.abs(parseInt(dollars));
-        this._cents = Math.abs(parseInt(cents));
+        this.negative = isNegative;
+        this.dollars = Math.abs(parseInt(dollars));
+        this.cents = Math.abs(parseInt(cents));
     }
 
     /**
@@ -32,7 +32,7 @@ export class CurrencyValue{
      * @returns {*} boolean whether the value is negative
      */
     get isNegative() {
-        return this._isNegative;
+        return this.negative;
     }
 
     /**
@@ -41,7 +41,7 @@ export class CurrencyValue{
      * @param value boolean whether the value is negative
      */
     set isNegative(value) {
-        this._isNegative = value;
+        this.negative = value;
     }
 
     /**
@@ -49,8 +49,8 @@ export class CurrencyValue{
      *
      * @returns {number} integer the dollar value
      */
-    get dollars() {
-        return this._dollars;
+    get getDollars() {
+        return this.dollars;
     }
 
     /**
@@ -58,8 +58,8 @@ export class CurrencyValue{
      *
      * @param value integer the dollar value
      */
-    set dollars(value) {
-        this._dollars = Math.abs(parseInt(value));
+    set setDollars(value) {
+        this.dollars = Math.abs(parseInt(value));
     }
 
     /**
@@ -67,8 +67,8 @@ export class CurrencyValue{
      *
      * @returns {number} integer the cents value
      */
-    get cents() {
-        return this._cents;
+    get getCents() {
+        return this.cents;
     }
 
     /**
@@ -76,8 +76,8 @@ export class CurrencyValue{
      *
      * @param value integer the cents value
      */
-    set cents(value) {
-        this._cents = Math.abs(parseInt(value));
+    set setCents(value) {
+        this.cents = Math.abs(parseInt(value));
     }
 
     /**
@@ -110,6 +110,14 @@ export class CurrencyValue{
     }
 
     /**
+     * This method returns a string representation of the currency
+     * value object using the USD currency notation conventions.
+     */
+    toString() {
+        return (this.isNegative ? '-$' : '$') + this.dollars + '.' + (this.cents < 10 ? '0' : '') + this.cents;
+    }
+
+    /**
      * This method attempts to parse a number object with non-
      * integer values into a CurrencyValue object storing dollars
      * and cents as integer values, which are more accurate for
@@ -129,5 +137,21 @@ export class CurrencyValue{
         const cents = Math.abs(Math.trunc(((parseFloat(value) * 100) % 100)));
         console.log('Cents: ' + cents + ' / ' + value);
         return new CurrencyValue(isNegative, dollars, cents);
+    }
+
+    /**
+     * This static method creates a CurrencyValue object from any object
+     * that has the requisite properties of negative, dollars, and cents.
+     * There are no checks to ensure that those value can be used to
+     * create a valid CurrencyValue object, so be extremely careful using
+     * this method.
+     *
+     * @param negative boolean whether the value is negative
+     * @param dollars integer the number of dollars
+     * @param cents integer the number of cents
+     * @returns {CurrencyValue} CurrencyValue representation of the value
+     */
+    static from({negative, dollars, cents}){
+        return new CurrencyValue(negative, dollars, cents);
     }
 }
