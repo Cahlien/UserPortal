@@ -1,9 +1,11 @@
 
 import TestRenderer from 'react-test-renderer'
 import LoansOnOffer from './LoansOnOffer'
+import {render, screen, act} from '@testing-library/react';
+import axiosMock from 'axios';
 
 jest.mock('axios')
-describe('View Account List ability', () => {
+describe('Loan View list', () => {
 
 
     const data = {
@@ -18,13 +20,15 @@ describe('View Account List ability', () => {
             }
         }
     };
-    // it('Gets accounts from the backend and displays them as a list', async () => {
-    //     // const ALSpy = jest.spyOn(AccountList( [data] ), data);
-    //     const account = axios.get.mockImplementationOnce(() => Promise.resolve(data));
-    //     // const applyButton = screen.getByText('Apply');
-    //     // userEvent.click(applyButton)
-    //     // expect(ALSpy).toBeCalledTimes(1);
-    // });
+
+    it('Searches for loans', async () => {
+        const promise = Promise.resolve({status: 200});
+        axiosMock.get.mockResolvedValueOnce(promise);
+        const loanOff = render(<LoansOnOffer />);
+        const applyButton = screen.getByText('Search');
+        // await act(() => promise);
+        expect(axiosMock.get).toBeCalledTimes(1);
+    });
 
     
 

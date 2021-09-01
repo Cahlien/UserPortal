@@ -7,7 +7,7 @@ import AuthContext from "../../../store/auth-context";
 import { Table, Modal, Button } from "react-bootstrap"
 import LoanRegistration from '../LoanSignUp/LoanRegistration';
 
-function LoansOnOffer() {
+function LoansOnOffer(props) {
     const history = useHistory();
     const actionContext = useContext(ActionContext);
     const authContext = useContext(AuthContext);

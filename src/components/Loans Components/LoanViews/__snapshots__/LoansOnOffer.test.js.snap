@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`View Account List ability Expects the snapshot to match the display 1`] = `
+exports[`Loan View list Expects the snapshot to match the display 1`] = `
 <section
   className="container"
 >

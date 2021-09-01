@@ -27,14 +27,18 @@ const LoanRegistration = () => {
     async function getLoanType() {
         console.log('get call')
         var url = "http://localhost:9001/loantypes/" + loanTypeId
-        await axios.get(url, {
+        try {
+        const response = await axios.get(url, {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
-        }).then((response) => {
-            setLoanType(response.data);
         });
+        var loan = response.data
+        setLoanType(loan);
+    } catch (e) {
+        console.log('error caught: ', e)
+    }
     }
 
     async function submitHandler(event) {
@@ -48,7 +52,6 @@ const LoanRegistration = () => {
             }
         });
         console.log('post response: ', response.data)
-        console.log('post response loan type: ', response.data.loanType)
         setLoan(response.data);
         console.log('loan set to: ', loan);
         setLoanDisplay(true);
@@ -120,15 +123,15 @@ const LoanRegistration = () => {
                         </FormGroup>
                     }
                     {loanDisplay === false &&
-                    <ButtonGroup>
-                        <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={submitHandler}>Run Credit Check</Button>
-                    </ButtonGroup>
+                        <ButtonGroup>
+                            <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={submitHandler}>Run Credit Check</Button>
+                        </ButtonGroup>
                     }
                     {loanDisplay === true &&
-                    <ButtonGroup>
-                        <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={acceptHandler}>Accept</Button>
-                        <Button title='registerButton' type={'submit'} className={'btn btn-secondary mt-3'} onClick={cancelHandler}>Cancel</Button>
-                    </ButtonGroup>
+                        <ButtonGroup>
+                            <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={acceptHandler}>Accept</Button>
+                            <Button title='registerButton' type={'submit'} className={'btn btn-secondary mt-3'} onClick={cancelHandler}>Cancel</Button>
+                        </ButtonGroup>
                     }
                 </Form>
             </div>
