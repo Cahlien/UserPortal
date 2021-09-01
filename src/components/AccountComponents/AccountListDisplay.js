@@ -1,5 +1,6 @@
 import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
+import {CurrencyValue} from "../../models/currencyvalue.model";
 
 const AccountList = ({ accounts }) => {
 
@@ -27,7 +28,7 @@ const AccountList = ({ accounts }) => {
                         {(dispActs ?? []).map((account, index) => (
                             <tr key={index}>
                                 <td>{account.nickname}</td>
-                                <td>${account.balance['dollars'] + '.' + account.balance['cents']}</td>
+                                <td>{CurrencyValue.from(account.balance).toString()}</td>
                                 <td>{account.interest}%</td>
                                 <td>{account.createDate}</td>
                                 <td>{account.type}</td>

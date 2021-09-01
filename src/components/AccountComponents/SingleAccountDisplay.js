@@ -5,13 +5,14 @@ import axios from "axios"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
+import {CurrencyValue} from "../../models/currencyvalue.model";
 
 const SingleAccount = ({ accounts }) => {
     console.log('incoming accounts: ', accounts)
     const [account, setAccount] = useState({});
-    const [amount, setAmount] = useState({});
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
+    var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
     // const [showWarn, setShowWarn] = useState(false);
     // const [showMsg, setWarnMsg] = useState(false);
@@ -82,7 +83,7 @@ const SingleAccount = ({ accounts }) => {
                     <tbody>
                         <tr>
                             <td>{account ? account.nickname : null}</td>
-                            <td>${account.balance ? account?.balance['dollars'] + '.' + account?.balance['cents'] : null}</td>
+                            <td>{account.balance ? CurrencyValue.from(account?.balance).toString() : '$0.00'}</td>
                             <td>{account ? account.interest : null}%</td>
                             <td>{account ? account.createDate : null}</td>
                             <td>{account ? account.type : null}</td>
@@ -136,62 +137,58 @@ const SingleAccount = ({ accounts }) => {
     }
 
     function submitWithdraw(event) {
-        if (!event === null) {
-            event.preventDefault();
-        }
-        let amount = parseFloat(withAmt.current.value, 10) * 100;
-        console.log('withdraw value:', parseFloat(withAmt.current.value, 10));
-        if (amount === parseFloat(amount, 10)) {
-            if (amount > 0) {
-                setAmount(amount *= -1);
-            }
-            changeMoney(amount)
-        } else {
-            console.log('amount not an integer')
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // if (!event === null) {
+        //     event.preventDefault();
+        // }
+        // console.log('withdrw value:', withAmt.current.value);
+        // let amount = parseInt(withAmt.current.value, 10);
+        // if (amount === parseInt(amount, 10)) {
+        //     if (amount > 0) {
+        //         amount *= -1
+        //     }
+        //     changeMoney(amount)
+        // } else {
+        //     console.log('amount not an integer')
+        // }
 
     }
 
     function submitDeposit(event) {
-        if (!event === null) {
-            event.preventDefault();
-        }
-        console.log('dpst value:', depAmt.current.value);
-        let amount = parseFloat(depAmt.current.value, 10) * 100;
-        if (amount === parseFloat(amount, 10)) {
-            if (amount < 0) {
-                setAmount(amount *= -1)
-            }
-            changeMoney(amount);
-        } else {
-            console.log('amount not an integer')
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // if (!event === null) {
+        //     event.preventDefault();
+        // }
+        // console.log('dpst value:', depAmt.current.value);
+        // let amount = parseInt(depAmt.current.value, 10);
+        // if (amount === parseInt(amount, 10)) {
+        //     if (amount < 0) {
+        //         amount *= -1
+        //     }
+        //     changeMoney(amount);
+        // } else {
+        //     console.log('amount not an integer')
+        // }
 
     }
 
     async function changeMoney(amount) {
-        TransferEntity.amount = amount;
-        const url = 'http://localhost:9001/accounts/' + account.accountId
-        const headers = {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        };
-        if (account.balance + TransferEntity.amount >= 0) {
-            try {
-                console.log('amount: ', amount)
-                console.log('TE.A: ', TransferEntity.amount)
-                const response = await axios.put(url, TransferEntity, headers);
-                console.log('put response: ', response.data)
-                setAccount(response.data)
-                window.location.reload();
-            } catch (e) {
-                console.log(e)
-            }
-        }
-        else if (account.balance + TransferEntity.amount < 0) {
-            // setWarnMsg('No overdraft allowance present, cannot withdraw more than your current balance of $' + accounts.balance / 100)
-            // setShowWarn(true);
-        }
+        alert("The ability to submit transactions has not been implemented yet.")
+        // TransferEntity.amount = amount
+        // const url = 'http://localhost:9001/accounts/' + account.accountId
+        // const headers = {
+        //     'Authorization': token,
+        //     'Content-Type': 'application/json'
+        // };
+        //
+        // try {
+        //     const response = await axios.put(url, TransferEntity);
+        //     console.log(response.data)
+        //     setAccount(response.data)
+        //     window.location.reload();
+        // } catch (e) {
+        //     console.log(e)
+        // }
     }
 }
 

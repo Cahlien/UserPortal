@@ -3,6 +3,7 @@ import AuthContext from "../../../store/auth-context"
 import axios from "axios"
 import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown } from "react-bootstrap";
 import { Alert } from "react-bootstrap";
+import {CurrencyValue} from "../../../models/currencyvalue.model";
 
 function AccountRegistration() {
 
@@ -40,22 +41,14 @@ function AccountRegistration() {
             setTitle('Recovery')
         }
 
-        let enteredNickname = nickname.current.value;
-        let enteredDeposit = balance.current.value;
-        if (enteredDeposit < 0) {
-            enteredDeposit = 0;
-        }
-        if (enteredDeposit === "") {
-            enteredDeposit = 0;
-        }
-        if (enteredNickname === "") {
-            enteredNickname = 'Account';
-        }
+        const enteredNickname = nickname.current.value;
+        const enteredDeposit = CurrencyValue.valueOf(parseFloat((balance.current.value)));
         let cdate = new Date();
+        const typeAns = actType
 
         const registrationData = {
             nickname: enteredNickname,
-            balance: enteredDeposit * 100,
+            balance: enteredDeposit,
             userId: authContext.userId,
             activeStatus: true,
             interest: 1,
