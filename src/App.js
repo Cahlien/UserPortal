@@ -27,7 +27,7 @@ function App() {
                 </Route>
                 <Route path={'/users'}>
                     <Layout>
-                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
+                        {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
                     </Layout>
                 </Route>
                 <Route path={'/me'}>
@@ -42,27 +42,27 @@ function App() {
                 </Route>
                 <Route path={'/accounts/single/:id'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <AccountSingle/>}
+                        {authContext.userIsLoggedIn && <AccountSingle/>}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/me'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <ViewAccount/>}
+                        {authContext.userIsLoggedIn && <ViewAccount/>}
                     </Layout>
                 </Route>
                 <Route path={'/accounts'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <AccountRegistration/>}
+                        {authContext.userIsLoggedIn && <AccountRegistration/>}
                     </Layout>
                 </Route>
                 <Route path={'/loansignup'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <LoanRegistration/>}
+                        {authContext.userIsLoggedIn && <LoanRegistration/>}
                     </Layout>
                 </Route>
                 <Route path={'/loanoffers'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <LoansOnOffer/>}
+                        {authContext.userIsLoggedIn && <LoansOnOffer/>}
                     </Layout>
                 </Route>
                 <Route path={'/auth'}>
@@ -76,12 +76,6 @@ function App() {
                         <CardTypes />
                     </Layout>
                 </Route>
-                <Layout>
-                    <Route path={'/auth'}>
-                        {!authContext.userIsLoggedIn && <LoginForm />}
-                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
-                    </Route>
-                </Layout>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
