@@ -1,22 +1,37 @@
-import { Button, Table, Modal } from "react-bootstrap"
+import { Button, Table, Modal, Alert } from "react-bootstrap"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
 import axios from "axios"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
-import { render } from "@testing-library/react";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
 import {CurrencyValue} from "../../models/currencyvalue.model";
 
 const SingleAccount = ({ accounts }) => {
-
-    var [account, setAccount] = useState({});
+    console.log('incoming accounts: ', accounts)
+    const [account, setAccount] = useState({});
+    const [isRecovery, setRecovery] = useState(false);
+    const [deactivateText, setDeactText] = useState()
     var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
+    // const [showWarn, setShowWarn] = useState(false);
+    // const [showMsg, setWarnMsg] = useState(false);
+    const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
         setAccount(accounts)
+        console.log('type: ', account.type)
+        if (accounts.type === 'Recovery' || isRecovery) {
+            setRecovery(true)
+            setDeactText('Recovery Account');
+        }
+        else {
+            setRecovery(false);
+        setDeactText('Deactivate');
+        }
     }, [accounts])
+
+    console.log('recovery status: ', isRecovery)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -26,12 +41,15 @@ const SingleAccount = ({ accounts }) => {
     const depAmt = useRef();
     const TransferEntity = { amount };
 
-    function deactivateHandler(account, history) {
-        render(
-            <section>
-                <Deactivator account={account} history={history} />
-            </section>
-        )
+    function deactivateHandler() {
+        setErDisp(Deactivator({ account }, { history }));
+        handleClose();
+    }
+
+    if (erdisp) {
+        window.setTimeout(() => {
+            setErDisp(false)
+        }, 10000)
     }
 
     if (accounts === null) {
@@ -39,6 +57,16 @@ const SingleAccount = ({ accounts }) => {
     } else {
         return (
             <div>
+                <Alert variant="danger" onClose={() => setErDisp(false)} show={erdisp} dismissible>
+                    <Alert.Heading>Warning! This account still has a Balance!</Alert.Heading>
+                    <p>
+                        You cannot close an account with a balance. Instead, it will be placed in Recovery until
+                        the balance reaches zero. Recovery accounts will always have a 0% interest,
+                        meaning no dividends will be accrued from them. Beardtrust reccomends transferring
+                        money to another account or withdrawing everything.
+                    </p>
+                </Alert>
+
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -49,7 +77,7 @@ const SingleAccount = ({ accounts }) => {
                             <th>Type</th>
                             <th>Withdraw</th>
                             <th>Deposit</th>
-                            <th>Deactivate</th>
+                            <th>Deactivate This Account?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +85,7 @@ const SingleAccount = ({ accounts }) => {
                             <td>{account ? account.nickname : null}</td>
                             <td>{account.balance ? CurrencyValue.from(account?.balance).toString() : '$0.00'}</td>
                             <td>{account ? account.interest : null}%</td>
-                            <td>{account ? account.create_date : null}</td>
+                            <td>{account ? account.createDate : null}</td>
                             <td>{account ? account.type : null}</td>
                             <td>$<input
                                 type="text"
@@ -81,10 +109,11 @@ const SingleAccount = ({ accounts }) => {
                                 >Deposit</Button></td>
                             <td><Button
                                 onClick={handleShow}
+                                disabled={isRecovery}
                                 variant="danger"
                                 type={'submit'}
                                 title='deactivate'>
-                                Deactivate Account</Button>
+                                {deactivateText}</Button>
 
                                 <Modal show={show} onHide={handleClose}>
                                     <Modal.Header closeButton>
@@ -95,7 +124,7 @@ const SingleAccount = ({ accounts }) => {
                                         <Button variant="secondary" onClick={handleClose}>
                                             Cancel
                                         </Button>
-                                        <Button variant="primary" onClick={() => deactivateHandler(account, history)}>
+                                        <Button variant="primary" onClick={() => deactivateHandler()}>
                                             Deactivate Account
                                         </Button>
                                     </Modal.Footer>

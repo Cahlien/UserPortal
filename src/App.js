@@ -1,13 +1,12 @@
 import {useContext} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthContext from './store/auth-context';
-import ActionContext from './store/action-context';
 import RegistrationForm from "./components/AuthComponents/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
 import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/AccountComponents/ViewAccounts/ViewAccountList';
-import AccountSingle from './components/AccountComponents/ViewAccounts/ViewSingleAccount';
+import ViewAccount from './components/AccountComponents/ViewAccounts/AccountListLogic';
+import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAccountLogic';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/LayoutComponents/PageLayout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
@@ -15,10 +14,11 @@ import UserCards from './components/CardComponents/UserCards/UserCards';
 import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
 import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
+import LoanRegistration from "./components/Loans Components/LoanSignUp/LoanRegistration"
+import LoansOnOffer from "./components/Loans Components/LoanViews/LoansOnOffer"
 
 function App() {
     const authContext = useContext(AuthContext);
-    const actionContext = useContext(ActionContext);
     return (
         <div className="App">
             <Switch>
@@ -55,6 +55,16 @@ function App() {
                     {authContext.userIsLoggedIn && <AccountRegistration/>}
                     </Layout>
                 </Route>
+                <Route path={'/loansignup'}>
+                    <Layout>
+                    {authContext.userIsLoggedIn && <LoanRegistration/>}
+                    </Layout>
+                </Route>
+                <Route path={'/loanoffers'}>
+                    <Layout>
+                    {authContext.userIsLoggedIn && <LoansOnOffer/>}
+                    </Layout>
+                </Route>
                 <Route path={'/auth'}>
                     <Layout>
                         {!authContext.userIsLoggedIn && <LoginForm/>}
@@ -66,6 +76,12 @@ function App() {
                         <CardTypes />
                     </Layout>
                 </Route>
+                <Layout>
+                    <Route path={'/auth'}>
+                        {!authContext.userIsLoggedIn && <LoginForm />}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
+                    </Route>
+                </Layout>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />

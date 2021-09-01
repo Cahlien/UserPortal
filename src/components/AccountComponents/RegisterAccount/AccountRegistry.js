@@ -2,15 +2,17 @@ import { useRef, useState, useContext, useEffect } from "react";
 import AuthContext from "../../../store/auth-context"
 import axios from "axios"
 import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import {CurrencyValue} from "../../../models/currencyvalue.model";
 
 function AccountRegistration() {
 
     const authContext = useContext(AuthContext);
 
-    const [errorMessage, setErrorMessage] = useState();
     const [typeTitle, setTitle] = useState();
-    
+    const [show, setShow] = useState(false);
+    const [showWarn, setShowWarn] = useState(false);
+
     const nickname = useRef();
     const balance = useRef();
     let actType = 'Recovery';
@@ -35,6 +37,9 @@ function AccountRegistration() {
 
     async function submitHandler(event) {
         event.preventDefault();
+        if (typeTitle === 'Select Account Type') {
+            setTitle('Recovery')
+        }
 
         const enteredNickname = nickname.current.value;
         const enteredDeposit = CurrencyValue.valueOf(parseFloat((balance.current.value)));
@@ -45,15 +50,22 @@ function AccountRegistration() {
             nickname: enteredNickname,
             balance: enteredDeposit,
             userId: authContext.userId,
-            active_status: true,
+            activeStatus: true,
             interest: 1,
             create_date: cdate,
-            type: typeAns
+            type: typeTitle
         }
 
         try {
-        const res = await axios.post(url, registrationData);
-        console.log(res);
+            if (enteredDeposit === 0 && enteredNickname === "Account") {
+                setShowWarn(true)
+            }
+            else {
+                console.log('dep: ', enteredDeposit)
+                const res = await axios.post(url, registrationData);
+                console.log(res);
+                setShow(true)
+            }
         } catch (e) {
             console.log(e);
         }
@@ -61,11 +73,28 @@ function AccountRegistration() {
 
     }
 
+    if (show) {
+        window.setTimeout(() => {
+            setShow(false)
+        }, 3000)
+    }
+
+    if (showWarn) {
+        window.setTimeout(() => {
+            setShowWarn(false)
+        }, 5000)
+    }
+
     return (
         <section>
-            <div className={'container vertical-center'}>
+            <div>
+                <Alert variant="success" show={show} >
+                    Success
+                </Alert>
+                <Alert variant="warning" show={showWarn} >
+                    No info given!
+                </Alert>
                 <Form className={'offset-4 col-3'}>
-                    {errorMessage && <div className={'alert-danger mb-3'}>{errorMessage}</div>}
                     <FormGroup>
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Nickname?</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={nickname} required />
@@ -78,7 +107,7 @@ function AccountRegistration() {
                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
                             {typeTitle}
                         </Dropdown.Toggle>
-                        <Dropdown.Menu>
+                        <Dropdown.Menu required>
                             <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
                             <Dropdown.Item eventKey="1">Checking</Dropdown.Item>
                         </Dropdown.Menu>

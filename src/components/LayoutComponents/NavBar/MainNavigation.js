@@ -62,6 +62,17 @@ function MainNavigation(props) {
                             <Dropdown.Item href="/cards">My Cards</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>}
+                    {authContext.userIsLoggedIn &&
+                    <Dropdown>
+                        <Dropdown.Toggle variant="link" className={'undecorated'} id="loans-dropdown">
+                            Loans
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item href="/loanoffers">Apply for Loan</Dropdown.Item>
+                            <Dropdown.Item href="/loans">My Loans</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>}
                     <li className="nav-item">
                         {!authContext.userIsLoggedIn && <Link className={'nav-link'} to={'/auth'}>Log In</Link>}
                         {authContext.userIsLoggedIn && <Link className={'nav-link'} onClick={logout} to={'/'}>Logout</Link>}

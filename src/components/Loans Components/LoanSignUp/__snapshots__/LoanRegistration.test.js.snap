@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loan Registration tests Expects the snapshot to match the display 1`] = `
+<section>
+  <div
+    className="container w-50 my-5 centerpiece"
+  >
+    <form
+      className="offset-4 col-3"
+    >
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          New 
+           Loan:
+        </label>
+      </div>
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          APR: 
+           
+        </label>
+      </div>
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          Loan Duration: 
+           months.
+        </label>
+      </div>
+      <div>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
+          Description: 
+           
+        </label>
+      </div>
+      <div
+        className="btn-group"
+        role="group"
+      >
+        <button
+          className="btn btn-primary mt-3 btn btn-primary"
+          disabled={false}
+          onClick={[Function]}
+          title="registerButton"
+          type="submit"
+        >
+          Run Credit Check
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+`;
