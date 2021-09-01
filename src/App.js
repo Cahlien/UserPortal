@@ -16,6 +16,7 @@ import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
 import LoanRegistration from "./components/Loans Components/LoanSignUp/LoanRegistration"
 import LoansOnOffer from "./components/Loans Components/LoanViews/LoansOnOffer"
+import ViewLoanStatus from './components/Loans Components/LoanViews/ViewLoanStatus';
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -63,6 +64,11 @@ function App() {
                 <Route path={'/loanoffers'}>
                     <Layout>
                     {authContext.userIsLoggedIn && <LoansOnOffer/>}
+                    </Layout>
+                </Route>
+                <Route path={'/myloans'}>
+                    <Layout>
+                    {authContext.userIsLoggedIn && <ViewLoanStatus/>}
                     </Layout>
                 </Route>
                 <Route path={'/auth'}>

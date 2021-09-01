@@ -1,33 +1,26 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
-import { useHistory } from "react-router-dom";
-import ActionContext from "../../../store/action-context";
 import AuthContext from "../../../store/auth-context";
-import { Table, Modal, Button } from "react-bootstrap"
+import { Table } from "react-bootstrap"
 
-function LoansOnOffer() {
-    const history = useHistory();
-    const actionContext = useContext(ActionContext);
+function ViewLoanStatus() {
     const authContext = useContext(AuthContext);
     const token = authContext.token;
     const userId = authContext.userId;
-    //modal items
-    const [applyLoan, setApplyLoan] = useState();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
     //page items
-    const [availableLoans, setavailableLoans] = useState();
+    const [availableLoans, setavailableLoans] = useState([]);
     const [loansDisplayed, setLoansDisplayed] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchCriteria, setSearchCriteria] = useState("");
-    const [sortBy, setSortBy] = useState("id,asc");
+    const [sortBy, setSortBy] = useState("loanId,asc," + userId);
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'typeName', direction: 'asc' });
     const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'description', direction: 'asc' });
     const [sortByInterest, setSortByInterest] = useState({ active: false, name: 'baseInterestRate', direction: 'asc' });
-    const url = 'http://localhost:9001/loantypes'
+    const [sortByCreateDate, setSortByCreateDate] = useState({ active: false, name: 'baseInterestRate', direction: 'asc' });
+    const url = 'http://localhost:9001/loans/me';
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
 
@@ -42,10 +35,10 @@ function LoansOnOffer() {
                 page: currentPage === 0 ? 0 : currentPage - 1,
                 size: pageSize,
                 sortBy: sortBy,
-                search: searchCriteria
+                search: searchCriteria,
             };
         } else {
-            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy };
+            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy};
         }
 
         console.log('params: ', params);
@@ -57,9 +50,10 @@ function LoansOnOffer() {
             }
         });
         console.log("outbound url: ", url);
-        console.log('inbound list: ', list)
+        console.log('inbound response: ', list);
 
         if (list.data.content !== availableLoans) {
+            console.log('list content found: ', list.data.content);
             if (searchCriteriaChanged) {
                 setCurrentPage(1);
                 setSearchCriteriaChanged(false);
@@ -77,13 +71,6 @@ function LoansOnOffer() {
         }
 
     }, [getList, availableLoans, loansDisplayed, token, url]);
-
-    function applyHandler() {
-        console.log('attempting to apply')
-        actionContext.action(applyLoan.id);
-        handleClose();
-        history.push('/loansignup');
-    }
 
     function handlePageChange(event, value) {
         event.preventDefault();
@@ -110,6 +97,7 @@ function LoansOnOffer() {
     function addToSort(event) {
         let sort = '';
         let field = { };
+        console.log('available loans: ', availableLoans);
 
         if (event.target.id === 'typeName') {
             if (sortByTypeName.active === true) {
@@ -117,15 +105,15 @@ function LoansOnOffer() {
                 sort = field.name + ',' + field.direction;
             } else {
                 setSortByTypeName({ active: true, name: 'typeName', direction: 'asc' });
-                sort = sortByTypeName.name + ',' + sortByTypeName.direction;
+                sort = sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
             }
 
             if (sortByDescription.active === true) {
-                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
             }
 
             if (sortByInterest.active === true) {
-                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
             }
         }
 
@@ -136,15 +124,15 @@ function LoansOnOffer() {
                 sort = field.name + ',' + field.direction;
             } else {
                 setSortByDescription({ active: true, name: 'description', direction: 'asc' });
-                sort = sortByDescription.name + ',' + sortByDescription.direction;
+                sort = sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
             }
 
             if (setSortByTypeName.active === true) {
-                sort += +',' + setSortByTypeName.name + ',' + setSortByTypeName.direction;
+                sort += +',' + setSortByTypeName.name + ',' + setSortByTypeName.direction + ',' + authContext.userId;
             }
 
             if (sortByTypeName.active === true) {
-                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
             }
         }
 
@@ -155,15 +143,19 @@ function LoansOnOffer() {
                 sort = field.name + ',' + field.direction;
             } else {
                 setSortByInterest({ active: true, name: 'apr', direction: 'asc' });
-                sort = sortByInterest.name + ',' + sortByInterest.direction;
+                sort = sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
             }
 
             if (sortByTypeName.active === true) {
-                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
             }
 
             if (sortByDescription.active === true) {
-                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction + ',' + authContext.userId;
             }
         }
 
@@ -183,7 +175,7 @@ function LoansOnOffer() {
 
     return (
         <section className={'container'}>
-            <h1 className={'text-center mt-5'}>The Loans of BeardTrust</h1>
+            <h1 className={'text-center mt-5'}>Your Loans: (WIP)</h1>
             <div className={'mt-5'}>
                 <div>
                     <div className={'input-group mb-3'}>
@@ -212,28 +204,51 @@ function LoansOnOffer() {
                         <tr>
                             <th className={'align-middle text-center'} data-sortable={'true'}
                                 scope={'col'} onClick={addToSort}
-                                id={'typeName'}>Loan
+                                id={'typeName'}>Loan Type
                                 {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
-                            <th data-sortable={'true'} scope={'col'} id={'description'} onClick={addToSort}>Description
+                            <th data-sortable={'true'} scope={'col'} id={'description'} onClick={addToSort}>
+                                Description
                                 {sortByDescription.active === true && (sortByDescription.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
                                 id={'apr'} onClick={addToSort}>Interest Rate
                                 {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
-                            <th className={'align-middle text-center'}>Sign Up</th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'apr'} onClick={addToSort}>Amount
+                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'apr'} onClick={addToSort}>Principal
+                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'apr'} onClick={addToSort}>Due Date
+                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'apr'} onClick={addToSort}>Date Created
+                                {sortByInterest.active === true && (sortByCreateDate.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'}>
+                                Loan Interaction
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {availableLoans && availableLoans.map(loan => (
                             <tr key={loan.id}>
-                                <td className={'align-middle text-center'}>{loan.typeName}</td>
-                                <td className={'align-middle'}>{loan.description}</td>
-                                <td className={'align-middle text-center'}>{loan.apr + '%'}</td>
+                                <td className={'align-middle text-center'}>{loan.loanType.typeName}</td>
+                                <td className={'align-middle'}>{loan.loanType.description}</td>
+                                <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>
+                                <td className={'align-middle text-center'}>{'$' + loan.currencyValue.dollars + '.' + loan.currencyValue.cents}</td>
+                                <td className={'align-middle text-center'}>{loan.principal}</td>
+                                <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
+                                <td className={'align-middle text-center'}>{loan.createDate}</td>
                                 <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'} onClick={function (event) { setApplyLoan(loan); setShow(true) }}
-                                        id={loan.id}>Apply
+                                    <button className={'btn btn-primary btn mx-3'}
+                                        id={loan.id}>Review
                                     </button>
                                 </td>
                             </tr>
@@ -244,26 +259,8 @@ function LoansOnOffer() {
                     boundaryCount={1} onChange={handlePageChange} />
             </div>
             <script>$('#table').DataTable()</script>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Loan Information:</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Loan Type: {applyLoan ? applyLoan.typeName : null}</Modal.Body>
-                <Modal.Body>APR: {applyLoan ? applyLoan.apr : null}%</Modal.Body>
-                <Modal.Body>Length: {applyLoan ? applyLoan.numMonths : null} months</Modal.Body>
-                <Modal.Body>Description: {applyLoan ? applyLoan.description : null}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={() => applyHandler()}>
-                        Proceed to registration
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </section>
     );
 }
 
-export default LoansOnOffer;
+export default ViewLoanStatus;
