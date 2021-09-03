@@ -513,7 +513,7 @@ function ViewLoanStatus() {
                         </Modal>
                     }
                 </Table>
-                <Pagination classNameName={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
+                <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
                     boundaryCount={1} onChange={handlePageChange} />
             </div >
             <script>$('#table').DataTable()</script>

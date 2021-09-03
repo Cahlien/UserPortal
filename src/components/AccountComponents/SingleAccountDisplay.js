@@ -1,7 +1,6 @@
 import { Button, Table, Modal, Alert } from "react-bootstrap"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
-import axios from "axios"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
@@ -12,7 +11,7 @@ const SingleAccount = ({ accounts }) => {
     const [account, setAccount] = useState({});
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
-    var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
+    // var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
     // const [showWarn, setShowWarn] = useState(false);
     // const [showMsg, setWarnMsg] = useState(false);
@@ -39,7 +38,7 @@ const SingleAccount = ({ accounts }) => {
     const token = authContext.token;
     const withAmt = useRef();
     const depAmt = useRef();
-    const TransferEntity = { amount };
+    // const TransferEntity = { amount };
 
     function deactivateHandler() {
         setErDisp(Deactivator({ account }, { history }));
