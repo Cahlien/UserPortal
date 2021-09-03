@@ -1,5 +1,5 @@
-import {useContext} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import { useContext } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import RegistrationForm from "./components/AuthComponents/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
@@ -16,6 +16,7 @@ import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
 import LoanRegistration from "./components/Loans Components/LoanSignUp/LoanRegistration"
 import LoansOnOffer from "./components/Loans Components/LoanViews/LoansOnOffer"
+import ViewLoanStatus from './components/Loans Components/LoanViews/ViewLoanStatus';
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -32,12 +33,12 @@ function App() {
                 </Route>
                 <Route path={'/me'}>
                     <Layout>
-                        {authContext.userIsLoggedIn && <ViewUserForm/>}
+                        {authContext.userIsLoggedIn && <ViewUserForm />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
                     <Layout>
-                        {authContext.userIsLoggedIn && <AccountDeactivator/>}
+                        {authContext.userIsLoggedIn && <AccountDeactivator />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
@@ -62,13 +63,18 @@ function App() {
                 </Route>
                 <Route path={'/loanoffers'}>
                     <Layout>
-                        {authContext.userIsLoggedIn && <LoansOnOffer/>}
+                        {authContext.userIsLoggedIn && <LoansOnOffer />}
+                    </Layout>
+                </Route>
+                <Route path={'/myloans'}>
+                    <Layout>
+                        {authContext.userIsLoggedIn && <ViewLoanStatus />}
                     </Layout>
                 </Route>
                 <Route path={'/auth'}>
                     <Layout>
-                        {!authContext.userIsLoggedIn && <LoginForm/>}
-                        {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
+                        {!authContext.userIsLoggedIn && <LoginForm />}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
                     </Layout>
                 </Route>
                 <Route path={'/cardoffers'}>
@@ -83,12 +89,12 @@ function App() {
                 </Route>
                 <Route path={'/cards/:cardId'}>
                     <Layout>
-                        <CardStatus/>
+                        <CardStatus />
                     </Layout>
                 </Route>
                 <Route path={'/cards'}>
                     <Layout>
-                        <UserCards/>
+                        <UserCards />
                     </Layout>
                 </Route>
             </Switch>

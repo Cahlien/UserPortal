@@ -35,6 +35,7 @@ const LoanRegistration = () => {
             }
         });
         var loan = response.data
+        console.log('loantype: ', response.data)
         setLoanType(loan);
     } catch (e) {
         console.log('error caught: ', e)
@@ -53,12 +54,12 @@ const LoanRegistration = () => {
         });
         console.log('post response: ', response.data)
         setLoan(response.data);
-        console.log('loan set to: ', loan);
         setLoanDisplay(true);
     }
 
     async function acceptHandler(event) {
         event.preventDefault();
+        loan.loanType.loanTypeId = loanTypeId;
         console.log('accept handler sending: ', loan);
         var url = "http://localhost:9001/loans"
         const response = await axios.post(url, loan, {
@@ -71,7 +72,7 @@ const LoanRegistration = () => {
         setShow(true);
         window.setTimeout(() => {
             setShow(false);
-            history.push("/");
+            history.push("/myloans");
         }, 1000)
     }
 
