@@ -469,36 +469,36 @@ function ViewLoanStatus() {
                             <Modal.Body>
                                 <div className="form-group">
                                     <div className="mb-2">
-                                        <label className="form-label">Type:</label>
-                                        <input type="text" disabled={true} className="form-control" value={currentLoan.loanType.typeName}></input>
+                                        <label id="typeLabel" className="form-label">Type:</label>
+                                        <input id="typeText" type="text" disabled={true} className="form-control" value={currentLoan.loanType.typeName}></input>
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Description:</label>
-                                        <p className="form-body">
+                                        <label id="descriptionLabel" className="form-label">Description:</label>
+                                        <p id="descriptionText" className="form-body">
                                         {currentLoan.loanType.description}
                                         </p>
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Interest:</label>
-                                        <input className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr}></input>
+                                        <label id="interestLabel" className="form-label">Interest:</label>
+                                        <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr}></input>
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Amount:</label>
-                                        <input className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.currencyValue).toString()}></input>
+                                        <label id="amountLabel" className="form-label">Amount:</label>
+                                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.currencyValue).toString()}></input>
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Principal:</label>
-                                        <input className="form-control" type="text" disabled={true} value={currentLoan.principal}></input>
+                                        <label id="principalLabel" className="form-label">Principal:</label>
+                                        <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.principal}></input>
                                     </div>
                                     <div className="mb-2">
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Next Payment Due Date:</label>
-                                        <input className="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
+                                        <label id="nextDueDateLabel" className="form-label">Next Payment Due Date:</label>
+                                        <input id="nextDueDateText" className="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
                                     </div>
                                     <div className="mb-2">
-                                        <label className="form-label">Date Created:</label>
-                                        <input className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
+                                        <label id="createDateLabel" className="form-label">Date Created:</label>
+                                        <input id="createDateText" className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
                                     </div>
                                 </div>
                             </Modal.Body>
