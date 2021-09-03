@@ -11,7 +11,7 @@ const SingleAccount = ({ accounts }) => {
     const [account, setAccount] = useState({});
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
-    // var [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
+    const [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
     // const [showWarn, setShowWarn] = useState(false);
     // const [showMsg, setWarnMsg] = useState(false);
