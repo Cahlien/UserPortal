@@ -1,6 +1,7 @@
 import { Table, Button, } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import {CurrencyValue} from "../../models/currencyvalue.model";
+import {AccountType} from "../../models/accounttype.model";
 
 const AccountList = ({ accounts }) => {
 
@@ -30,9 +31,13 @@ const AccountList = ({ accounts }) => {
                                 <td>{account.nickname}</td>
                                 <td>{CurrencyValue.from(account.balance).toString()}</td>
                                 <td>{account.interest}%</td>
-                                <td>{account.createDate}</td>
-                                <td>{account.type}</td>
-                                <Link to={'/accounts/single/' + account.accountId}>
+                                <td>
+                                    {account.createDate.slice(8, 10) + '/' +
+                                account.createDate.slice(5, 7) + '/' +
+                                account.createDate.slice(0, 4)}
+                                </td>
+                                <td>{account.type.name}</td>
+                                <Link to={'/accounts/single/' + account.id}>
                                     <Button
                                         variant="success"
                                         type={'submit'}

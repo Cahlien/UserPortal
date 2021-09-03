@@ -21,7 +21,7 @@ const SingleAccount = ({ accounts }) => {
     useEffect(() => {
         setAccount(accounts)
         console.log('type: ', account.type)
-        if (accounts.type === 'Recovery' || isRecovery) {
+        if (account.type && account.type.name === 'Recovery' || isRecovery) {
             setRecovery(true)
             setDeactText('Recovery Account');
         }
@@ -85,8 +85,12 @@ const SingleAccount = ({ accounts }) => {
                             <td>{account ? account.nickname : null}</td>
                             <td>{account.balance ? CurrencyValue.from(account?.balance).toString() : '$0.00'}</td>
                             <td>{account ? account.interest : null}%</td>
-                            <td>{account ? account.createDate : null}</td>
-                            <td>{account ? account.type : null}</td>
+                            <td>
+                                {account.createDate ? account.createDate.slice(8, 10) + '/' +
+                                account.createDate.slice(5, 7) + '/' +
+                                account.createDate.slice(0, 4) : null}
+                            </td>
+                            <td>{account && account.type ? account.type.name : null}</td>
                             <td>$<input
                                 type="text"
                                 id="withdrawInput"
