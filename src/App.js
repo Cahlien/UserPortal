@@ -1,5 +1,5 @@
-import {useContext} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import { useContext } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import AuthContext from './store/auth-context';
 import RegistrationForm from "./components/AuthComponents/RegistrationForm/RegistrationForm";
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
@@ -28,53 +28,53 @@ function App() {
                 </Route>
                 <Route path={'/users'}>
                     <Layout>
-                    {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'}/>}
+                        {!authContext.userIsLoggedIn && <RegistrationForm url={'http://localhost:9001/users'} />}
                     </Layout>
                 </Route>
                 <Route path={'/me'}>
                     <Layout>
-                        {authContext.userIsLoggedIn && <ViewUserForm/>}
+                        {authContext.userIsLoggedIn && <ViewUserForm />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/deactivate'}>
                     <Layout>
-                        {authContext.userIsLoggedIn && <AccountDeactivator/>}
+                        {authContext.userIsLoggedIn && <AccountDeactivator />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/single/:id'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <AccountSingle/>}
+                        {authContext.userIsLoggedIn && <AccountSingle />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts/me'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <ViewAccount/>}
+                        {authContext.userIsLoggedIn && <ViewAccount />}
                     </Layout>
                 </Route>
                 <Route path={'/accounts'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <AccountRegistration/>}
+                        {authContext.userIsLoggedIn && <AccountRegistration />}
                     </Layout>
                 </Route>
                 <Route path={'/loansignup'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <LoanRegistration/>}
+                        {authContext.userIsLoggedIn && <LoanRegistration />}
                     </Layout>
                 </Route>
                 <Route path={'/loanoffers'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <LoansOnOffer/>}
+                        {authContext.userIsLoggedIn && <LoansOnOffer />}
                     </Layout>
                 </Route>
                 <Route path={'/myloans'}>
                     <Layout>
-                    {authContext.userIsLoggedIn && <ViewLoanStatus/>}
+                        {authContext.userIsLoggedIn && <ViewLoanStatus />}
                     </Layout>
                 </Route>
                 <Route path={'/auth'}>
                     <Layout>
-                        {!authContext.userIsLoggedIn && <LoginForm/>}
-                        {authContext.userIsLoggedIn && <Redirect to={'/'}/>}
+                        {!authContext.userIsLoggedIn && <LoginForm />}
+                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
                     </Layout>
                 </Route>
                 <Route path={'/cardoffers'}>
@@ -82,12 +82,6 @@ function App() {
                         <CardTypes />
                     </Layout>
                 </Route>
-                <Layout>
-                    <Route path={'/auth'}>
-                        {!authContext.userIsLoggedIn && <LoginForm />}
-                        {authContext.userIsLoggedIn && <Redirect to={'/'} />}
-                    </Route>
-                </Layout>
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />
@@ -95,12 +89,12 @@ function App() {
                 </Route>
                 <Route path={'/cards/:cardId'}>
                     <Layout>
-                        <CardStatus/>
+                        <CardStatus />
                     </Layout>
                 </Route>
                 <Route path={'/cards'}>
                     <Layout>
-                        <UserCards/>
+                        <UserCards />
                     </Layout>
                 </Route>
             </Switch>

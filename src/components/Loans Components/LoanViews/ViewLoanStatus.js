@@ -16,10 +16,13 @@ function ViewLoanStatus() {
     const [searchCriteria, setSearchCriteria] = useState("");
     const [sortBy, setSortBy] = useState("loanId,asc," + userId);
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
-    const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'typeName', direction: 'asc' });
-    const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'description', direction: 'asc' });
-    const [sortByInterest, setSortByInterest] = useState({ active: false, name: 'baseInterestRate', direction: 'asc' });
-    const [sortByCreateDate, setSortByCreateDate] = useState({ active: false, name: 'baseInterestRate', direction: 'asc' });
+    const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'loanType_typeName', direction: 'asc' });
+    const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'loanType_description', direction: 'asc' });
+    const [sortByInterest, setSortByInterest] = useState({ active: false, name: 'loanType_apr', direction: 'asc' });
+    const [sortByCreateDate, setSortByCreateDate] = useState({ active: false, name: 'createDate', direction: 'asc' });
+    const [sortByNextPay, setSortByNextPay] = useState({ active: false, name: 'nextDueDate', direction: 'asc' });
+    const [sortByPrincipal, setSortByPrincipal] = useState({ active: false, name: 'principal', direction: 'asc' });
+    const [sortByValueTitle, setsortByValueTitle] = useState({ active: false, name: 'valueTitle', direction: 'asc' });
     const url = 'http://localhost:9001/loans/me';
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
@@ -99,65 +102,250 @@ function ViewLoanStatus() {
         let field = { };
         console.log('available loans: ', availableLoans);
 
-        if (event.target.id === 'typeName') {
+        if (event.target.id === 'loanType_typeName') {
             if (sortByTypeName.active === true) {
                 field = toggleDirection(sortByTypeName);
-                sort = field.name + ',' + field.direction;
+                sort = field.name + ',' + field.direction + ',' +  userId;
             } else {
-                setSortByTypeName({ active: true, name: 'typeName', direction: 'asc' });
+                setSortByTypeName({ active: true, name: 'loanType_typeName', direction: 'asc' });
                 sort = sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
             }
 
             if (sortByDescription.active === true) {
-                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
             }
 
             if (sortByInterest.active === true) {
-                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+            }
+
+            if (sortByValueTitle.active === true) {
+                sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
+            }
+
+            if (sortByPrincipal.active === true) {
+                sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+            }
+
+            if (sortByNextPay.active === true) {
+                sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
             }
         }
 
-        if (event.target.id === 'description') {
+        if (event.target.id === 'loanType_description') {
             if (sortByDescription.active === true) {
 
                 field = toggleDirection(sortByDescription);
-                sort = field.name + ',' + field.direction;
+                sort = field.name + ',' + field.direction + ',' +  userId;
             } else {
-                setSortByDescription({ active: true, name: 'description', direction: 'asc' });
+                setSortByDescription({ active: true, name: 'loanType_description', direction: 'asc' });
                 sort = sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
             }
 
             if (setSortByTypeName.active === true) {
-                sort += +',' + setSortByTypeName.name + ',' + setSortByTypeName.direction + ',' + authContext.userId;
+                sort += +',' + setSortByTypeName.name + ',' + setSortByTypeName.direction;
             }
 
             if (sortByTypeName.active === true) {
-                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
             }
-        }
 
-        if (event.target.id === 'apr') {
             if (sortByInterest.active === true) {
-
-                field = toggleDirection(sortByInterest);
-                sort = field.name + ',' + field.direction;
-            } else {
-                setSortByInterest({ active: true, name: 'apr', direction: 'asc' });
-                sort = sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
             }
 
-            if (sortByTypeName.active === true) {
-                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
+            if (sortByValueTitle.active === true) {
+                sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
             }
 
-            if (sortByDescription.active === true) {
-                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction + ',' + authContext.userId;
+            if (sortByPrincipal.active === true) {
+                sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+            }
+
+            if (sortByNextPay.active === true) {
+                sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
             }
 
             if (sortByCreateDate.active === true) {
-                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction + ',' + authContext.userId;
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
             }
         }
+
+        if (event.target.id === 'loanType_apr') {
+            if (sortByInterest.active === true) {
+
+                field = toggleDirection(sortByInterest);
+                sort = field.name + ',' + field.direction + ',' +  userId;
+            } else {
+                setSortByInterest({ active: true, name: 'loanType_apr', direction: 'asc' });
+                sort = sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
+            }
+
+            if (sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if (sortByTypeName.active === true) {
+                sort += +',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if (sortByValueTitle.active === true) {
+                sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
+            }
+
+            if (sortByPrincipal.active === true) {
+                sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+            }
+
+            if (sortByNextPay.active === true) {
+                sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
+            }
+        }
+
+        if (event.target.id === 'principal') {
+            if (sortByPrincipal.active === true) {
+
+                field = toggleDirection(sortByPrincipal);
+                sort = field.name + ',' + field.direction + ',' + userId;
+            } else {
+                setSortByPrincipal({ active: true, name: 'principal', direction: 'asc' });
+                sort = sortByPrincipal.name + ',' + sortByPrincipal.direction + ',' + authContext.userId;
+            }
+
+            if (sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if (sortByInterest.active === true) {
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+            }
+
+            if (sortByValueTitle.active === true) {
+                sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
+            }
+
+            if (sortByTypeName.active === true) {
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if (sortByNextPay.active === true) {
+                sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
+            }
+        }
+
+        if (event.target.id === 'valueTitle') {
+            if (sortByValueTitle.active === true) {
+                field = toggleDirection(sortByValueTitle);
+                sort = field.name + ',' + field.direction + ',' +  userId;
+            } else {
+                setsortByValueTitle({ active: true, name: 'valueTitle', direction: 'asc' });
+                sort = sortByValueTitle.name + ',' + sortByValueTitle.direction + ',' + authContext.userId;
+            }
+
+            if (sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if (sortByInterest.active === true) {
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+            }
+
+            if (sortByTypeName.active === true) {
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if (sortByPrincipal.active === true) {
+                sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+            }
+
+            if (sortByNextPay.active === true) {
+                sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
+            }
+        }
+
+        if (event.target.id === 'nextDueDate') {
+            if (sortByNextPay.active === true) {
+                field = toggleDirection(sortByNextPay);
+                sort = field.name + ',' + field.direction + ',' +  userId;
+            } else {
+                setSortByNextPay({ active: true, name: 'nextDueDate', direction: 'asc' });
+                sort = sortByNextPay.name + ',' + sortByNextPay.direction + ',' + authContext.userId;
+            }
+
+            if (sortByDescription.active === true) {
+                sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+            }
+
+            if (sortByInterest.active === true) {
+                sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+            }
+
+            if (sortByValueTitle.active === true) {
+                sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
+            }
+
+            if (sortByPrincipal.active === true) {
+                sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+            }
+
+            if (sortByTypeName.active === true) {
+                sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction;
+            }
+
+            if (sortByCreateDate.active === true) {
+                sort += ',' + sortByCreateDate.name + ',' + sortByCreateDate.direction;
+            }
+        }
+
+            if (event.target.id === 'createDate') {
+                if (sortByCreateDate.active === true) {
+                    field = toggleDirection(sortByCreateDate);
+                    sort = field.name + ',' + field.direction + ',' +  userId;
+                } else {
+                    setSortByCreateDate({ active: true, name: 'createDate', direction: 'asc' });
+                    sort = sortByCreateDate.name + ',' + sortByCreateDate.direction + ',' + authContext.userId;
+                }
+
+                if (sortByDescription.active === true) {
+                    sort += ',' + sortByDescription.name + ',' + sortByDescription.direction;
+                }
+    
+                if (sortByInterest.active === true) {
+                    sort += +',' + sortByInterest.name + ',' + sortByInterest.direction;
+                }
+    
+                if (sortByValueTitle.active === true) {
+                    sort += ',' + sortByValueTitle.name + ',' + sortByValueTitle.direction;
+                }
+    
+                if (sortByPrincipal.active === true) {
+                    sort += ',' + sortByPrincipal.name + ',' + sortByPrincipal.direction;
+                }
+    
+                if (sortByNextPay.active === true) {
+                    sort += ',' + sortByNextPay.name + ',' + sortByNextPay.direction;
+                }
+    
+                if (sortByTypeName.active === true) {
+                    sort += ',' + sortByTypeName.name + ',' + sortByTypeName.direction ;
+                }
+            }
 
         setLoansDisplayed(false);
         setSortBy(sort);
@@ -204,32 +392,32 @@ function ViewLoanStatus() {
                         <tr>
                             <th className={'align-middle text-center'} data-sortable={'true'}
                                 scope={'col'} onClick={addToSort}
-                                id={'typeName'}>Loan Type
+                                id={'loanType_typeName'}>Loan Type
                                 {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
-                            <th data-sortable={'true'} scope={'col'} id={'description'} onClick={addToSort}>
+                            <th data-sortable={'true'} scope={'col'} id={'loanType_description'} onClick={addToSort}>
                                 Description
                                 {sortByDescription.active === true && (sortByDescription.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'apr'} onClick={addToSort}>Interest Rate
+                                id={'loanType_apr'} onClick={addToSort}>Interest Rate
                                 {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'apr'} onClick={addToSort}>Amount
-                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                                id={'valueTitle'} onClick={addToSort}>Amount
+                                {sortByValueTitle.active === true && (sortByValueTitle.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'apr'} onClick={addToSort}>Principal
-                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                                id={'principal'} onClick={addToSort}>Principal
+                                {sortByPrincipal.active === true && (sortByPrincipal.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'apr'} onClick={addToSort}>Due Date
-                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+                                id={'nextDueDate'} onClick={addToSort}>Next Payment Due
+                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'apr'} onClick={addToSort}>Date Created
-                                {sortByInterest.active === true && (sortByCreateDate.direction === 'asc' ? '  ↑' : '  ↓')}
+                                id={'createDate'} onClick={addToSort}>Date Created
+                                {sortByCreateDate.active === true && (sortByCreateDate.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'}>
                                 Loan Interaction
@@ -238,7 +426,7 @@ function ViewLoanStatus() {
                     </thead>
                     <tbody>
                         {availableLoans && availableLoans.map(loan => (
-                            <tr key={loan.id}>
+                            <tr key={loan.loanId}>
                                 <td className={'align-middle text-center'}>{loan.loanType.typeName}</td>
                                 <td className={'align-middle'}>{loan.loanType.description}</td>
                                 <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>

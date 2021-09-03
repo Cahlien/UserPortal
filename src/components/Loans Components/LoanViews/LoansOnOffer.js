@@ -22,7 +22,7 @@ function LoansOnOffer() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchCriteria, setSearchCriteria] = useState("");
-    const [sortBy, setSortBy] = useState("id,asc");
+    const [sortBy, setSortBy] = useState("loanTypeId,asc");
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'typeName', direction: 'asc' });
     const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'description', direction: 'asc' });
@@ -80,7 +80,8 @@ function LoansOnOffer() {
 
     function applyHandler() {
         console.log('attempting to apply')
-        actionContext.action(applyLoan.id);
+        console.log('applyLoan: ', applyLoan)
+        actionContext.action(applyLoan.loanTypeId);
         handleClose();
         history.push('/loansignup');
     }
@@ -233,7 +234,7 @@ function LoansOnOffer() {
                                 <td className={'align-middle text-center'}>{loan.apr + '%'}</td>
                                 <td className={'align-middle text-center'}>
                                     <button className={'btn btn-primary btn mx-3'} onClick={function (event) { setApplyLoan(loan); setShow(true) }}
-                                        id={loan.id}>Apply
+                                        id={loan.loanTypeId}>Apply
                                     </button>
                                 </td>
                             </tr>
