@@ -376,7 +376,7 @@ function ViewLoanStatus() {
 
     return (
         <section className={'container'}>
-            <h1 className={'text-center mt-5'}>Your Loans: (WIP)</h1>
+            <h1 className={'text-center mt-5'}>Your Loans:</h1>
             <div className={'mt-5'}>
                 <div>
                     <div className={'input-group mb-3'}>
