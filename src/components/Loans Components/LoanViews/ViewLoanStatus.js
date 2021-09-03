@@ -376,7 +376,7 @@ function ViewLoanStatus() {
 
     return (
         <section className={'container'}>
-            <h1 className={'text-center mt-5'}>Your Loans: (WIP)</h1>
+            <h1 className={'text-center mt-5'}>Your Loans:</h1>
             <div className={'mt-5'}>
                 <div>
                     <div className={'input-group mb-3'}>
@@ -467,38 +467,38 @@ function ViewLoanStatus() {
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <div class="form-group">
-                                    <div class="mb-2">
-                                        <label class="form-label">Type:</label>
-                                        <input type="text" disabled={true} class="form-control" value={currentLoan.loanType.typeName}></input>
+                                <div className="form-group">
+                                    <div className="mb-2">
+                                        <label className="form-label">Type:</label>
+                                        <input type="text" disabled={true} className="form-control" value={currentLoan.loanType.typeName}></input>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Description:</label>
-                                        <body class="form-body">
+                                    <div className="mb-2">
+                                        <label className="form-label">Description:</label>
+                                        <p className="form-body">
                                         {currentLoan.loanType.description}
-                                        </body>
+                                        </p>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Interest:</label>
-                                        <input class="form-control" type="text" disabled={true} value={currentLoan.loanType.apr}></input>
+                                    <div className="mb-2">
+                                        <label className="form-label">Interest:</label>
+                                        <input className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr}></input>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Amount:</label>
-                                        <input class="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.currencyValue).toString()}></input>
+                                    <div className="mb-2">
+                                        <label className="form-label">Amount:</label>
+                                        <input className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.currencyValue).toString()}></input>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Principal:</label>
-                                        <input class="form-control" type="text" disabled={true} value={currentLoan.principal}></input>
+                                    <div className="mb-2">
+                                        <label className="form-label">Principal:</label>
+                                        <input className="form-control" type="text" disabled={true} value={currentLoan.principal}></input>
                                     </div>
-                                    <div class="mb-2">
+                                    <div className="mb-2">
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Next Payment Due Date:</label>
-                                        <input class="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
+                                    <div className="mb-2">
+                                        <label className="form-label">Next Payment Due Date:</label>
+                                        <input className="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Date Created:</label>
-                                        <input class="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
+                                    <div className="mb-2">
+                                        <label className="form-label">Date Created:</label>
+                                        <input className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
                                     </div>
                                 </div>
                             </Modal.Body>

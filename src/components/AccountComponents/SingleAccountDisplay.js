@@ -1,7 +1,6 @@
 import { Button, Table, Modal, Alert } from "react-bootstrap"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
-import axios from "axios"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
