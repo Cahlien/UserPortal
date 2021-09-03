@@ -5,7 +5,6 @@ import { useContext } from "react"
 import AccountList from "../AccountListDisplay"
 
 function ViewAccount() {
-
     const authContext = useContext(AuthContext);
 
     var [actAry, setAccount] = useState({})
@@ -29,6 +28,8 @@ function ViewAccount() {
                 if (res.statusText === "OK") {
                     console.log('LIST VIEW SUCCESSFUL');
                     const actAry = Array.prototype.slice.call(res.data)
+                    console.log(actAry)
+
                     setAccount(Array.prototype.slice.call(actAry))
                 } else {
                     console.log('response: ', res)

@@ -82,6 +82,7 @@ function App() {
                         <CardTypes />
                     </Layout>
                 </Route>
+
                 <Route path={'/cardsignup'}>
                     <Layout>
                         <CardSignUp />

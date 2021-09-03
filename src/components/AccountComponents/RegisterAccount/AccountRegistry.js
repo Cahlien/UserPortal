@@ -4,6 +4,7 @@ import axios from "axios"
 import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown } from "react-bootstrap";
 import { Alert } from "react-bootstrap";
 import {CurrencyValue} from "../../../models/currencyvalue.model";
+import {AccountType} from "../../../models/accounttype.model";
 
 function AccountRegistration() {
 
@@ -42,18 +43,22 @@ function AccountRegistration() {
         }
 
         const enteredNickname = nickname.current.value;
-        const enteredDeposit = CurrencyValue.valueOf(parseFloat((balance.current.value)));
+        const enteredDeposit = balance.current.value;
         let cdate = new Date();
         const typeAns = actType
 
+        if(balance.current.value === null){
+            balance.current.value = 0.0;
+        }
+
         const registrationData = {
             nickname: enteredNickname,
-            balance: enteredDeposit,
+            balance: CurrencyValue.valueOf(parseFloat(enteredDeposit)),
             userId: authContext.userId,
             activeStatus: true,
             interest: 1,
             create_date: cdate,
-            type: typeTitle
+            type: AccountType.byName(typeTitle)
         }
 
         try {

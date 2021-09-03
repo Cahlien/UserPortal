@@ -132,10 +132,13 @@ export class CurrencyValue{
      * @returns {CurrencyValue} CurrencyValue the resulting value object
      */
     static valueOf(value){
+        let dollars = Math.abs(Math.trunc(parseFloat(value)));
+        dollars = dollars !== null ? dollars : null;
+        let cents = Math.abs(Math.trunc(((parseFloat(value) * 100) % 100)));
+        cents = cents !== null ? cents : null;
+
         const isNegative = value < 0;
-        const dollars = Math.abs(Math.trunc(parseFloat(value)));
-        const cents = Math.abs(Math.trunc(((parseFloat(value) * 100) % 100)));
-        console.log('Cents: ' + cents + ' / ' + value);
+
         return new CurrencyValue(isNegative, dollars, cents);
     }
 
