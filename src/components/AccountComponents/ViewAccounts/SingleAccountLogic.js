@@ -1,6 +1,6 @@
 import AuthContext from "../../../store/auth-context";
 import SingleAccount from "../SingleAccountDisplay";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import TransactionsList from "../../TransactionComponents/TransactionsList";
@@ -18,7 +18,7 @@ const AccountSingle = () => {
     const [searchCriteria, setSearchCriteria] = useState();
     const [sortOrder, setSortOrder] = useState('statusTime,desc');
     let searchEntry;
-    let transactionUrl = `http://localhost:9001/accounts/transactions?page=${pageNumber - 1}&size=${pageSize}&sort=${sortOrder}`
+    let transactionUrl = `http://localhost:9001/accounts/transactions/${id}?page=${pageNumber - 1}&size=${pageSize}&sort=${sortOrder}`
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
     const url = `http://localhost:9001/accounts/${id}`
 
@@ -103,7 +103,7 @@ const AccountSingle = () => {
                     console.log('VIEW FAILURE: Code 403 (Forbidden). Your login may be expired or your URL may be incorrect.')
                 }
                 console.log('Error message: ', e.message + ', code: ' + e.response);
-            }), [id, url, token, pageNumber, pageSize, searchCriteria, sortOrder, transactionUrl])
+            }), [id, url, token, pageNumber, pageSize, searchCriteria, sortOrder, transactionUrl, loadTransactions])
 
     return (
         <section className={'container'}>
