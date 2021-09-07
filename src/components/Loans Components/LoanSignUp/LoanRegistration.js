@@ -19,13 +19,16 @@ const LoanRegistration = () => {
     const [warn, showWarn] = useState(false);
     const today = new Date();
     useEffect(() => {
-        if (loanType === undefined) {
+        console.log('loantypeId in useEffect: ', loanTypeId)
+        console.log('actionContext in useEffect: ', actionContext.targetId)
+        if (loanType === undefined && loanTypeId !== null) {
             getLoanType();
         }
     }, [userId]);
 
     async function getLoanType() {
         console.log('get call')
+        console.log('loan type id: ', loanTypeId)
         var url = "http://localhost:9001/loantypes/" + loanTypeId
         try {
         const response = await axios.get(url, {
@@ -34,8 +37,10 @@ const LoanRegistration = () => {
                 'Content-Type': 'application/json'
             }
         });
-        var loan = response.data
-        console.log('loantype: ', response.data)
+        var loan =  response.data;
+        loan.id = loanTypeId;
+        console.log('loantype: ', loan)
+        console.log('outbound url: ', url)
         setLoanType(loan);
     } catch (e) {
         console.log('error caught: ', e)
@@ -88,7 +93,7 @@ const LoanRegistration = () => {
 
     return (
         <section>
-            <div className={'container w-50 my-5 centerpiece'}>
+            <div className={'container my-5 '}>
                 <Alert variant="success" show={show} >
                     Success
                 </Alert>
@@ -106,7 +111,8 @@ const LoanRegistration = () => {
                         <FormLabel htmlFor={'username'} className={'col-form-label'}>Loan Duration: {loanType ? loanType.numMonths : null} months.</FormLabel>
                     </FormGroup>
                     <FormGroup>
-                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Description: {loanType ? loanType.description : null} </FormLabel>
+                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Description:</FormLabel>
+                        <FormLabel htmlFor={'username'} className={'col-form-label'}>{loanType ? loanType.description : null} </FormLabel>
                     </FormGroup>
                     {loanDisplay === true &&
                         <FormGroup>
