@@ -5,6 +5,7 @@ import Deactivator from "./AccountDeactivation/AccountDeactivator";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
 import {CurrencyValue} from "../../models/currencyvalue.model";
+import TransactionsList from "../TransactionComponents/TransactionsList"
 
 const SingleAccount = ({ accounts }) => {
     console.log('incoming accounts: ', accounts)
@@ -55,7 +56,7 @@ const SingleAccount = ({ accounts }) => {
         return null
     } else {
         return (
-            <div>
+            <div className={'mb-0'}>
                 <Alert variant="danger" onClose={() => setErDisp(false)} show={erdisp} dismissible>
                     <Alert.Heading>Warning! This account still has a Balance!</Alert.Heading>
                     <p>
@@ -66,7 +67,7 @@ const SingleAccount = ({ accounts }) => {
                     </p>
                 </Alert>
 
-                <Table striped bordered hover>
+                <Table striped bordered hover className={'mb-0'}>
                     <thead>
                         <tr>
                             <th>Nickname</th>
@@ -91,26 +92,29 @@ const SingleAccount = ({ accounts }) => {
                             </td>
                             <td>{account && account.type ? account.type.name : null}</td>
                             <td>$<input
+                                className={'col-md-6'}
                                 type="text"
                                 id="withdrawInput"
                                 ref={withAmt} />
                                 <Button
+                                    className={'col-md-4'}
                                     variant="success"
                                     type={'submit'}
                                     onClick={submitWithdraw}
                                     title='withdrawButton'
                                 >Withdraw</Button></td>
                             <td>$<input
+                                className={'col-md-6'}
                                 type="int"
                                 id="depositInput"
                                 ref={depAmt} />
-                                <Button
+                                <Button className={'col-md-4'}
                                     variant="success"
                                     type={'submit'}
                                     onClick={submitDeposit}
                                     title='depositButton'
                                 >Deposit</Button></td>
-                            <td><Button
+                            <td><Button className={'col-md-8'}
                                 onClick={handleShow}
                                 disabled={isRecovery}
                                 variant="danger"

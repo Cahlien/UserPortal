@@ -24,14 +24,14 @@ function AccountRegistration() {
 
     function dropHandler(dropInput) {
         switch (dropInput) {
-            case "0":
-                actType = 'Savings'
-                break;
             case "1":
-                actType = 'Checking'
+                actType = 'SuperSaver Savings'
+                break;
+            case "2":
+                actType = 'CoolCash Checking'
                 break;
             default:
-                actType = 'Savings'
+                actType = 'SuperSaver Savings'
         }
         setTitle(actType);
     }
@@ -113,8 +113,8 @@ function AccountRegistration() {
                             {typeTitle}
                         </Dropdown.Toggle>
                         <Dropdown.Menu required>
-                            <Dropdown.Item eventKey="0">Savings</Dropdown.Item>
-                            <Dropdown.Item eventKey="1">Checking</Dropdown.Item>
+                            <Dropdown.Item eventKey="1">SuperSaver Savings</Dropdown.Item>
+                            <Dropdown.Item eventKey="2">CoolCash Checking</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <ButtonGroup>
