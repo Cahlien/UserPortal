@@ -1,6 +1,6 @@
 import AuthContext from "../../../store/auth-context";
 import SingleAccount from "../SingleAccountDisplay";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import TransactionsList from "../../TransactionComponents/TransactionsList";
@@ -12,36 +12,40 @@ const AccountSingle = () => {
     const authContext = useContext(AuthContext);
     const [account, setAccount] = useState({});
     const token = authContext.token;
-    const [pageNumber, setPageNumber] = useState(1);
+    const [pageNumber, setPageNumber] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState();
     const [pageSize, setPageSize] = useState(5);
     const [searchCriteria, setSearchCriteria] = useState();
     const [sortOrder, setSortOrder] = useState('statusTime,desc');
+    const [isDirty, setIsDirty] = useState(true);
     let searchEntry;
-    let transactionUrl = `http://localhost:9001/accounts/transactions?page=${pageNumber - 1}&size=${pageSize}&sort=${sortOrder}`
+    let transactionUrl = `http://localhost:9001/accounts/transactions/${id}?page=${pageNumber}&size=${pageSize}&sort=${sortOrder}`
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
     const url = `http://localhost:9001/accounts/${id}`
 
-    const onChangePageSize = (event) => {
+    const onChangePageSize = async (event) => {
         console.log(event.target.value)
         setPageSize(event.target.value)
+        setIsDirty(true);
     }
 
-    const onChangePage = (event, value) => {
+    const onChangePage = async (event, value) => {
         console.log(value)
-        setPageNumber(value)
+        setPageNumber(value - 1)
+        setIsDirty(true);
     }
 
     const onSearchEntered = (event) => {
         searchEntry = event.target.value
     }
 
-    const onSearchClicked = () => {
+    const onSearchClicked = async () => {
         setSearchCriteria(searchEntry)
-        console.log(searchEntry)
+        console.log("Search Entry: " + searchEntry)
+        setIsDirty(true);
     }
 
-    const onSortChanged = (event) => {
+    const onSortChanged = async (event) => {
         let sequence = sortOrder.split(',');
         if(sequence[1] === 'asc') {
                 sequence = event.target.id + ',desc';
@@ -51,6 +55,7 @@ const AccountSingle = () => {
 
         console.log(sequence)
         setSortOrder(sequence)
+        setIsDirty(true);
     }
 
     const loadTransactions = async () => {
@@ -73,37 +78,41 @@ const AccountSingle = () => {
             setTransactions(response.data.content)
         }
         setNumberOfPages(response.data.totalPages)
-        console.log("State: " + pageNumber + ' ' + pageSize + ' ' + sortOrder + ' ' + searchCriteria)
     }
 
-    useEffect(() =>
-            axios.get(
-            url,
-            {
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(async (res) => {
-                if (res.statusText === "OK") {
-                    console.log('SINGLE VIEW SUCCESSFUL');
-                    console.log(res.data)
-                    setAccount(res.data);
-                } else {
-                    console.log('SINGLE VIEW FAILED');
-                    console.log('result: ', res)
-                }
+    useEffect(() => {
+        if (isDirty) {
+            return axios.get(
+                url,
+                {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(async (res) => {
+                    setIsDirty(false);
+                    if (res.statusText === "OK") {
+                        console.log('SINGLE VIEW SUCCESSFUL');
+                        console.log(res.data)
+                        setAccount(res.data);
+                    } else {
+                        console.log('SINGLE VIEW FAILED');
+                        console.log('result: ', res)
+                    }
 
-                await loadTransactions();
+                    await loadTransactions();
 
-            }, [pageNumber, pageSize, sortOrder, searchCriteria])
-            .catch((e) => {
-                if (e.response === 403) {
-                    console.log('VIEW FAILURE: Code 403 (Forbidden). Your login may be expired or your URL may be incorrect.')
-                }
-                console.log('Error message: ', e.message + ', code: ' + e.response);
-            }), [id, url, token, pageNumber, pageSize, searchCriteria, sortOrder, transactionUrl])
+                }, [pageNumber, pageSize, sortOrder, searchCriteria])
+                .catch((e) => {
+                    if (e.response === 403) {
+                        console.log('VIEW FAILURE: Code 403 (Forbidden). Your login may be expired or your URL may be incorrect.')
+                    }
+                    console.log('Error message: ', e.message + ', code: ' + e.response);
+                }), [id, url, token, pageNumber, pageSize, searchCriteria, sortOrder, transactionUrl]
+        }
+    }
+ )
 
     return (
         <section className={'container'}>
@@ -140,7 +149,7 @@ const AccountSingle = () => {
                     onSortChanged={onSortChanged}
                     sortOrder={sortOrder}
                 />
-                <Pagination className={'my-3'} count={numberOfPages} page={pageNumber} siblingCount={1}
+                <Pagination className={'my-3'} count={numberOfPages} page={pageNumber + 1} siblingCount={1}
                             boundaryCount={1} onChange={onChangePage}/>
             </ul>
         </section>
