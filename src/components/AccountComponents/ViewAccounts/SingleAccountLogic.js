@@ -42,6 +42,7 @@ const AccountSingle = () => {
     const onSearchClicked = async () => {
         setSearchCriteria(searchEntry)
         console.log("Search Entry: " + searchEntry)
+
         setIsDirty(true);
     }
 

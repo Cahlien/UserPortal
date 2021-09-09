@@ -70,7 +70,7 @@ function MainNavigation(props) {
 
                         <Dropdown.Menu>
                             <Dropdown.Item href="/loanoffers">Apply for Loan</Dropdown.Item>
-                            <Dropdown.Item href="/loans">My Loans</Dropdown.Item>
+                            <Dropdown.Item href="/myloans">My Loans</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>}
                     <li className="nav-item">
