@@ -42,8 +42,6 @@ function CardStatus(){
                     });
 
                     if(results){
-                        console.log("Data: " + results.data)
-                        console.log("Content: " + results.data.content)
                         setCardStatus(results.data);
                         setHasLoaded(true);
                     }
