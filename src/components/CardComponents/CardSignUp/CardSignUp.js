@@ -120,7 +120,11 @@ function CardSignUp(props) {
         if (!formIsValid(applicationData)) return;
 
         try {
-            const response = await axios.post(url + userId, applicationData);
+            const response = await axios.post(url + userId, applicationData, {
+                headers: {
+                    "Authorization": authContext.token
+                }
+            });
         } catch (e) {
             if (e.response) {
                 setErrorMessage(e.response.data.message);
