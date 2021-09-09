@@ -129,46 +129,47 @@ function ViewUserForm() {
         window.location.reload();
     }
     return (
-        <section>
-            <ul>
-                <h3 style={{ display: "flex" }}>Your Details:
-                </h3>
+        <section className={'container'}>
+            <div className={'mt-5'}>
+                <h1 className={'text-center mt-5'}>Your Details:</h1>
+                <div className={'btn mt-5'}>
+                    <Button variant='secondary' className={'btn-center btn-primary mt-3'} onClick={handleShow}>Update Info</Button>
+                </div>
                 <User user={user} />
-                <Button type={'submit'} className={'btn btn-primary mt-3'} onClick={handleShow}>Update Info</Button>
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>
-                            Enter your desired changes here:
-                        </Modal.Title>
-                    </Modal.Header>
-                    <div className="form-group">
-                        <Modal.Body>
-                            <FormLabel htmlFor={'username'} className={'col-form-label'}>Update Username</FormLabel>
-                            <FormControl type={'text'} id={'username'} ref={usernameRef} />
-                            <FormLabel htmlFor={'password'}>Update Password</FormLabel>
-                            <FormControl type={'password'} id={'password'} ref={passwordRef} />
-                            <FormLabel htmlFor={'firstName'}>Update First Name</FormLabel>
-                            <FormControl type={'text'} id={'firstName'} ref={firstNameRef} />
-                            <FormLabel htmlFor={'lastName'}>Update Last Name</FormLabel>
-                            <FormControl type={'text'} id={'lastName'} ref={lastNameRef} />
-                            <FormLabel htmlFor={'email'}>Update Email Address</FormLabel>
-                            <FormControl type={'email'} id={'email'} ref={emailRef} email={'true'} />
-                            <FormLabel htmlFor={'phone'}>Update Phone Number</FormLabel>
-                            <FormControl type={'text'} id={'phone'} ref={phoneRef} />
-                            <FormLabel htmlFor={'dateOfBirth'}>Update Date of Birth</FormLabel>
-                            <FormControl type={'text'} id={'dateOfbirth'} ref={dateOfBirthRef} />
-                        </Modal.Body>
-                    </div>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={submitUpdate}>
-                            Submit your Changes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </ul>
+            </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Enter your desired changes here:
+                    </Modal.Title>
+                </Modal.Header>
+                <div className="form-group">
+                    <Modal.Body>
+                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Update Username</FormLabel>
+                        <FormControl type={'text'} id={'username'} ref={usernameRef} />
+                        <FormLabel htmlFor={'password'}>Update Password</FormLabel>
+                        <FormControl type={'password'} id={'password'} ref={passwordRef} />
+                        <FormLabel htmlFor={'firstName'}>Update First Name</FormLabel>
+                        <FormControl type={'text'} id={'firstName'} ref={firstNameRef} />
+                        <FormLabel htmlFor={'lastName'}>Update Last Name</FormLabel>
+                        <FormControl type={'text'} id={'lastName'} ref={lastNameRef} />
+                        <FormLabel htmlFor={'email'}>Update Email Address</FormLabel>
+                        <FormControl type={'email'} id={'email'} ref={emailRef} email={'true'} />
+                        <FormLabel htmlFor={'phone'}>Update Phone Number</FormLabel>
+                        <FormControl type={'text'} id={'phone'} ref={phoneRef} />
+                        <FormLabel htmlFor={'dateOfBirth'}>Update Date of Birth</FormLabel>
+                        <FormControl type={'text'} id={'dateOfbirth'} ref={dateOfBirthRef} />
+                    </Modal.Body>
+                </div>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={submitUpdate}>
+                        Submit your Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </section>
     )
 
