@@ -100,12 +100,13 @@ function AccountRegistration() {
                     No info given!
                 </Alert>
                 <Form className={'offset-4 col-3'}>
+                <h1 className={'text-center mt-5'}>Set up a new BeardTrust Account today!</h1>
                     <FormGroup>
-                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Nickname?</FormLabel>
+                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Give this account a nickname:</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={nickname} required />
                     </FormGroup>
                     <FormGroup>
-                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Initial Deposit:</FormLabel>
+                        <FormLabel htmlFor={'username'} className={'col-form-label'}>Input your initial deposit:</FormLabel>
                         <FormControl type={'text'} id={'username'} ref={balance} required />
                     </FormGroup>
                     <Dropdown className='mt-3' onSelect={function (evt) { dropHandler(evt) }} required>

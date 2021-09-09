@@ -444,7 +444,7 @@ function ViewLoanStatus() {
                                 <td className={'align-middle'}>{loan.loanType.description}</td>
                                 <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>
                                 <td className={'align-middle text-center'}>{CurrencyValue.from(loan.currencyValue).toString()}</td>
-                                <td className={'align-middle text-center'}>{loan.principal}</td>
+                                <td className={'align-middle text-center'}>${loan.principal}</td>
                                 <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
                                 <td className={'align-middle text-center'}>{loan.createDate}</td>
                                 <td className={'align-middle text-center'}>
@@ -480,7 +480,7 @@ function ViewLoanStatus() {
                                     </div>
                                     <div className="mb-2">
                                         <label id="interestLabel" className="form-label">Interest:</label>
-                                        <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr}></input>
+                                        <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr + '%'}></input>
                                     </div>
                                     <div className="mb-2">
                                         <label id="amountLabel" className="form-label">Amount:</label>
@@ -488,7 +488,7 @@ function ViewLoanStatus() {
                                     </div>
                                     <div className="mb-2">
                                         <label id="principalLabel" className="form-label">Principal:</label>
-                                        <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.principal}></input>
+                                        <input id="principalText" className="form-control" type="text" disabled={true} value={'$' + currentLoan.principal}></input>
                                     </div>
                                     <div className="mb-2">
                                     </div>
