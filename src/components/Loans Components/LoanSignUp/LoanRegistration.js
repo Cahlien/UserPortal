@@ -19,8 +19,6 @@ const LoanRegistration = () => {
     const [warn, showWarn] = useState(false);
     const today = new Date();
     useEffect(() => {
-        console.log('loantypeId in useEffect: ', loanTypeId)
-        console.log('actionContext in useEffect: ', actionContext.targetId)
         if (loanType === undefined && loanTypeId !== null) {
             getLoanType();
         }
@@ -38,7 +36,6 @@ const LoanRegistration = () => {
             }
         });
         var loan =  response.data;
-        loan.id = loanTypeId;
         console.log('loantype: ', loan)
         console.log('outbound url: ', url)
         setLoanType(loan);
@@ -64,7 +61,7 @@ const LoanRegistration = () => {
 
     async function acceptHandler(event) {
         event.preventDefault();
-        loan.loanType.loanTypeId = loanTypeId;
+        loan.loanType.id = loanTypeId;
         console.log('accept handler sending: ', loan);
         var url = "http://localhost:9001/loans"
         const response = await axios.post(url, loan, {
@@ -126,7 +123,7 @@ const LoanRegistration = () => {
                     }
                     {loanDisplay === true &&
                         <FormGroup>
-                            <FormLabel htmlFor={'username'} className={'col-form-label'}>Pay Cycle: {loan ? loan.payDay : null} days </FormLabel>
+                            <FormLabel htmlFor={'username'} className={'col-form-label'}>First Payment: {loan ? loan.nextDueDate : null}</FormLabel>
                         </FormGroup>
                     }
                     {loanDisplay === false &&

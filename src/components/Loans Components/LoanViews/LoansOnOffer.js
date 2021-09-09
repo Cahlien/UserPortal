@@ -26,7 +26,7 @@ function LoansOnOffer() {
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'typeName', direction: 'asc' });
     const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'description', direction: 'asc' });
-    const [sortByInterest, setSortByInterest] = useState({ active: false, name: 'baseInterestRate', direction: 'asc' });
+    const [sortByInterest, setSortByInterest] = useState({ active: false, name: 'apr', direction: 'asc' });
     const url = 'http://localhost:9001/loantypes'
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
