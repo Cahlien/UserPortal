@@ -42,6 +42,8 @@ function CardStatus(){
                     });
 
                     if(results){
+                        console.log("Data: " + results.data)
+                        console.log("Content: " + results.data.content)
                         setCardStatus(results.data);
                         setHasLoaded(true);
                     }
@@ -68,9 +70,9 @@ function CardStatus(){
             {errorMessage && <div className={'alert-danger mt-5'}>{errorMessage}</div>}
             <Centerpiece content={
                 {
-                    title: cardStatus?.nickname + '   ...' + cardStatus?.cardNumber.slice(15,19),
-                    lead: 'Current Balance: $' + cardStatus?.balance.dollars + '.' + (cardStatus?.balance.cents > 10 ?
-                        cardStatus?.balance.cents : '0' + cardStatus?.balance.cents),
+                    title: cardStatus?.nickname + '   ...' + cardStatus?.cardNumber?.slice(15,19),
+                    lead: 'Current Balance: $' + cardStatus?.balance?.dollars + '.' + (cardStatus?.balance?.cents > 10 ?
+                        cardStatus?.balance?.cents : '0' + cardStatus?.balance?.cents),
                     body: 'TODO: add transactions, minimum payment, due date, and write user\'s name and card number' +
                         ' on card image',
                     imageText: cardStatus?.nickname,

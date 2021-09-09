@@ -1,5 +1,7 @@
 import { Table, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
+import AuthContext from "../../../store/auth-context";
+import {useContext} from "react";
 
 /**
  * This function returns a table for displaying a list of cards associated with
@@ -13,6 +15,7 @@ import { Link } from "react-router-dom"
  */
 function CardsList(props){
     const cards = props.cards ?? [];
+    const authContext = useContext(AuthContext);
     if (cards.length ===0){
         return null;
     } else {
@@ -38,7 +41,7 @@ function CardsList(props){
                             <td className={'align-middle text-center'}>{card.expireDate.slice(5, 7) + '/' + card.expireDate.slice(2, 4)}</td>
                             <td className={'align-middle text-center'}>{card.cardType.typeName}</td>
                             <td className={'align-middle text-center'}>
-                                <Link to={'/cards/' + card.cardId}>
+                                <Link to={'/cards/' + card.id}>
                                     <Button
                                         className={'btn-sm'}
                                         variant={'success'}
