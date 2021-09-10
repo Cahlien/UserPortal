@@ -12,6 +12,7 @@ const SingleAccount = ({ accounts }) => {
     const [account, setAccount] = useState({});
     const [isRecovery, setRecovery] = useState(false);
     const [deactivateText, setDeactText] = useState()
+    const [userId, setUserId] = useState();
     const [amount, setAmount] = useState(new CurrencyValue(false, 0, 0));
     const [show, setShow] = useState(false);
     // const [showWarn, setShowWarn] = useState(false);
@@ -19,6 +20,7 @@ const SingleAccount = ({ accounts }) => {
     const [erdisp, setErDisp] = useState(false);
     const history = useHistory();
     useEffect(() => {
+        setUserId(authContext.userId);
         setAccount(accounts)
         console.log('type: ', account.type)
         if (account.type && account.type.name === 'Recovery' || isRecovery) {
@@ -42,7 +44,7 @@ const SingleAccount = ({ accounts }) => {
     // const TransferEntity = { amount };
 
     function deactivateHandler() {
-        setErDisp(Deactivator({ account }, { history }));
+        setErDisp(Deactivator({ account }, { history }, { userId }, { token }));
         handleClose();
     }
 

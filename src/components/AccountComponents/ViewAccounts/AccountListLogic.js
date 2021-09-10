@@ -44,8 +44,8 @@ function ViewAccount() {
 
         return (
             <section>
+                <h3 style={{ display: "flex" }}>Your Accounts:</h3> 
                 <ul>
-                    <h3 style={{ display: "flex" }}>Your Accounts:</h3> 
                     <AccountList accounts={actAry}/>
                 </ul>
             </section>

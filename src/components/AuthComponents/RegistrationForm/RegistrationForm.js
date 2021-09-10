@@ -133,6 +133,7 @@ function RegistrationForm(props) {
         if(!formIsValid(registrationData)) return;
 
         try {
+            console.log('sending data: ', registrationData)
             const response = await axios.post(url, registrationData);
             localStorage.setItem('userId', response.data.userId);
 
