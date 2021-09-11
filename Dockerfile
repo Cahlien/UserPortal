@@ -1,5 +1,4 @@
-FROM node:latest AS builder
-MAINTAINER Matthew.Crowell@Smoothstack.com
+FROM node:alpine AS builder
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build

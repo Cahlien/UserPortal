@@ -47,8 +47,8 @@ function MainNavigation(props) {
                             Accounts
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <Dropdown.Item href="/accounts">Apply for Account</Dropdown.Item>
-                            <Dropdown.Item href="/accounts/me">My Accounts</Dropdown.Item>
+                            <Link className={'nav-link dropdown-item'} to="/accounts">Apply for Account</Link>
+                            <Link className={'nav-link dropdown-item'} to="/accounts/me">My Accounts</Link>
                         </Dropdown.Menu>
                     </Dropdown>}
                     {authContext.userIsLoggedIn &&
@@ -56,10 +56,9 @@ function MainNavigation(props) {
                         <Dropdown.Toggle variant="link" className={'undecorated'} id="cards-dropdown">
                             Cards
                         </Dropdown.Toggle>
-
                         <Dropdown.Menu>
-                            <Dropdown.Item href="/cardoffers">Apply for Card</Dropdown.Item>
-                            <Dropdown.Item href="/cards">My Cards</Dropdown.Item>
+                            <Link className={'nav-link dropdown-item'} to="/cardoffers">Apply for Card</Link>
+                            <Link className={'nav-link dropdown-item'} to="/cards">My Cards</Link>
                         </Dropdown.Menu>
                     </Dropdown>}
                     {authContext.userIsLoggedIn &&
@@ -69,8 +68,8 @@ function MainNavigation(props) {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item href="/loanoffers">Apply for Loan</Dropdown.Item>
-                            <Dropdown.Item href="/myloans">My Loans</Dropdown.Item>
+                            <Link className={'nav-link dropdown-item'} to="/loanoffers">Apply for Loan</Link>
+                            <Link className={'nav-link dropdown-item'} to="/myloans">My Loans</Link>
                         </Dropdown.Menu>
                     </Dropdown>}
                     <li className="nav-item">
