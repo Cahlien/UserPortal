@@ -43,11 +43,11 @@ function ViewAccount() {
             }), [token, userId])
 
         return (
-            <section>
-                <ul>
-                    <h3 style={{ display: "flex" }}>Your Accounts:</h3> 
+            <section className="container">
+                <div className="mt-5">
+                    <h1 className="text-center mt-5">Your Accounts:</h1> 
                     <AccountList accounts={actAry}/>
-                </ul>
+                </div>
             </section>
         )
 }
