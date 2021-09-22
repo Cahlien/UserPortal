@@ -45,7 +45,6 @@ function ViewAccount() {
         return (
             <section className="container">
                 <div className="mt-5">
-                    <h1 className="text-center mt-5">Your Accounts:</h1> 
                     <AccountList accounts={actAry}/>
                 </div>
             </section>

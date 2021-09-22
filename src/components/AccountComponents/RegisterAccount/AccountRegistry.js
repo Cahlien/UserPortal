@@ -5,11 +5,12 @@ import { Button, ButtonGroup, Form, FormControl, FormGroup, FormLabel, Dropdown 
 import { Alert } from "react-bootstrap";
 import {CurrencyValue} from "../../../models/currencyvalue.model";
 import {AccountType} from "../../../models/accounttype.model";
+import { useHistory } from "react-router";
 
 function AccountRegistration() {
 
     const authContext = useContext(AuthContext);
-
+    const history = useHistory();
     const [typeTitle, setTitle] = useState();
     const [show, setShow] = useState(false);
     const [showWarn, setShowWarn] = useState(false);
@@ -70,6 +71,10 @@ function AccountRegistration() {
                 const res = await axios.post(url, registrationData);
                 console.log(res);
                 setShow(true)
+                window.setTimeout(() => {
+                    setShow(false);
+                    history.push("/accounts/me");
+                }, 1000)
             }
         } catch (e) {
             console.log(e);
