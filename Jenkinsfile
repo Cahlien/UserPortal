@@ -9,7 +9,7 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-    stage('Release to aws') {
+    stage('Push to S3') {
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Upload(bucket:'mc.userportal.beardtrust', 
       workingDir:'/', includePathPattern:'**s3://mc.userportal.beardtrust*') // pick your jar or whatever you need
