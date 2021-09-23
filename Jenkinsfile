@@ -10,11 +10,6 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-  stage('Build') {
-        steps {
-            bat 'mvn clean compile' 
-        }
-    }
     stage('Release to aws') {
         steps {
             withAWS(region:'us-east-2', credentials:'nathanael_access_key'){
