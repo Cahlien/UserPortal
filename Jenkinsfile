@@ -12,7 +12,7 @@ node {
     stage('Release to aws') {
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Upload(bucket:'mc.userportal.beardtrust', 
-      workingDir:'/', includePathPattern:'**/*') // pick your jar or whatever you need
+      workingDir:'/', includePathPattern:'**s3://mc.userportal.beardtrust*') // pick your jar or whatever you need
     }
     }
 }
