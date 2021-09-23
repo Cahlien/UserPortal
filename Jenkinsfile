@@ -10,7 +10,7 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-  //Docker images not on ECR
+  // Docker images not on ECR
   // stage('Build docker image') {
   //    def mvn = tool 'Maven';
   //   sh "${mvn}/bin/mvn clean package -Dmaven.test.skip=true"
