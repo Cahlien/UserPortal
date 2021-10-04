@@ -7,7 +7,7 @@ node {
     def scannerHome = tool 'Qube'
     withSonarQubeEnv() {
       sh "npm install"
-      sh "npm react-scripts test"
+      sh "npm test"
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
