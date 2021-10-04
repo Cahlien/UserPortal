@@ -8,7 +8,7 @@ node {
     withSonarQubeEnv() {
       sh "npm install"
       //sh "npm run sonar"
-      //sh "npm test -- --coverage"
+      sh "npm test -- --coverage"
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
