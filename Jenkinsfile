@@ -4,9 +4,6 @@ node {
   }
 
   stage('Test') {
-        env.NODE_ENV = "test"
-
-        env.PATH = "${nodejs}/bin:${env.PATH}"
 
         sh 'node -v'
         sh 'npm prune'
