@@ -6,8 +6,6 @@ node {
   stage('Test') {
         env.NODE_ENV = "test"
 
-        def nodejs = tool name: 'Recent Node', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-
         env.PATH = "${nodejs}/bin:${env.PATH}"
 
         sh 'node -v'
