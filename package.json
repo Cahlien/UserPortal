@@ -22,15 +22,12 @@
     "react-test-renderer": "^17.0.2",
     "test-library": "^1.0.0",
     "validator": "^13.6.0",
-    "web-vitals": "^1.0.1",
-    "mocha": "~1.10.0",
-    "istanbul": "~0.1.36",
-    "mocha-istanbul": "~0.2.0"
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "nyc mocha",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
