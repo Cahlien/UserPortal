@@ -3,12 +3,25 @@ node {
     checkout scm
   }
 
+  stage('Test') {
+        env.NODE_ENV = "test"
+
+        def nodejs = tool name: 'Recent Node', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+
+        env.PATH = "${nodejs}/bin:${env.PATH}"
+
+        sh 'node -v'
+        sh 'npm prune'
+        sh 'npm install'
+
+        //sh 'npm install -g jest'
+
+        sh 'npm test --verbose'
+  }
+
   stage('SonarQube Analysis') {
     def scannerHome = tool 'Qube'
     withSonarQubeEnv() {
-      sh "npm install"
-      //sh "npm run sonar"
-      sh "npm run test"
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
