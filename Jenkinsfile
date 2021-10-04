@@ -9,7 +9,7 @@ node {
         sh 'npm prune'
         sh 'npm install --dev'
 
-        sh 'npm install -g jest'
+        //sh 'npm install -g jest'
 
         sh 'npm test --verbose'
   }
