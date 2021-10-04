@@ -7,7 +7,7 @@ node {
 
         sh 'node -v'
         sh 'npm prune'
-        sh 'npm install'
+        sh 'npm install --dev'
 
         //sh 'npm install -g jest'
 

@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jenkins-mocha test/*",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -49,7 +49,8 @@
     ]
   },
   "devDependencies": {
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "jenkins-mocha": "latest"
   },
   "jestSonar": {
     "sonar56x": true,
