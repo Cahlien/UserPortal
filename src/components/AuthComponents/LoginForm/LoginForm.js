@@ -5,7 +5,7 @@ import AuthContext from '../../../store/auth-context';
 import Form from 'react-bootstrap/Form';
 import './LoginForm.css';
 
-const url = 'http://localhost:9001/users/login';
+const url = 'http://albfa-beard-1r5y6kkwddkzn-1964560445.us-east-2.elb.amazonaws.com/login';
 
 /**
  * The login form component.
