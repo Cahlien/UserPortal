@@ -16,7 +16,6 @@ node {
     }
 
     stage('Push to S3') {
-      sh 'npm install'
       sh 'npm build --configuration development'
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Upload(bucket:'mc.userportal.beardtrust', 
