@@ -11,7 +11,9 @@ node {
   }
 
   stage('Build') {
-    sh "npm install && npm build --configuration development"
+    nodejs(nodeJSInstallationName: 'Node 6.x', configId: '<config-file-provider-id>') {
+                    sh 'npm config ls'
+                }
     }
 
     stage('Push to S3') {
