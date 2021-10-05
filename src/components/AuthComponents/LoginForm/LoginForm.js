@@ -5,7 +5,7 @@ import AuthContext from '../../../store/auth-context';
 import Form from 'react-bootstrap/Form';
 import './LoginForm.css';
 
-const url = 'https://albfa-beard-1r5y6kkwddkzn-1964560445.us-east-2.elb.amazonaws.com/users/login';
+const url = 'http://albfa-beard-1r5y6kkwddkzn-1964560445.us-east-2.elb.amazonaws.com/users/login';
 
 /**
  * The login form component.
@@ -64,7 +64,7 @@ function LoginForm(props) {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'LR-Type': 'user',
-                        'Access-Control-Allow-Origin': "*"
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }
             );
