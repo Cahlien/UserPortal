@@ -11,7 +11,7 @@ node {
   }
 
   stage('Build') {
-    sh "npm  init || npm install init && npm build --configuration development"
+    sh "yarn install || sudo yum install yarn && npm build --configuration development"
     }
 
     stage('Push to S3') {
