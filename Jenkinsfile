@@ -3,17 +3,6 @@ node {
     checkout scm
   }
 
-  stage('Test') {
-
-        sh 'node -v'
-        sh 'npm prune'
-        sh 'npm install --dev'
-
-        //sh 'npm install -g jest'
-
-        sh 'npm test --verbose'
-  }
-
   stage('SonarQube Analysis') {
     def scannerHome = tool 'Qube'
     withSonarQubeEnv() {

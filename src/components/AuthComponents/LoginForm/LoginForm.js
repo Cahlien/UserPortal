@@ -63,7 +63,8 @@ function LoginForm(props) {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'LR-Type': 'user'
+                        'LR-Type': 'user',
+                        'Access-Control-Allow-Origin': "*"
                     }
                 }
             );
