@@ -9,6 +9,11 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
+
+  stage('Build') {
+    sh "yarn install && yarn build --configuration development"
+    }
+
     stage('Push to S3') {
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Upload(bucket:'mc.userportal.beardtrust', 
