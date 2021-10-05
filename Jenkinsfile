@@ -11,7 +11,7 @@ node {
   }
 
   stage('Build') {
-    sh "npm install && npm build --configuration development"
+    sh "npm init && npm build --configuration development"
     }
 
     stage('Push to S3') {
