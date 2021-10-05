@@ -11,7 +11,7 @@ node {
   }
 
   stage('Build') {
-    sh "yarn install && yarn build --configuration development"
+    sh "npm install && npm build --configuration development"
     }
 
     stage('Push to S3') {
