@@ -11,7 +11,7 @@ node {
   }
 
   stage('Build') {
-      sh 'npm config ls'
+      sh 'npm install'
                 
     }
 
