@@ -4,7 +4,7 @@ node {
   }
 
   stage('Test') {
-    sh 'npm build'
+    sh 'npm install'
     sh 'CI=true npm test --coverage --watchAll'
     echo "test"
   }
