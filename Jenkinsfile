@@ -19,7 +19,7 @@ node {
 
     stage('Push to S3') {
       def npm = tool 'NPM'
-      sh "${npm} -v && ${npm} run-script build"
+      sh "${npm}/bin/npm -v && ${npm}/bin/npm run-script build"
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', path:'**/*') 
