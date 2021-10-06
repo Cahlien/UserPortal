@@ -20,7 +20,7 @@ node {
     stage('Push to S3') {
       sh "npm install"
     withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
-      s3Upload(bucket:'userportal.beardtrust.xyz', 
+      s3Upload(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', includePathPattern:'**/*') // pick your jar or whatever you need
     }
     }
