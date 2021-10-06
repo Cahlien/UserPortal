@@ -18,7 +18,7 @@ node {
   }
 
     stage('Push to S3') {
-      sh "yarn build"
+      sh "npm install"
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', Path:'**/*') 
