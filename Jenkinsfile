@@ -7,7 +7,7 @@ node {
     nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
                   sh 'npm update'
-                    sh 'npm test'
+                    sh 'npm test -u'
                 }
     echo "test"
   }
@@ -22,6 +22,7 @@ node {
   stage('Build') {
                 nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
+                  sh 'npm update'
                     sh 'npm run-script build'
                 }
             
