@@ -18,7 +18,7 @@ node {
   }
 
   stage('Build') {
-                nodejs(nodeJSInstallationName: 'Node 16.x', configId: '<config-file-provider-id>') {
+                nodejs(nodeJSInstallationName: 'NPM', configId: '<config-file-provider-id>') {
                     sh 'npm config ls'
                 }
             
