@@ -18,11 +18,10 @@ node {
   }
 
   stage('Build') {
-            steps {
                 nodejs(nodeJSInstallationName: 'Node 16.x', configId: '<config-file-provider-id>') {
                     sh 'npm config ls'
                 }
-            }
+            
         }
 
     stage('Push to S3') {
