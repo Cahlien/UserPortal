@@ -21,7 +21,11 @@ node {
       sh "npm install"
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Upload(bucket:'mc.userportal.beardtrust', 
-      workingDir:'src', includePathPattern:'**/*') // pick your jar or whatever you need
+      workingDir:'src', includePathPattern:'**/*') // primary bucket
+    }
+    withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
+      s3Upload(bucket:'userportal.beardtrust.xyz', 
+      workingDir:'src', includePathPattern:'**/*') // backup bucket
     }
     }
 }
