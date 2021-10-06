@@ -6,7 +6,7 @@ node {
   stage('Test') {
     sh 'npm install'
     //sh 'npm bugs test'
-    sh 'CI=true npm run build'
+    sh 'CI=true npm test'
     echo "test"
   }
 
