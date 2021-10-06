@@ -18,7 +18,7 @@ node {
   }
 
   stage('Build') {
-                nodejs(nodeJSInstallationName: 'NPM', configId: '<config-file-provider-id>') {
+                nodejs(nodeJSInstallationName: 'NPM') {
                     sh 'npm config ls'
                 }
             
