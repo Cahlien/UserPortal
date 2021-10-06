@@ -18,12 +18,16 @@ node {
   }
 
     stage('Push to S3') {
-      sh "npm build"
+      sh "yarn build"
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
+      s3Delete(bucket:'mc.userportal.beardtrust', 
+      workingDir:'src', Path:'**/*') 
       s3Upload(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', includePathPattern:'**/*') // primary bucket
     }
     withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
+      s3Delete(bucket:'userportal.beardtrust.xyz', 
+      workingDir:'src', Path:'**/*') 
       s3Upload(bucket:'userportal.beardtrust.xyz', 
       workingDir:'src', includePathPattern:'**/*') // backup bucket
     }
