@@ -50,7 +50,8 @@
       "text",
       "clover",
       "cobertura"
-    ],
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
