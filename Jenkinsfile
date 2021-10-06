@@ -18,7 +18,7 @@ node {
   }
 
     stage('Push to S3') {
-      sh "sudo su && node -v && npm run-script build"
+      sh "npm -v && npm run-script build"
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', path:'**/*') 
