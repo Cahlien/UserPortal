@@ -27,9 +27,30 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jenkins-mocha src/*",
+    "postbuild": "rimraf build/**/*.map",
+    "test": "react-scripts test --env=jsdom",
+    "coverage:dev": "react-scripts test --coverage --watchAll",
+    "coverage:prod": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!coverage/**",
+      "!node_modules/**",
+      "!src/index.js",
+      "!src/setupTests.js",
+      "!public/**",
+      "!build/**"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json",
+      "text",
+      "clover",
+      "cobertura"
+    ],
   "eslintConfig": {
     "extends": [
       "react-app",
