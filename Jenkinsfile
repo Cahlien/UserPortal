@@ -19,6 +19,7 @@ node {
 
   stage('Build') {
                 nodejs(nodeJSInstallationName: 'NPM') {
+                  sh "npm install"
                     sh 'npm run-script build'
                 }
             
