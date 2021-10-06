@@ -6,6 +6,7 @@ node {
   stage('Test') {
     nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
+                  sh 'npm update'
                     sh 'npm test'
                 }
     echo "test"
