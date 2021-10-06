@@ -18,7 +18,7 @@ node {
 
     stage('Push to S3') {
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
-      s3Upload(bucket:'mc.userportal.beardtrust', 
+      s3Upload(bucket:'ng.test.bucket', 
       workingDir:'src', includePathPattern:'**/*') // pick your jar or whatever you need
     }
     }
