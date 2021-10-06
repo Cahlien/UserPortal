@@ -4,9 +4,10 @@ node {
   }
 
   stage('Test') {
-    sh 'npm install'
-    //sh 'npm bugs test'
-    //sh 'CI=true npm test'
+    nodejs(nodeJSInstallationName: 'NPM') {
+                  sh "npm install"
+                    sh 'npm test'
+                }
     echo "test"
   }
 
