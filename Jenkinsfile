@@ -22,6 +22,7 @@ node {
                 nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
                   sh 'npm run build'
+                  sh 'npx browserslist@latest --update-db'
                 }
             
         }
