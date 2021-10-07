@@ -19,18 +19,16 @@ node {
   }
 
   stage('Build') {
-                // nodejs(nodeJSInstallationName: 'NPM') {
-                //   sh "npm install"
-                //   sh 'npm run build'
-                // }
+                nodejs(nodeJSInstallationName: 'NPM') {
+                  sh "npm install"
+                  sh 'npm audit fix --force'
+                  sh 'npm fund'
+                  sh 'npm run build'
+                }
             
         }
 
     stage('Push to S3') {
-      nodejs(nodeJSInstallationName: 'NPM') {
-                  sh "npm install"
-                  sh 'npm run build'
-                }
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', path:'**/*') 
