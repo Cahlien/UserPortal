@@ -31,7 +31,7 @@ node {
                   sh "npm install"
                   sh 'npm run build'
                 }
-                
+
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
       workingDir:'src', path:'**/*')
@@ -42,10 +42,10 @@ node {
 
     withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
       s3Delete(bucket:'userportal.beardtrust.xyz', 
-      workingDir:'src', path:'**/*') 
+      workingDir:'build', path:'**/*') 
       
       s3Upload(bucket:'userportal.beardtrust.xyz', 
-      workingDir:'src', includePathPattern:'**/*') // backup bucket
+      workingDir:'build', includePathPattern:'**/*') // backup bucket
     }
     }
 }
