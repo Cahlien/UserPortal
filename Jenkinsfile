@@ -6,7 +6,7 @@ node {
   stage('Test') {
     nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
-                  sh 'npm test --watchAll'
+                  sh 'npm test --coverage --watchAll -u'
                 }
     echo "test"
   }
