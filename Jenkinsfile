@@ -33,7 +33,7 @@ node {
       workingDir:'src', path:'**/*')
 
       s3Upload(bucket:'mc.userportal.beardtrust', 
-      workingDir:'src', includePathPattern:'**/build*') // primary bucket
+      workingDir:'src', includePathPattern:'**/build/*') // primary bucket
     }
 
     withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
@@ -41,7 +41,7 @@ node {
       workingDir:'src', path:'**/*') 
       
       s3Upload(bucket:'userportal.beardtrust.xyz', 
-      workingDir:'src', includePathPattern:'**/build*') // backup bucket
+      workingDir:'src', includePathPattern:'**/build/*') // backup bucket
     }
     }
 }
