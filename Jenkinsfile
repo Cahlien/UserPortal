@@ -6,7 +6,7 @@ node {
   stage('Test') {
     nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
-                 // sh 'npm test'
+                 sh 'npm test'
                 }
     echo "test"
   }
@@ -21,8 +21,6 @@ node {
   stage('Build') {
                 nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
-                  sh 'npm audit fix --force'
-                  sh 'npm fund'
                   sh 'npm run build'
                 }
             
