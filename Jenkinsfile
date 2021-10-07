@@ -34,10 +34,10 @@ node {
 
     withAWS(region:'us-east-2', credentials:'nathanael_access_key') {
       s3Delete(bucket:'mc.userportal.beardtrust', 
-      workingDir:'src', path:'**/*')
+      workingDir:'build', path:'**/*')
 
       s3Upload(bucket:'mc.userportal.beardtrust', 
-      workingDir:'src', includePathPattern:'**/*') // primary bucket
+      workingDir:'build', includePathPattern:'**/*') // primary bucket
     }
 
     withAWS(region:'us-east-1', credentials:'nathanael_access_key') {
