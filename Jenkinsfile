@@ -7,7 +7,7 @@ node {
     nodejs(nodeJSInstallationName: 'NPM') {
                   sh "npm install"
                   sh 'npm update'
-                  sh 'npm test -au && u'
+                 // sh 'npm test'
                 }
     echo "test"
   }
