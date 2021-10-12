@@ -1,4 +1,4 @@
-export class Transaction {
+export class TransactionModel {
     id;
     transactionType;
     transactionAmount;
@@ -20,6 +20,6 @@ export class Transaction {
     }
 
     static from({id, transactionType, transactionAmount, transactionStatus, source, target, statusTime, notes}){
-        return new Transaction(id, transactionType, transactionAmount, transactionStatus, source, target, statusTime, notes)
+        return new TransactionModel(id, transactionType, transactionAmount, transactionStatus, source, target, statusTime, notes)
     }
 }
