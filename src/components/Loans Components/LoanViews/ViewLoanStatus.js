@@ -417,7 +417,7 @@ function ViewLoanStatus() {
                                 {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'valueTitle'} onClick={addToSort}>Amount
+                                id={'valueTitle'} onClick={addToSort}>Balance
                                 {sortByValueTitle.active === true && (sortByValueTitle.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
@@ -443,8 +443,8 @@ function ViewLoanStatus() {
                                 <td className={'align-middle text-center'}>{loan.loanType.typeName}</td>
                                 <td className={'align-middle'}>{loan.loanType.description}</td>
                                 <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.currencyValue).toString()}</td>
-                                <td className={'align-middle text-center'}>${loan.principal}</td>
+                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.principal).toString()}</td>
+                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.balance).toString()}</td>
                                 <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
                                 <td className={'align-middle text-center'}>{loan.createDate}</td>
                                 <td className={'align-middle text-center'}>
@@ -483,12 +483,12 @@ function ViewLoanStatus() {
                                         <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr + '%'}></input>
                                     </div>
                                     <div className="mb-2">
-                                        <label id="amountLabel" className="form-label">Amount:</label>
-                                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.currencyValue).toString()}></input>
+                                        <label id="amountLabel" className="form-label">Balance:</label>
+                                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.balance).toString()}></input>
                                     </div>
                                     <div className="mb-2">
                                         <label id="principalLabel" className="form-label">Principal:</label>
-                                        <input id="principalText" className="form-control" type="text" disabled={true} value={'$' + currentLoan.principal}></input>
+                                        <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.principal).toString()}></input>
                                     </div>
                                     <div className="mb-2">
                                     </div>

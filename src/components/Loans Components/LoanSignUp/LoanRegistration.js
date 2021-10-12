@@ -17,7 +17,6 @@ const LoanRegistration = () => {
     const [loanDisplay, setLoanDisplay] = useState(false);
     const [show, setShow] = useState(false);
     const [warn, showWarn] = useState(false);
-    const today = new Date();
     useEffect(() => {
         if (loanType === undefined && loanTypeId !== null) {
             getLoanType();
@@ -113,7 +112,12 @@ const LoanRegistration = () => {
                     </FormGroup>
                     {loanDisplay === true &&
                         <FormGroup>
-                            <FormLabel htmlFor={'username'} className={'col-form-label'}>Offered Balance: ${loan ? loan.currencyValue.dollars : null}.{loan ? loan.currencyValue.cents : null} </FormLabel>
+                            <FormLabel htmlFor={'username'} className={'col-form-label'}>Offered Principal: ${loan ? loan.principal.dollars : null}.{loan ? loan.principal.cents : null} </FormLabel>
+                        </FormGroup>
+                    }
+                    {loanDisplay === true &&
+                        <FormGroup>
+                            <FormLabel htmlFor={'username'} className={'col-form-label'}>Initial Balance: ${loan ? loan.balance.dollars : null}.{loan ? loan.balance.cents : null} </FormLabel>
                         </FormGroup>
                     }
                     {loanDisplay === true &&
