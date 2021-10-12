@@ -26,9 +26,29 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "CI=false && react-scripts build",
+    "postbuild": "rimraf build/**/*.map",
+    "test": "react-scripts test --coverage --watchAll=false  --forceExit  -u",
     "eject": "react-scripts eject"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!coverage/**",
+      "!node_modules/**",
+      "!src/index.js",
+      "!src/setupTests.js",
+      "!public/**",
+      "!build/**"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json",
+      "text",
+      "clover",
+      "cobertura"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -47,5 +67,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0",
+    "jenkins-mocha": "latest"
+  },
+  "jestSonar": {
+    "sonar56x": true,
+    "reportPath": "testResults",
+    "reportFile": "sonar-report.xml",
+    "indent": 4
   }
 }

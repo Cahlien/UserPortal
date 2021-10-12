@@ -5,7 +5,7 @@ import RegistrationForm from "./components/AuthComponents/RegistrationForm/Regis
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
 import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/AccountComponents/ViewAccounts/AccountListLogic';
+import ViewAccount from './components/AccountComponents/AccountListDisplay';
 import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAccountLogic';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/LayoutComponents/PageLayout/Layout';

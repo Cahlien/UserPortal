@@ -3,7 +3,7 @@
 exports[`Loan Registration tests Expects the snapshot to match the display 1`] = `
 <section>
   <div
-    className="container w-50 my-5 centerpiece"
+    className="container my-5 "
   >
     <form
       className="offset-4 col-3"
@@ -40,7 +40,12 @@ exports[`Loan Registration tests Expects the snapshot to match the display 1`] =
           className="col-form-label form-label"
           htmlFor="username"
         >
-          Description: 
+          Description:
+        </label>
+        <label
+          className="col-form-label form-label"
+          htmlFor="username"
+        >
            
         </label>
       </div>

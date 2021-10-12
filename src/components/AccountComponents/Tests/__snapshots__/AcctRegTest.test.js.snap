@@ -2,18 +2,21 @@
 
 exports[`Account Registration Test Expects the snapshot to match the display 1`] = `
 <section>
-  <div
-    className="container vertical-center"
-  >
+  <div>
     <form
       className="offset-4 col-3"
     >
+      <h1
+        className="text-center mt-5"
+      >
+        Set up a new BeardTrust Account today!
+      </h1>
       <div>
         <label
           className="col-form-label form-label"
           htmlFor="username"
         >
-          Nickname?
+          Give this account a nickname:
         </label>
         <input
           className="form-control"
@@ -27,7 +30,7 @@ exports[`Account Registration Test Expects the snapshot to match the display 1`]
           className="col-form-label form-label"
           htmlFor="username"
         >
-          Initial Deposit:
+          Input your initial deposit:
         </label>
         <input
           className="form-control"
