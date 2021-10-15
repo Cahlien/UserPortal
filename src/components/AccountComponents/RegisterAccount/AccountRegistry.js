@@ -6,6 +6,7 @@ import { Alert } from "react-bootstrap";
 import {CurrencyValue} from "../../../models/currencyvalue.model";
 import {AccountType} from "../../../models/accounttype.model";
 import { useHistory } from "react-router";
+import { withRouter } from 'react-router-dom';
 
 function AccountRegistration() {
 
@@ -59,6 +60,7 @@ function AccountRegistration() {
             activeStatus: true,
             interest: 1,
             create_date: cdate,
+            type_id: '123456',
             type: AccountType.byName(typeTitle)
         }
 
@@ -73,7 +75,7 @@ function AccountRegistration() {
                 setShow(true)
                 window.setTimeout(() => {
                     setShow(false);
-                    history.push("/accounts/me");
+                    //history.push("/accounts/me");
                 }, 1000)
             }
         } catch (e) {

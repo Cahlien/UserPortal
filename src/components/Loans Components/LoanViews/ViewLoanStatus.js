@@ -15,7 +15,7 @@ function ViewLoanStatus() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchCriteria, setSearchCriteria] = useState("");
-    const [sortBy, setSortBy] = useState("loanId,asc," + userId);
+    const [sortBy, setSortBy] = useState("id,asc" +  "," + userId);
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'loanType_typeName', direction: 'asc' });
     const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'loanType_description', direction: 'asc' });
@@ -118,7 +118,7 @@ function ViewLoanStatus() {
         if (event.target.id === 'loanType_typeName') {
             if (sortByTypeName.active === true) {
                 field = toggleDirection(sortByTypeName);
-                sort = field.name + ',' + field.direction + ',' + userId;
+                sort = field.name + ',' + field.direction + ',';
             } else {
                 setSortByTypeName({ active: true, name: 'loanType_typeName', direction: 'asc' });
                 sort = sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;

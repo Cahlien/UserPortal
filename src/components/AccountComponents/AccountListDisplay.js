@@ -16,7 +16,7 @@ const [loansDisplayed, setLoansDisplayed] = useState(false);
 const [currentPage, setCurrentPage] = useState(1);
 const [pageSize, setPageSize] = useState(10);
 const [searchCriteria, setSearchCriteria] = useState("");
-const [sortBy, setSortBy] = useState("Id,asc,");
+const [sortBy, setSortBy] = useState("Id");
 const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
 const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'type_name', direction: 'asc' });
 const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'type_description', direction: 'asc' });
@@ -43,12 +43,13 @@ const getList = useCallback(async () => {
         params = {
             pageNum: currentPage === 0 ? 0 : currentPage - 1,
             pageSize: pageSize,
-            sortBy: sortBy,
+            sortName: sortBy,
+            sortDir: sortByTypeName.direction,
             search: searchCriteria,
-            id: userId
+            userId: userId
         };
     } else {
-        params = { id: userId, pageNum: currentPage === 0 ? 0 : currentPage - 1, pageSize: pageSize, sortBy: sortBy, search: searchCriteria };
+        params = { userId: userId, pageNum: currentPage === 0 ? 0 : currentPage - 1, pageSize: pageSize, sortName: sortBy, sortDir: sortByTypeName.direction, search: searchCriteria };
     }
 
     console.log('params: ', params);
@@ -63,7 +64,7 @@ const getList = useCallback(async () => {
     console.log('inbound response: ', list);
 
     if (list.data.content !== availableLoans) {
-        console.log('list content found: ', list.data.content);
+        console.log('list data found: ', list.data);
         if (searchCriteriaChanged) {
             setCurrentPage(1);
             setSearchCriteriaChanged(false);
