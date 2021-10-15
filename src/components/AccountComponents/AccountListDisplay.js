@@ -121,7 +121,7 @@ function addToSort(event) {
     if (event.target.id === 'type_name') {
         if (sortByTypeName.active === true) {
             field = toggleDirection(sortByTypeName);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setSortByTypeName({ active: true, name: 'type_name', direction: 'asc' });
             sort = sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
@@ -156,7 +156,7 @@ function addToSort(event) {
         if (sortByInterest.active === true) {
 
             field = toggleDirection(sortByInterest);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setSortByInterest({ active: true, name: 'interest', direction: 'asc' });
             sort = sortByInterest.name + ',' + sortByInterest.direction + ',' + authContext.userId;
@@ -191,7 +191,7 @@ function addToSort(event) {
         if (sortByPrincipal.active === true) {
 
             field = toggleDirection(sortByPrincipal);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setSortByPrincipal({ active: true, name: 'type_description', direction: 'asc' });
             sort = sortByPrincipal.name + ',' + sortByPrincipal.direction + ',' + authContext.userId;
@@ -225,7 +225,7 @@ function addToSort(event) {
     if (event.target.id === 'balance') {
         if (sortByValueTitle.active === true) {
             field = toggleDirection(sortByValueTitle);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setsortByValueTitle({ active: true, name: 'balance', direction: 'asc' });
             sort = sortByValueTitle.name + ',' + sortByValueTitle.direction + ',' + authContext.userId;
@@ -259,7 +259,7 @@ function addToSort(event) {
     if (event.target.id === 'nickname') {
         if (sortByNextPay.active === true) {
             field = toggleDirection(sortByNextPay);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setSortByNextPay({ active: true, name: 'nickname', direction: 'asc' });
             sort = sortByNextPay.name + ',' + sortByNextPay.direction + ',' + authContext.userId;
@@ -293,7 +293,7 @@ function addToSort(event) {
     if (event.target.id === 'createDate') {
         if (sortByCreateDate.active === true) {
             field = toggleDirection(sortByCreateDate);
-            sort = field.name + ',' + field.direction + ',' + userId;
+            sort = field.name + ',' + field.direction;
         } else {
             setSortByCreateDate({ active: true, name: 'createDate', direction: 'asc' });
             sort = sortByCreateDate.name + ',' + sortByCreateDate.direction + ',' + authContext.userId;
