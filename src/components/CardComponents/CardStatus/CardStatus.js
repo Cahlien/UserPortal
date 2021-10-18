@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import AuthContext from "../../../store/auth-context";
 import {useHistory, useParams} from "react-router-dom";
 import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
+import TransactionsList from "../../TransactionComponents/TransactionsList";
 
 /**
  * This function returns a page showing the details and status of a
@@ -46,8 +47,6 @@ function CardStatus(){
                         setHasLoaded(true);
                     }
                 }
-
-
             }
 
             try {
@@ -88,8 +87,10 @@ function CardStatus(){
                     }
                 }
             }/>
-        </section>
 
+            <TransactionsList url={url + '/transactions'} />
+
+        </section>
     );
 }
 
