@@ -1,21 +1,28 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 import AuthContext from "../../../store/auth-context";
 import { Table, Modal, Button } from "react-bootstrap";
 import { CurrencyValue } from '../../../models/currencyvalue.model';
+import { Slider } from '@material-ui/core';
+import { Dropdown } from 'react-bootstrap';
 
 function ViewLoanStatus() {
     const authContext = useContext(AuthContext);
     const token = authContext.token;
     const userId = authContext.userId;
+    const enteredValue = useRef();
     //page items
+    const [typeTitle, setTitle] = useState("Select Payment Type");
     const [availableLoans, setavailableLoans] = useState([]);
     const [loansDisplayed, setLoansDisplayed] = useState(false);
+    const [availableAccounts, setAvailableAccounts] = useState([]);
+    const [paymentAccount, setPaymentAccount] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(5);
     const [searchCriteria, setSearchCriteria] = useState("");
-    const [sortBy, setSortBy] = useState("id,asc" +  "," + userId);
+    const [sortBy, setSortBy] = useState("id,asc" + "," + userId);
+    const [maxPayment, setMaxPayment] = useState(1000);
     const [searchCriteriaChanged, setSearchCriteriaChanged] = useState(false);
     const [sortByTypeName, setSortByTypeName] = useState({ active: false, name: 'loanType_typeName', direction: 'asc' });
     const [sortByDescription, setSortByDescription] = useState({ active: false, name: 'loanType_description', direction: 'asc' });
@@ -28,6 +35,8 @@ function ViewLoanStatus() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [pay, setPay] = useState(false);
+    const handleClosePayment = () => setPay(false);
     const url = 'http://localhost:9001/loans/me';
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
@@ -44,9 +53,10 @@ function ViewLoanStatus() {
                 size: pageSize,
                 sortBy: sortBy,
                 search: searchCriteria,
+                userId: userId
             };
         } else {
-            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy };
+            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy, userId: userId };
         }
 
         console.log('params: ', params);
@@ -72,11 +82,13 @@ function ViewLoanStatus() {
             setNumberOfPages(list.data.totalPages);
             setCurrentLoan(availableLoans[0]);
         }
+
     }, [availableLoans, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy]);
 
     useEffect(() => {
         if (!loansDisplayed) {
             getList();
+            getAccounts();
         }
 
     }, [getList, availableLoans, loansDisplayed, token, url]);
@@ -108,6 +120,78 @@ function ViewLoanStatus() {
         setCurrentLoan(props);
         console.log('currentLoan: ', currentLoan);
         setShow(true);
+    }
+
+    function handleShowPayment() {
+        console.log('handle show pay')
+        setPay(true);
+        getAccounts();
+    }
+
+    async function getAccounts() {
+        console.log('get accounts')
+        let params = { page: currentPage === 0 ? 0 : currentPage - 1, size: 10, sortBy: sortBy, userId: userId };
+        if (!pay) {
+        const list = await axios.get("http://localhost:9001/accounts", {
+            params,
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (list.data.content !== availableAccounts) {
+            setAvailableAccounts(list.data.content);
+            console.log('list found: ', list)
+            console.log('accounts set: ', availableAccounts)
+        }
+    }
+    }
+
+    async function makePayment(event) {
+        event.preventDefault();
+        const desiredValue = enteredValue.current.value
+        let d = Math.abs(Math.trunc(parseFloat(desiredValue)))
+        let c = Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100)))
+        if (d < 0) {d *= -1}
+        if (c < 0) {c *= -1}
+        console.log('entered value dollars: ', Math.abs(Math.trunc(parseFloat(desiredValue))))
+        console.log('entered value cents: ', Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100))))
+        const cv = {
+            isNegative: true,
+            dollars: d,
+            cents: c
+        };
+        console.log('currency value body: ', cv.toString())
+        console.log('payment loan set to: ', currentLoan)
+        const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
+            cv,
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        const res2 = await axios.post(('http://localhost:9001/loans/' + userId + '/' + currentLoan.id),
+            cv,
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        console.log('account payment response: ', res)
+        console.log('loan payment response: ', res2)
+        window.location.reload();
+    }
+
+    function dropHandler(dropInput) {
+        console.log('drop handler accessed by: ', dropInput)
+        setPaymentAccount(availableAccounts[dropInput])
+        setTitle(availableAccounts[dropInput].nickname + ': ' + CurrencyValue.from(availableAccounts[dropInput].balance).toString())
+        console.log('payment account set to: ', paymentAccount)
+        setMaxPayment(availableAccounts[dropInput].balance.dollars)
     }
 
     function addToSort(event) {
@@ -417,15 +501,27 @@ function ViewLoanStatus() {
                                 {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'valueTitle'} onClick={addToSort}>Balance
+                                id={'valueTitle'} onClick={addToSort}>Original Principal
                                 {sortByValueTitle.active === true && (sortByValueTitle.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'principal'} onClick={addToSort}>Principal
+                                id={'principal'} onClick={addToSort}>Balance Owed
                                 {sortByPrincipal.active === true && (sortByPrincipal.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
                                 id={'nextDueDate'} onClick={addToSort}>Next Payment Due
+                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'nextDueDate'} onClick={addToSort}>Paid Status
+                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'nextDueDate'} onClick={addToSort}>Minimum Due
+                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+                            </th>
+                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+                                id={'nextDueDate'} onClick={addToSort}>Late Fee
                                 {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
                             </th>
                             <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
@@ -446,6 +542,9 @@ function ViewLoanStatus() {
                                 <td className={'align-middle text-center'}>{CurrencyValue.from(loan.principal).toString()}</td>
                                 <td className={'align-middle text-center'}>{CurrencyValue.from(loan.balance).toString()}</td>
                                 <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
+                                <td className={'align-middle text-center'}>{loan.hasPaid == true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
+                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.minDue).toString()}</td>
+                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.lateFee).toString()}</td>
                                 <td className={'align-middle text-center'}>{loan.createDate}</td>
                                 <td className={'align-middle text-center'}>
                                     <button className={'btn btn-primary btn mx-3'}
@@ -475,7 +574,7 @@ function ViewLoanStatus() {
                                     <div className="mb-2">
                                         <label id="descriptionLabel" className="form-label">Description:</label>
                                         <p id="descriptionText" className="form-body">
-                                        {currentLoan.loanType.description}
+                                            {currentLoan.loanType.description}
                                         </p>
                                     </div>
                                     <div className="mb-2">
@@ -491,6 +590,10 @@ function ViewLoanStatus() {
                                         <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.principal).toString()}></input>
                                     </div>
                                     <div className="mb-2">
+                                        <label id="principalLabel" className="form-label">Normal Minimum Payment:</label>
+                                        <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.minMonthFee}></input>
+                                    </div>
+                                    <div className="mb-2">
                                     </div>
                                     <div className="mb-2">
                                         <label id="nextDueDateLabel" className="form-label">Next Payment Due Date:</label>
@@ -500,15 +603,39 @@ function ViewLoanStatus() {
                                         <label id="createDateLabel" className="form-label">Date Created:</label>
                                         <input id="createDateText" className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
                                     </div>
+                                    {pay === true &&
+                                        <div>
+                                            <label id="createDateLabel" className="form-label">Source Account:</label>
+                                            <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
+                                                <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
+                                                    {typeTitle}
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu required>
+                                                    {(availableAccounts ?? []).map((account, index) => (
+                                                        <Dropdown.Item eventKey={index}>{account.nickname}: {CurrencyValue.from(account.balance).toString()}</Dropdown.Item>
+                                                    ))}
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                            <div>
+                                                <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
+                                                $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
+                                            </div>
+                                        </div>}
                                 </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={handleClose}>
+                                <Button variant="secondary" onClick={handleClose, handleClosePayment}>
                                     Cancel
                                 </Button>
-                                <Button variant="primary">
-                                    Payment Features Here
-                                </Button>
+                                {pay === false &&
+                                    <Button variant="primary" onClick={handleShowPayment}>
+                                        Make a Payment
+                                    </Button>
+                                } {pay === true && paymentAccount &&
+                                    <Button variant="primary" onClick={makePayment}>
+                                        Confirm Payment
+                                    </Button>
+                                }
                             </Modal.Footer>
                         </Modal>
                     }

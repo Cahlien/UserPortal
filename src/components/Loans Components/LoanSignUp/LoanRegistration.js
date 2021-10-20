@@ -43,6 +43,26 @@ const LoanRegistration = () => {
     }
     }
 
+    async function getLoan() {
+        console.log('get call')
+        console.log('loan type id: ', loanTypeId)
+        var url = "http://localhost:9001/loans/new"
+        try {
+        const response = await axios.get(url, {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        var loan =  response.data;
+        console.log('loan: ', loan)
+        console.log('outbound url: ', url)
+        setLoanType(loan);
+    } catch (e) {
+        console.log('error caught: ', e)
+    }
+    }
+
     async function submitHandler(event) {
         event.preventDefault();
         console.log('submit handler sending: ', loanType);
@@ -73,7 +93,7 @@ const LoanRegistration = () => {
         setShow(true);
         window.setTimeout(() => {
             setShow(false);
-            history.push("/myloans");
+            // history.push("/myloans");
         }, 1000)
     }
 
