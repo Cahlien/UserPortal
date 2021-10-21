@@ -148,19 +148,34 @@ function ViewLoanStatus() {
     }
 
     async function makePayment(event) {
+        console.log('current max payment: ', maxPayment)
+        if (paymentAccount.balance.negative) {
+            console.log('account negative')
+            setMaxPayment(-1 * maxPayment)
+            console.log('adjusted max payment: ', maxPayment)
+        }
         event.preventDefault();
         const desiredValue = enteredValue.current.value
+        console.log('desired value: ', desiredValue)
         let d = Math.abs(Math.trunc(parseFloat(desiredValue)))
         let c = Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100)))
         if (d < 0) {d *= -1}
         if (c < 0) {c *= -1}
         console.log('entered value dollars: ', Math.abs(Math.trunc(parseFloat(desiredValue))))
         console.log('entered value cents: ', Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100))))
-        const cv = {
-            isNegative: true,
-            dollars: d,
-            cents: c
-        };
+        const cv = new CurrencyValue(true, d, c)
+        if (desiredValue > maxPayment) {
+            console.log('cv compare to maxpayment equals -1')
+            window.confirm('Attempted to pay with more than available in account!')
+            cv.dollars = paymentAccount.balance.dollars;
+            cv.cents = paymentAccount.balance.cents
+        }
+        if (cv.negative) {
+            console.log('setting payment to 0')
+            cv.dollars = 0;
+            cv.cents = 0;
+            cv.negative = false;
+        }
         console.log('currency value body: ', cv.toString())
         console.log('payment loan set to: ', currentLoan)
         const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
@@ -183,15 +198,16 @@ function ViewLoanStatus() {
         )
         console.log('account payment response: ', res)
         console.log('loan payment response: ', res2)
-        window.location.reload();
+        // window.location.reload();
     }
 
     function dropHandler(dropInput) {
-        console.log('drop handler accessed by: ', dropInput)
+        setMaxPayment((availableAccounts[dropInput].balance.dollars + (availableAccounts[dropInput].balance.cents / 100)))
         setPaymentAccount(availableAccounts[dropInput])
+        console.log('drop handler accessed by: ', dropInput)
         setTitle(availableAccounts[dropInput].nickname + ': ' + CurrencyValue.from(availableAccounts[dropInput].balance).toString())
         console.log('payment account set to: ', paymentAccount)
-        setMaxPayment(availableAccounts[dropInput].balance.dollars)
+        console.log('max payment set: ', maxPayment)
     }
 
     function addToSort(event) {
@@ -594,6 +610,10 @@ function ViewLoanStatus() {
                                         <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.minMonthFee}></input>
                                     </div>
                                     <div className="mb-2">
+                                        <label id="principalLabel" className="form-label">Current Minimum Owed:</label>
+                                        <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.minDue).toString()}></input>
+                                    </div>
+                                    <div className="mb-2">
                                     </div>
                                     <div className="mb-2">
                                         <label id="nextDueDateLabel" className="form-label">Next Payment Due Date:</label>
@@ -616,10 +636,12 @@ function ViewLoanStatus() {
                                                     ))}
                                                 </Dropdown.Menu>
                                             </Dropdown>
+                                            {maxPayment !== null &&
                                             <div>
                                                 <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
                                                 $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
                                             </div>
+}
                                         </div>}
                                 </div>
                             </Modal.Body>
