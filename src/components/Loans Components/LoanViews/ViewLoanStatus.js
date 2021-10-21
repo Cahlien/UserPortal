@@ -4,8 +4,8 @@ import axios from "axios";
 import AuthContext from "../../../store/auth-context";
 import { Table, Modal, Button } from "react-bootstrap";
 import { CurrencyValue } from '../../../models/currencyvalue.model';
-import { Slider } from '@material-ui/core';
 import { Dropdown } from 'react-bootstrap';
+import './styles.css'
 
 function ViewLoanStatus() {
     const authContext = useContext(AuthContext);
@@ -13,7 +13,7 @@ function ViewLoanStatus() {
     const userId = authContext.userId;
     const enteredValue = useRef();
     //page items
-    const [typeTitle, setTitle] = useState("Select Payment Type");
+    const [typeTitle, setTitle] = useState("Select Payment Account");
     const [availableLoans, setavailableLoans] = useState([]);
     const [loansDisplayed, setLoansDisplayed] = useState(false);
     const [availableAccounts, setAvailableAccounts] = useState([]);
@@ -132,52 +132,65 @@ function ViewLoanStatus() {
         console.log('get accounts')
         let params = { page: currentPage === 0 ? 0 : currentPage - 1, size: 10, sortBy: sortBy, userId: userId };
         if (!pay) {
-        const list = await axios.get("http://localhost:9001/accounts", {
-            params,
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
+            const list = await axios.get("http://localhost:9001/accounts", {
+                params,
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (list.data.content !== availableAccounts) {
+                setAvailableAccounts(list.data.content);
+                console.log('list found: ', list)
+                console.log('accounts set: ', availableAccounts)
             }
-        });
-        if (list.data.content !== availableAccounts) {
-            setAvailableAccounts(list.data.content);
-            console.log('list found: ', list)
-            console.log('accounts set: ', availableAccounts)
         }
-    }
     }
 
     async function makePayment(event) {
-        console.log('current max payment: ', maxPayment)
-        if (paymentAccount.balance.negative) {
-            console.log('account negative')
-            setMaxPayment(-1 * maxPayment)
-            console.log('adjusted max payment: ', maxPayment)
-        }
         event.preventDefault();
+
         const desiredValue = enteredValue.current.value
         console.log('desired value: ', desiredValue)
         let d = Math.abs(Math.trunc(parseFloat(desiredValue)))
         let c = Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100)))
-        if (d < 0) {d *= -1}
-        if (c < 0) {c *= -1}
+        if (d < 0) { d *= -1 }
+        if (c < 0) { c *= -1 }
+        const cv = new CurrencyValue(true, d, c)
+        const loanBalance = new CurrencyValue(currentLoan.balance.negative, currentLoan.balance.dollars, currentLoan.balance.cents)
         console.log('entered value dollars: ', Math.abs(Math.trunc(parseFloat(desiredValue))))
         console.log('entered value cents: ', Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100))))
-        const cv = new CurrencyValue(true, d, c)
+        var a = currentLoan.balance.dollars.toString() +  '.' + (currentLoan.balance.cents / 100).toString()
+        console.log('current loan: ', loanBalance.toString())
+        console.log('new cv: ', cv.toString())
+        
+        let confirmPayment = false;
+        let canPay = false;
+        console.log('current max payment: ', maxPayment)
+        if (paymentAccount.balance.negative) {
+            console.log('account negative')
+            canPay = false
+            setMaxPayment(0);
+            console.log('adjusted max payment: ', maxPayment)
+        } else {
+            console.log('allowing payment...')
+            canPay = true;
+        }
         if (desiredValue > maxPayment) {
             console.log('cv compare to maxpayment equals -1')
-            window.confirm('Attempted to pay with more than available in account!')
+            confirmPayment = window.confirm('Attempted to pay with more than available in account!\nWIP: Overdraw?')
             cv.dollars = paymentAccount.balance.dollars;
             cv.cents = paymentAccount.balance.cents
         }
-        if (cv.negative) {
-            console.log('setting payment to 0')
-            cv.dollars = 0;
-            cv.cents = 0;
-            cv.negative = false;
-        }
+        cv.negative = false;
+        confirmPayment = window.confirm("Are you sure you want to pay " + cv.toString() + " towards your loan of " + loanBalance.toString() + '\nWIP: Confirm Credentials?')
+        cv.negative = true;
         console.log('currency value body: ', cv.toString())
         console.log('payment loan set to: ', currentLoan)
+        console.log('confirm payment: ', confirmPayment)
+        console.log('canPay: ', canPay)
+        if (canPay && confirmPayment) {
+            console.log('canPay true')
         const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
             cv,
             {
@@ -198,6 +211,7 @@ function ViewLoanStatus() {
         )
         console.log('account payment response: ', res)
         console.log('loan payment response: ', res2)
+        }
         // window.location.reload();
     }
 
@@ -575,7 +589,7 @@ function ViewLoanStatus() {
                     </tbody>
 
                     {currentLoan !== undefined &&
-                        <Modal show={show} onHide={handleClose}>
+                        <Modal show={show} onHide={handleClose} contentClassName="modal-style">
                             <Modal.Header closeButton>
                                 <Modal.Title>
                                     Your {currentLoan.loanType.typeName} Loan:
@@ -637,18 +651,25 @@ function ViewLoanStatus() {
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                             {maxPayment !== null &&
-                                            <div>
-                                                <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
-                                                $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
-                                            </div>
-}
+                                                <div>
+                                                    <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
+                                                    $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
+                                                </div>
+                                            }
                                         </div>}
                                 </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={handleClose, handleClosePayment}>
-                                    Cancel
-                                </Button>
+                                {pay === false &&
+                                    <Button variant="secondary" onClick={handleClose}>
+                                        Close
+                                    </Button>
+                                }
+                                {pay === true &&
+                                    <Button variant="secondary" onClick={handleClose, handleClosePayment}>
+                                        Cancel
+                                    </Button>
+                                }
                                 {pay === false &&
                                     <Button variant="primary" onClick={handleShowPayment}>
                                         Make a Payment
