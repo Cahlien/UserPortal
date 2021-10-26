@@ -4,19 +4,16 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import AuthContext from "../../store/auth-context";
 import axios from "axios";
 import { CurrencyValue } from "../../models/currencyvalue.model";
-import RowBuilder from "./RowBuilder";
-import { List } from "@material-ui/core";
 import AccountModal from "../AccountComponents/AccountModal";
 import LoanModal from "../Loans Components/LoanModal";
-import { useHistory } from "react-router";
 
 const DefaultTable = (props) => {
+    console.log('props received: ', props)
     const authContext = useContext(AuthContext);
     const token = authContext.token;
     const userId = authContext.userId;
     const url = props.url
     const pageTitle = props.title
-    const history = useHistory();
     const [availableObjects, setAvailableObjects] = useState([]);
     const [currentObject, setCurrentObject] = useState();
     const [numberOfPages, setNumberOfPages] = useState(5);
@@ -31,15 +28,10 @@ const DefaultTable = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const objCount = props.rows.length
     const titles = props.headers
-    for (let t of props.rows) {
-        rows.push(t)
-    }
 
     function handlePageChange(event, value) {
         event.preventDefault();
-        console.log('change page handler')
         setObjectsDisplayed(false);
         if (searchCriteriaChanged) {
             setCurrentPage(1);
@@ -150,7 +142,6 @@ const DefaultTable = (props) => {
         if (field.direction === 'asc') {
             field.direction = 'desc';
         } else {
-            // setSortBy('id,asc,' + userId + ',')
             field.direction = 'asc';
         }
 
