@@ -5,6 +5,7 @@ import AuthContext from "../../../store/auth-context";
 import { Table, Modal, Button } from "react-bootstrap";
 import { CurrencyValue } from '../../../models/currencyvalue.model';
 import { Dropdown } from 'react-bootstrap';
+import DefaultTable from '../../LayoutComponents/DefaultTable';
 import './styles.css'
 
 function ViewLoanStatus() {
@@ -13,6 +14,7 @@ function ViewLoanStatus() {
     const userId = authContext.userId;
     const enteredValue = useRef();
     //page items
+    const [rows, setRows] = useState([]);
     const [typeTitle, setTitle] = useState("Select Payment Account");
     const [availableLoans, setavailableLoans] = useState([]);
     const [loansDisplayed, setLoansDisplayed] = useState(false);
@@ -40,6 +42,20 @@ function ViewLoanStatus() {
     const url = 'http://localhost:9001/loans/me';
     const [numberOfPages, setNumberOfPages] = useState(10);
     const pageSizes = [5, 10, 15, 20, 25, 50, 100]
+    const headers = ['Loan Type', 'Description', 'APR', 'Principal', 'Balance', 'Next Payment Due', 'Paid Status', 'Minimum Due', 'Late Fee', 'Date Created']
+    const headerId = ['loanType_typeName', 'loanType_description', 'loanType_apr', 'principal', 'balance', 'nextDueDate', 'hasPaid', 'minDue', 'lateFee', 'createDate']
+    const titles = []
+
+    for (var i = 0; i < headers.length; i++) {
+        var title = {
+            title: headers[i],
+            direction: 'asc',
+            active: false,
+            id: headerId[i],
+            sequence: i
+        }
+        titles.push(title);
+    }
 
     const getList = useCallback(async () => {
         if (searchCriteria === "") {
@@ -81,17 +97,42 @@ function ViewLoanStatus() {
             setavailableLoans(list.data.content);
             setNumberOfPages(list.data.totalPages);
             setCurrentLoan(availableLoans[0]);
+            const row = []
+            for (let i = 0; i < list.data.size; i++) {
+                console.log('row builder reading: ', list.data.content[i])
+                row.push(
+                    <tr><td className={'align-middle text-center'}>{list.data.content[i].loanType.typeName}</td>
+                        <td className={'align-middle'}>{list.data.content[i].loanType.description}</td>
+                        <td className={'align-middle text-center'}>{list.data.content[i].loanType.apr + '%'}</td>
+                        <td className={'align-middle text-center'}>{CurrencyValue.from(list.data.content[i].principal).toString()}</td>
+                        <td className={'align-middle text-center'}>{CurrencyValue.from(list.data.content[i].balance).toString()}</td>
+                        <td className={'align-middle text-center'}>{list.data.content[i].nextDueDate}</td>
+                        <td className={'align-middle text-center'}>{list.data.content[i].hasPaid == true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
+                        <td className={'align-middle text-center'}>{CurrencyValue.from(list.data.content[i].minDue).toString()}</td>
+                        <td className={'align-middle text-center'}>{CurrencyValue.from(list.data.content[i].lateFee).toString()}</td>
+                        <td className={'align-middle text-center'}>{list.data.content[i].createDate}</td>
+                        <td className={'align-middle text-center'}>
+                            <button className={'btn btn-primary btn mx-3'}
+                                id={'reviewBtn'}>
+                                Review/Pay
+                            </button>
+                        </td></tr>)
+                rows.push(row)
+            }
+            setRows(row)
+            console.log('outbound rows:...................', rows)
+
         }
 
-    }, [availableLoans, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy]);
+    }, [availableLoans, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows]);
 
-    useEffect(() => {
-        if (!loansDisplayed) {
-            getList();
-            getAccounts();
-        }
+    // useEffect(() => {
+    //     if (!loansDisplayed) {
+    //         getList();
+    //         getAccounts();
+    //     }
 
-    }, [getList, availableLoans, loansDisplayed, token, url]);
+    // }, [getList, availableLoans, loansDisplayed, token, url, rows]);
 
     function handlePageChange(event, value) {
         event.preventDefault();
@@ -132,7 +173,7 @@ function ViewLoanStatus() {
         console.log('get accounts')
         let params = { page: currentPage === 0 ? 0 : currentPage - 1, size: 10, sortBy: sortBy, userId: userId };
         if (!pay) {
-            const list = await axios.get("http://localhost:9001/accounts", {
+            const list = await axios.get("http://localhost:9001/accounts/me", {
                 params,
                 headers: {
                     'Authorization': token,
@@ -160,10 +201,10 @@ function ViewLoanStatus() {
         const loanBalance = new CurrencyValue(currentLoan.balance.negative, currentLoan.balance.dollars, currentLoan.balance.cents)
         console.log('entered value dollars: ', Math.abs(Math.trunc(parseFloat(desiredValue))))
         console.log('entered value cents: ', Math.abs(Math.trunc(((parseFloat(desiredValue) * 100) % 100))))
-        var a = currentLoan.balance.dollars.toString() +  '.' + (currentLoan.balance.cents / 100).toString()
+        var a = currentLoan.balance.dollars.toString() + '.' + (currentLoan.balance.cents / 100).toString()
         console.log('current loan: ', loanBalance.toString())
         console.log('new cv: ', cv.toString())
-        
+
         let confirmPayment = false;
         let canPay = false;
         console.log('current max payment: ', maxPayment)
@@ -191,26 +232,26 @@ function ViewLoanStatus() {
         console.log('canPay: ', canPay)
         if (canPay && confirmPayment) {
             console.log('canPay true')
-        const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
-            cv,
-            {
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
+            const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
+                cv,
+                {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        )
-        const res2 = await axios.post(('http://localhost:9001/loans/' + userId + '/' + currentLoan.id),
-            cv,
-            {
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
+            )
+            const res2 = await axios.post(('http://localhost:9001/loans/' + userId + '/' + currentLoan.id),
+                cv,
+                {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        )
-        console.log('account payment response: ', res)
-        console.log('loan payment response: ', res2)
+            )
+            console.log('account payment response: ', res)
+            console.log('loan payment response: ', res2)
         }
         // window.location.reload();
     }
@@ -232,7 +273,7 @@ function ViewLoanStatus() {
         if (event.target.id === 'loanType_typeName') {
             if (sortByTypeName.active === true) {
                 field = toggleDirection(sortByTypeName);
-                sort = field.name + ',' + field.direction + ',';
+                sort = field.name + ',' + field.direction + ',' + userId;;
             } else {
                 setSortByTypeName({ active: true, name: 'loanType_typeName', direction: 'asc' });
                 sort = sortByTypeName.name + ',' + sortByTypeName.direction + ',' + authContext.userId;
@@ -489,205 +530,208 @@ function ViewLoanStatus() {
     }
 
     return (
-        <section className={'container'}>
-            <h1 className={'text-center mt-5'}>Your Loans:</h1>
-            <div className={'mt-5'}>
-                <div>
-                    <div className={'input-group mb-3'}>
-                        <div className={'me-5 col-xs-12 col-lg-2'}>
-                            <span className={'align-middle'}>
-                                {'Items per Page: '}
-                            </span>
-                            <select data-testid={'pageSizeSelector'} className={'text-center align-middle'} onChange={handlePageSizeChange}
-                                value={pageSize}>
-                                {pageSizes.map((size) => (
-                                    <option key={size} value={size}>{size}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
-                        <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
-                            onChange={handleSearchCriteriaChange} />
-                        <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
-                            id={'searchBar'}>Search
-                        </button>
-                    </div>
-                </div>
-                <Table striped bordered hover className={'me-3 table-responsive'} data-sortable={'true'}
-                    data-toggle={'table'} id={'table'}>
-                    <thead>
-                        <tr>
-                            <th className={'align-middle text-center'} data-sortable={'true'}
-                                scope={'col'} onClick={addToSort}
-                                id={'loanType_typeName'}>Loan Type
-                                {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th data-sortable={'true'} scope={'col'} id={'loanType_description'} onClick={addToSort}>
-                                Description
-                                {sortByDescription.active === true && (sortByDescription.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'loanType_apr'} onClick={addToSort}>Interest Rate
-                                {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'valueTitle'} onClick={addToSort}>Original Principal
-                                {sortByValueTitle.active === true && (sortByValueTitle.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'principal'} onClick={addToSort}>Balance Owed
-                                {sortByPrincipal.active === true && (sortByPrincipal.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'nextDueDate'} onClick={addToSort}>Next Payment Due
-                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'nextDueDate'} onClick={addToSort}>Paid Status
-                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'nextDueDate'} onClick={addToSort}>Minimum Due
-                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'nextDueDate'} onClick={addToSort}>Late Fee
-                                {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
-                                id={'createDate'} onClick={addToSort}>Date Created
-                                {sortByCreateDate.active === true && (sortByCreateDate.direction === 'asc' ? '  ↑' : '  ↓')}
-                            </th>
-                            <th className={'align-middle text-center'}>
-                                Loan Interaction
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {(availableLoans ?? []).map((loan, index) => (
-                            <tr key={index}>
-                                <td className={'align-middle text-center'}>{loan.loanType.typeName}</td>
-                                <td className={'align-middle'}>{loan.loanType.description}</td>
-                                <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.principal).toString()}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.balance).toString()}</td>
-                                <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
-                                <td className={'align-middle text-center'}>{loan.hasPaid == true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.minDue).toString()}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(loan.lateFee).toString()}</td>
-                                <td className={'align-middle text-center'}>{loan.createDate}</td>
-                                <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'}
-                                        id={'reviewBtn'}
-                                        onClick={() =>
-                                            prepModal(loan)}>
-                                        Review/Pay
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+        <>
+            <DefaultTable headers={titles} rows={rows} title='Loan' url={url} />
+        </>
+        // <section className={'container'}>
+        //     <h1 className={'text-center mt-5'}>Your Loans:</h1>
+        //     <div className={'mt-5'}>
+        //         <div>
+        //             <div className={'input-group mb-3'}>
+        //                 <div className={'me-5 col-xs-12 col-lg-2'}>
+        //                     <span className={'align-middle'}>
+        //                         {'Items per Page: '}
+        //                     </span>
+        //                     <select data-testid={'pageSizeSelector'} className={'text-center align-middle'} onChange={handlePageSizeChange}
+        //                         value={pageSize}>
+        //                         {pageSizes.map((size) => (
+        //                             <option key={size} value={size}>{size}</option>
+        //                         ))}
+        //                     </select>
+        //                 </div>
+        //                 <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
+        //                 <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
+        //                     onChange={handleSearchCriteriaChange} />
+        //                 <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
+        //                     id={'searchBar'}>Search
+        //                 </button>
+        //             </div>
+        //         </div>
+        //         <Table striped bordered hover className={'me-3 table-responsive'} data-sortable={'true'}
+        //             data-toggle={'table'} id={'table'}>
+        //             <thead>
+        //                 <tr>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'}
+        //                         scope={'col'} onClick={addToSort}
+        //                         id={'loanType_typeName'}>Loan Type
+        //                         {sortByTypeName.active === true && (sortByTypeName.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th data-sortable={'true'} scope={'col'} id={'loanType_description'} onClick={addToSort}>
+        //                         Description
+        //                         {sortByDescription.active === true && (sortByDescription.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'loanType_apr'} onClick={addToSort}>Interest Rate
+        //                         {sortByInterest.active === true && (sortByInterest.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'valueTitle'} onClick={addToSort}>Original Principal
+        //                         {sortByValueTitle.active === true && (sortByValueTitle.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'principal'} onClick={addToSort}>Balance Owed
+        //                         {sortByPrincipal.active === true && (sortByPrincipal.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'nextDueDate'} onClick={addToSort}>Next Payment Due
+        //                         {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'nextDueDate'} onClick={addToSort}>Paid Status
+        //                         {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'nextDueDate'} onClick={addToSort}>Minimum Due
+        //                         {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'nextDueDate'} onClick={addToSort}>Late Fee
+        //                         {sortByNextPay.active === true && (sortByNextPay.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'} data-sortable={'true'} scope={'col'}
+        //                         id={'createDate'} onClick={addToSort}>Date Created
+        //                         {sortByCreateDate.active === true && (sortByCreateDate.direction === 'asc' ? '  ↑' : '  ↓')}
+        //                     </th>
+        //                     <th className={'align-middle text-center'}>
+        //                         Loan Interaction
+        //                     </th>
+        //                 </tr>
+        //             </thead>
+        //             <tbody>
+        //                 {(availableLoans ?? []).map((loan, index) => (
+        //                     <tr key={index}>
+        //                         <td className={'align-middle text-center'}>{loan.loanType.typeName}</td>
+        //                         <td className={'align-middle'}>{loan.loanType.description}</td>
+        //                         <td className={'align-middle text-center'}>{loan.loanType.apr + '%'}</td>
+        //                         <td className={'align-middle text-center'}>{CurrencyValue.from(loan.principal).toString()}</td>
+        //                         <td className={'align-middle text-center'}>{CurrencyValue.from(loan.balance).toString()}</td>
+        //                         <td className={'align-middle text-center'}>{loan.nextDueDate}</td>
+        //                         <td className={'align-middle text-center'}>{loan.hasPaid == true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
+        //                         <td className={'align-middle text-center'}>{CurrencyValue.from(loan.minDue).toString()}</td>
+        //                         <td className={'align-middle text-center'}>{CurrencyValue.from(loan.lateFee).toString()}</td>
+        //                         <td className={'align-middle text-center'}>{loan.createDate}</td>
+        //                         <td className={'align-middle text-center'}>
+        //                             <button className={'btn btn-primary btn mx-3'}
+        //                                 id={'reviewBtn'}
+        //                                 onClick={() =>
+        //                                     prepModal(loan)}>
+        //                                 Review/Pay
+        //                             </button>
+        //                         </td>
+        //                     </tr>
+        //                 ))}
+        //             </tbody>
 
-                    {currentLoan !== undefined &&
-                        <Modal show={show} onHide={handleClose} contentClassName="modal-style">
-                            <Modal.Header closeButton>
-                                <Modal.Title>
-                                    Your {currentLoan.loanType.typeName} Loan:
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="form-group">
-                                    <div className="mb-2">
-                                        <label id="typeLabel" className="form-label">Type:</label>
-                                        <input id="typeText" type="text" disabled={true} className="form-control" value={currentLoan.loanType.typeName}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="descriptionLabel" className="form-label">Description:</label>
-                                        <p id="descriptionText" className="form-body">
-                                            {currentLoan.loanType.description}
-                                        </p>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="interestLabel" className="form-label">Interest:</label>
-                                        <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr + '%'}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="amountLabel" className="form-label">Balance:</label>
-                                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.balance).toString()}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="principalLabel" className="form-label">Principal:</label>
-                                        <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.principal).toString()}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="principalLabel" className="form-label">Normal Minimum Payment:</label>
-                                        <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.minMonthFee}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="principalLabel" className="form-label">Current Minimum Owed:</label>
-                                        <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.minDue).toString()}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="nextDueDateLabel" className="form-label">Next Payment Due Date:</label>
-                                        <input id="nextDueDateText" className="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label id="createDateLabel" className="form-label">Date Created:</label>
-                                        <input id="createDateText" className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
-                                    </div>
-                                    {pay === true &&
-                                        <div>
-                                            <label id="createDateLabel" className="form-label">Source Account:</label>
-                                            <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
-                                                <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
-                                                    {typeTitle}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu required>
-                                                    {(availableAccounts ?? []).map((account, index) => (
-                                                        <Dropdown.Item eventKey={index}>{account.nickname}: {CurrencyValue.from(account.balance).toString()}</Dropdown.Item>
-                                                    ))}
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                            {maxPayment !== null &&
-                                                <div>
-                                                    <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
-                                                    $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
-                                                </div>
-                                            }
-                                        </div>}
-                                </div>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                {pay === false &&
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Close
-                                    </Button>
-                                }
-                                {pay === true &&
-                                    <Button variant="secondary" onClick={handleClose, handleClosePayment}>
-                                        Cancel
-                                    </Button>
-                                }
-                                {pay === false &&
-                                    <Button variant="primary" onClick={handleShowPayment}>
-                                        Make a Payment
-                                    </Button>
-                                } {pay === true && paymentAccount &&
-                                    <Button variant="primary" onClick={makePayment}>
-                                        Confirm Payment
-                                    </Button>
-                                }
-                            </Modal.Footer>
-                        </Modal>
-                    }
-                </Table>
-                <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
-                    boundaryCount={1} onChange={handlePageChange} />
-            </div >
-            <script>$('#table').DataTable()</script>
-        </section >
+        //             {currentLoan !== undefined &&
+        //                 <Modal show={show} onHide={handleClose} contentClassName="modal-style">
+        //                     <Modal.Header closeButton>
+        //                         <Modal.Title>
+        //                             Your {currentLoan.loanType.typeName} Loan:
+        //                         </Modal.Title>
+        //                     </Modal.Header>
+        //                     <Modal.Body>
+        //                         <div className="form-group">
+        //                             <div className="mb-2">
+        //                                 <label id="typeLabel" className="form-label">Type:</label>
+        //                                 <input id="typeText" type="text" disabled={true} className="form-control" value={currentLoan.loanType.typeName}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="descriptionLabel" className="form-label">Description:</label>
+        //                                 <p id="descriptionText" className="form-body">
+        //                                     {currentLoan.loanType.description}
+        //                                 </p>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="interestLabel" className="form-label">Interest:</label>
+        //                                 <input id="interestText" className="form-control" type="text" disabled={true} value={currentLoan.loanType.apr + '%'}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="amountLabel" className="form-label">Balance:</label>
+        //                                 <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.balance).toString()}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="principalLabel" className="form-label">Principal:</label>
+        //                                 <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.principal).toString()}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="principalLabel" className="form-label">Normal Minimum Payment:</label>
+        //                                 <input id="principalText" className="form-control" type="text" disabled={true} value={currentLoan.minMonthFee}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="principalLabel" className="form-label">Current Minimum Owed:</label>
+        //                                 <input id="principalText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(currentLoan.minDue).toString()}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="nextDueDateLabel" className="form-label">Next Payment Due Date:</label>
+        //                                 <input id="nextDueDateText" className="form-control" type="text" disabled={true} value={currentLoan.nextDueDate}></input>
+        //                             </div>
+        //                             <div className="mb-2">
+        //                                 <label id="createDateLabel" className="form-label">Date Created:</label>
+        //                                 <input id="createDateText" className="form-control" type="text" disabled={true} value={currentLoan.createDate}></input>
+        //                             </div>
+        //                             {pay === true &&
+        //                                 <div>
+        //                                     <label id="createDateLabel" className="form-label">Source Account:</label>
+        //                                     <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
+        //                                         <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
+        //                                             {typeTitle}
+        //                                         </Dropdown.Toggle>
+        //                                         <Dropdown.Menu required>
+        //                                             {(availableAccounts ?? []).map((account, index) => (
+        //                                                 <Dropdown.Item eventKey={index}>{account.nickname}: {CurrencyValue.from(account.balance).toString()}</Dropdown.Item>
+        //                                             ))}
+        //                                         </Dropdown.Menu>
+        //                                     </Dropdown>
+        //                                     {maxPayment !== null &&
+        //                                         <div>
+        //                                             <label id="createDateLabel" className="form-label">Payment Amount:</label><br></br>
+        //                                             $<input type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
+        //                                         </div>
+        //                                     }
+        //                                 </div>}
+        //                         </div>
+        //                     </Modal.Body>
+        //                     <Modal.Footer>
+        //                         {pay === false &&
+        //                             <Button variant="secondary" onClick={handleClose}>
+        //                                 Close
+        //                             </Button>
+        //                         }
+        //                         {pay === true &&
+        //                             <Button variant="secondary" onClick={handleClose, handleClosePayment}>
+        //                                 Cancel
+        //                             </Button>
+        //                         }
+        //                         {pay === false &&
+        //                             <Button variant="primary" onClick={handleShowPayment}>
+        //                                 Make a Payment
+        //                             </Button>
+        //                         } {pay === true && paymentAccount &&
+        //                             <Button variant="primary" onClick={makePayment}>
+        //                                 Confirm Payment
+        //                             </Button>
+        //                         }
+        //                     </Modal.Footer>
+        //                 </Modal>
+        //             }
+        //         </Table>
+        //         <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
+        //             boundaryCount={1} onChange={handlePageChange} />
+        //     </div >
+        //     <script>$('#table').DataTable()</script>
+        // </section >
     );
 }
 
