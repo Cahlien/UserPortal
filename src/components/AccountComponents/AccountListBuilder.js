@@ -9,8 +9,9 @@ const titles = []
 for (var i = 0; i < headers.length; i++) {
     var title = {
         title: headers[i],
-        direction: 'asc',
+        direction: 'desc',
         active: false,
+        sorting: false,
         id: headerId[i],
         sequence: i
     }

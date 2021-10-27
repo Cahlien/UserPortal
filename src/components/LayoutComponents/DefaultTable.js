@@ -6,9 +6,11 @@ import axios from "axios";
 import { CurrencyValue } from "../../models/currencyvalue.model";
 import AccountModal from "../AccountComponents/AccountModal";
 import LoanModal from "../Loans Components/LoanModal";
+import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer } from "react-icons/fc"
+import Style from './style.css'
 
 const DefaultTable = (props) => {
-    console.log('props received: ', props)
+    // console.log('props received: ', props)
     const authContext = useContext(AuthContext);
     const token = authContext.token;
     const userId = authContext.userId;
@@ -25,6 +27,7 @@ const DefaultTable = (props) => {
     const [objectsDisplayed, setObjectsDisplayed] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const rows = []
+    const sortArry = [props.headers.size]
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -39,6 +42,15 @@ const DefaultTable = (props) => {
             setCurrentPage(value);
         }
 
+    }
+
+    function resetSearch() {
+        for (let i of titles) {
+            i.active = false;
+            i.sorting = false;
+        }
+        setSortBy('id,asc');
+        setObjectsDisplayed(false);
     }
 
     function handleSearchCriteriaChange(event) {
@@ -62,12 +74,12 @@ const DefaultTable = (props) => {
             params = {
                 page: currentPage === 0 ? 0 : currentPage - 1,
                 size: pageSize,
-                sort: sortBy,
+                sortBy: sortBy,
                 search: searchCriteria,
                 userId: userId
             };
         } else {
-            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sort: sortBy, userId: userId };
+            params = { page: currentPage === 0 ? 0 : currentPage - 1, size: pageSize, sortBy: sortBy, userId: userId };
         }
 
         console.log('default params: ', params);
@@ -103,21 +115,26 @@ const DefaultTable = (props) => {
     }, [getList, availableObjects, objectsDisplayed, titles, url, rows, pageSize, currentPage]);
 
     function addToSort(event) {
-        let sort = sortBy;
+        let sort = '';
         let field = {};
+        try {
         let title = titles[event.target.id];
-        if (title.active === true) {
-            field = toggleDirection(title);
-            sort += '&sort=' + field.id + ',' + field.direction;
-        } else {
-            console.log('title sorting: ', title.id)
-            title.direction = 'asc'; title.active = true;
-            titles[title.sequence] = title;
-            sort += '&sort=' + title.id + ',' + title.direction
+        console.log('title object: ', title)
+        title.sorting = true;
+        titles[event.target.id].active = true;
+        field = toggleDirection(title);
+        for (let i = 0; i < titles.length; i++) {
+            if (titles[i].sorting) {
+            sort +=  titles[i].id + ',' + titles[i].direction + ',';
+            }
+            
         }
-        console.log('sort created: ', sort)
+        sortArry[title.sequence] = sort;
         setObjectsDisplayed(false)
         setSortBy(sort)
+    } catch(e) {
+        window.alert('There was an error sorting your data.')
+    }
     }
 
     function openModal(props) {
@@ -165,8 +182,8 @@ const DefaultTable = (props) => {
                             <td className={'align-middle text-center'}>
                                 <button className={'btn btn-primary btn mx-3'}
                                     onClick={() => openModal(availableObjects.content[i])}
-                                    id={'reviewBtn'}>
-                                    Review/Pay
+                                    id={'reviewBtn'}><FcMoneyTransfer/>
+                                    Review 
                                 </button>
                             </td></tr>)
                 }
@@ -181,15 +198,15 @@ const DefaultTable = (props) => {
                             <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].principal).toString()}</td>
                             <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].balance).toString()}</td>
                             <td className={'align-middle text-center'}>{availableObjects.content[i].nextDueDate}</td>
-                            <td className={'align-middle text-center'}>{availableObjects.content[i].hasPaid == true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
+                            <td className={'align-middle text-center'}>{availableObjects.content[i].hasPaid === true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
                             <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].minDue).toString()}</td>
                             <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].lateFee).toString()}</td>
                             <td className={'align-middle text-center'}>{availableObjects.content[i].createDate}</td>
                             <td className={'align-middle text-center'}>
                                 <button className={'btn btn-primary btn mx-3'}
                                     onClick={() => openModal(availableObjects.content[i])}
-                                    id={'reviewBtn'}>
-                                    Review/Pay
+                                    id={'reviewBtn'}><FcMoneyTransfer/>
+                                    Review
                                 </button>
                             </td></tr>)
                 }
@@ -203,14 +220,14 @@ const DefaultTable = (props) => {
 
     }
     return (
-        <section className={'container'}>
+        <section style={Style} className={'container'}>
             <h1 className={'text-center mt-5'}>Your {pageTitle}s:</h1>
             <div className={'input-group mb-3'}>
                 <div className={'me-5 col-xs-12 col-lg-2'}>
                     <span className={'align-middle'}>
                         {'Items per Page: '}
                     </span>
-                    <select data-testid={'pageSizeSelector'} className={'text-center align-middle'} onChange={handlePageSizeChange}
+                    <select style={Style} data-testid={'pageSizeSelector'} className={'text-center align-middle'} onChange={handlePageSizeChange}
                         value={pageSize}>
                         {pageSizes.map((size) => (
                             <option key={size} value={size}>{size}</option>
@@ -218,10 +235,11 @@ const DefaultTable = (props) => {
                     </select>
                 </div>
                 <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
+                <button className={'btn btn-outline-secondary'}  type="submit" id="reset" title="Reset Sort" onClick={resetSearch}><FcRefresh/></button>
                 <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
-                    onChange={handleSearchCriteriaChange} />
+                    onChange={handleSearchCriteriaChange} title="Search" />
                 <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
-                    id={'searchBar'}>Search
+                    id={'searchBar'}><FcSearch/>Search
                 </button>
             </div>
             <div className={'mt-5'}>
@@ -230,9 +248,9 @@ const DefaultTable = (props) => {
                     <thead>
                         <tr>
                             {titles && titles.map(title => (
-                                <th className={'align-middle text-center'} data-sortable={'true'}
+                                <th style={Style} className={'align-middle text-center'} data-sortable={'true'}
                                     scope={'col'} onClick={addToSort} name={title.id}
-                                    id={title.sequence}>{title.title}{titles[title.sequence].active === true && (titles[title.sequence].direction === 'asc' ? '  ↑' : '  ↓')}</th>
+                                    id={title.sequence}>{title.title}<br></br>{titles[title.sequence].active === true && (titles[title.sequence].direction === 'asc' ? <FcAlphabeticalSortingAz /> : <FcAlphabeticalSortingZa />)}</th>
                             ))}
                             <th className={'align-middle text-center'}>{pageTitle} Interaction</th>
                         </tr>
