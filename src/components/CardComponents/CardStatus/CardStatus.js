@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import AuthContext from "../../../store/auth-context";
 import {useHistory, useParams} from "react-router-dom";
 import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
+import TransactionsList from "../../TransactionComponents/TransactionsList";
 
 /**
  * This function returns a page showing the details and status of a
@@ -22,7 +23,7 @@ function CardStatus(){
     const [hasLoaded, setHasLoaded] = useState(false);
     const userId = authContext.userId;
     const token = authContext.token;
-    const url = 'http://localhost:9001/cards/' + userId + '/' + cardId;
+    const url = `${process.env.REACT_APP_BASE_URL}${process.env.REACT_APP_CARD_SERVICE}/${userId}/${cardId}`;
 
     useEffect(() => {
         if(!hasLoaded){
@@ -46,8 +47,6 @@ function CardStatus(){
                         setHasLoaded(true);
                     }
                 }
-
-
             }
 
             try {
@@ -88,8 +87,10 @@ function CardStatus(){
                     }
                 }
             }/>
-        </section>
 
+            <TransactionsList url={`${url}${process.env.REACT_APP_TRANSACTIONS_ENDPOINT}`} />
+
+        </section>
     );
 }
 
