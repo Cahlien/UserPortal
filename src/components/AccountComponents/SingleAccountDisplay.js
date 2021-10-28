@@ -2,7 +2,7 @@ import { Button, Table, Modal, Alert } from "react-bootstrap"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "../../store/auth-context"
 import Deactivator from "./AccountDeactivation/AccountDeactivator";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import {CurrencyValue} from "../../models/currencyvalue.model";
 import TransactionsList from "../TransactionComponents/TransactionsList"

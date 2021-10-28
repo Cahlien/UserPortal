@@ -20,7 +20,7 @@ function ViewLoanStatus() {
 
     return (
         <>
-            <DefaultTable headers={titles} title='Loan' url={url} />
+            <DefaultTable headers={titles} title='Your Loans' url={url} />
         </>
     );
 }

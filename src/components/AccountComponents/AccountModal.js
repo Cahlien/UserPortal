@@ -1,15 +1,9 @@
 import { Modal, Button } from "react-bootstrap"
 import { CurrencyValue } from "../../models/currencyvalue.model"
-import { useState } from "react";
 
 
 function AccountModal(props) {
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const [currentAccount, setCurrentAccount] = useState();
     console.log('account modal rcvd: ', props)
-    console.log('show status: ', show)
     return (
         <section>
                 <Modal.Body>

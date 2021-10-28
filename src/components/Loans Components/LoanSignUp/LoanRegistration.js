@@ -84,6 +84,9 @@ const LoanRegistration = () => {
         console.log('accept handler sending: ', loan);
         var url = "http://localhost:9001/loans"
         const response = await axios.post(url, loan, {
+            params: {
+                userId: userId
+            },
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
@@ -93,7 +96,7 @@ const LoanRegistration = () => {
         setShow(true);
         window.setTimeout(() => {
             setShow(false);
-            // history.push("/myloans");
+            history.push("/myloans");
         }, 1000)
     }
 

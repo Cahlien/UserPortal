@@ -10,7 +10,7 @@ import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAcc
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/LayoutComponents/PageLayout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
-import UserCards from './components/CardComponents/UserCards/UserCards';
+import CardListBuilder from './components/CardComponents/CardListBuilder';
 import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
 import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
@@ -95,7 +95,7 @@ function App() {
                 </Route>
                 <Route path={'/cards'}>
                     <Layout>
-                        <UserCards />
+                        <CardListBuilder />
                     </Layout>
                 </Route>
             </Switch>
