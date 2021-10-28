@@ -8,6 +8,7 @@ import AccountModal from "../AccountComponents/AccountModal";
 import LoanModal from "../Loans Components/LoanModal";
 import LoanOfferModal from "../Loans Components/LoanOfferModal";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer, FcCurrencyExchange } from "react-icons/fc"
+import { GiMoneyStack, GiSwipeCard } from "react-icons/gi"
 import Style from './style.css'
 
 const DefaultTable = (props) => {
@@ -16,7 +17,6 @@ const DefaultTable = (props) => {
     const userId = authContext.userId;
     const url = props.url
     const pageTitle = props.title
-    const [showOffer, setShowOffer] = useState();
     const [availableObjects, setAvailableObjects] = useState([]);
     const [currentObject, setCurrentObject] = useState();
     const [numberOfPages, setNumberOfPages] = useState(5);
@@ -156,7 +156,11 @@ const DefaultTable = (props) => {
             case 'The Loans of BeardTrust':
                 console.log('loan type found')
                 setCurrentObject(props);
-                setShowOffer(true)
+                setShow(true)
+                break;
+            case 'Your Cards':
+                console.log('card found')
+                setCurrentObject(props);
                 setShow(true)
                 break;
         }
@@ -190,7 +194,7 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>
                                     <button className={'btn btn-primary btn mx-3'}
                                         onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><FcMoneyTransfer />
+                                        id={'reviewBtn'}><GiMoneyStack />
                                         Review
                                     </button>
                                 </td>
@@ -235,7 +239,7 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>
                                     <button className={'btn btn-primary btn mx-3'}
                                         onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><FcMoneyTransfer />
+                                        id={'reviewBtn'}><GiSwipeCard /><br />
                                         View
                                     </button>
                                 </td>
@@ -327,7 +331,7 @@ const DefaultTable = (props) => {
                                 </Modal.Header>
                                 <AccountModal account={currentObject} /></Modal>
                         </>}
-                    {show === true && showOffer === true && 
+                    {show === true && pageTitle === 'The Loans of BeardTrust' &&
                         <>
                             <Modal show={show} onHide={handleClose}>
                                 <Modal.Header closeButton>

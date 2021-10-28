@@ -4,6 +4,7 @@ import { Button, Dropdown } from "react-bootstrap";
 import { CurrencyValue } from "../../models/currencyvalue.model";
 import axios from "axios";
 import AuthContext from "../../store/auth-context";
+import { GiPayMoney } from "react-icons/gi"
 
 function LoanModal(props) {
     const authContext = useContext(AuthContext);
@@ -101,7 +102,11 @@ function LoanModal(props) {
             cv.cents = paymentAccount.balance.cents
         }
         cv.negative = false;
-        confirmPayment = window.confirm("Are you sure you want to pay " + cv.toString() + " towards your loan of " + loanBalance.toString() + '\nWIP: Confirm Credentials?')
+        if (!cv.toString().includes('NaN')) {
+            confirmPayment = window.confirm("Are you sure you want to pay " + cv.toString() + " towards your loan of " + loanBalance.toString() + '\nWIP: Confirm Credentials?')
+        } else {
+            window.alert("There was an error with the amount you entered, please ensure you are using numbers in your input")
+        }
         cv.negative = true;
         console.log('currency value body: ', cv.toString())
         console.log('payment loan set to: ', currentLoan)
@@ -211,7 +216,7 @@ function LoanModal(props) {
                     </Button>
                 } {pay === true && paymentAccount &&
                     <Button variant="primary" onClick={makePayment}>
-                        Confirm Payment
+                        Confirm Payment <GiPayMoney/>
                     </Button>
                 }
             </Modal.Footer>
