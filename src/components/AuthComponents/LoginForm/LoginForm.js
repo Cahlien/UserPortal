@@ -64,11 +64,6 @@ function LoginForm(props) {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'LR-Type': 'user',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': '*',
-                        'Access-Control-Allow-Headers': '*',
-                        'Access-Control-Expose-Headers': '*',
-                        'Access-Control-Max-Age': 864000
                     }
                 }
             );

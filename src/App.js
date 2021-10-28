@@ -5,18 +5,18 @@ import RegistrationForm from "./components/AuthComponents/RegistrationForm/Regis
 import LoginForm from "./components/AuthComponents/LoginForm/LoginForm";
 import ViewUserForm from './components/UserComponents/ViewUserForm/ViewUserForm';
 import AccountRegistration from './components/AccountComponents/RegisterAccount/AccountRegistry';
-import ViewAccount from './components/AccountComponents/AccountListDisplay';
+import ViewAccount from './components/AccountComponents/AccountListBuilder';
 import AccountSingle from './components/AccountComponents/ViewAccounts/SingleAccountLogic';
 import AccountDeactivator from './components/AccountComponents/AccountDeactivation/AccountDeactivator'
 import Layout from './components/LayoutComponents/PageLayout/Layout';
 import CardSignUp from './components/CardComponents/CardSignUp/CardSignUp'
-import UserCards from './components/CardComponents/UserCards/UserCards';
+import CardListBuilder from './components/CardComponents/CardListBuilder';
 import CardStatus from "./components/CardComponents/CardStatus/CardStatus";
 import CardTypes from "./components/CardComponents/CardTypes/CardTypes";
 import HomePage from "./components/Pages/HomePage/HomePage";
 import LoanRegistration from "./components/Loans Components/LoanSignUp/LoanRegistration"
 import LoansOnOffer from "./components/Loans Components/LoanViews/LoansOnOffer"
-import ViewLoanStatus from './components/Loans Components/LoanViews/ViewLoanStatus';
+import ViewLoanStatus from './components/Loans Components/LoanViews/LoanListBuilder';
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -95,7 +95,7 @@ function App() {
                 </Route>
                 <Route path={'/cards'}>
                     <Layout>
-                        <UserCards />
+                        <CardListBuilder />
                     </Layout>
                 </Route>
             </Switch>
