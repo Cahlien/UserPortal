@@ -7,7 +7,7 @@ import axios from "axios";
 
 function TransactionsList(props) {
     const authContext = useContext(AuthContext);
-    const url = props.url;
+    const url = `${process.env.REACT_APP_BASE_URL}${process.env.REACT_APP_TRANSACTIONS_ENDPOINT}/${props.assetId}`;
     const pageSizes = [5, 10, 15, 20, 25, 50];
     const [modified, setModified] = useState();
     const [transactions, setTransactions] = useState();
@@ -63,6 +63,7 @@ function TransactionsList(props) {
 
     function handleSearchCriteriaChange(event) {
         const criteria = event.target.value;
+
         if(criteria.length > 0){
             setSearchCriteria(criteria);
         } else {
