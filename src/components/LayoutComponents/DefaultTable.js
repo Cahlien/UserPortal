@@ -1,4 +1,5 @@
-import { Table, Modal } from "react-bootstrap";
+import { Table, Modal, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Pagination from '@material-ui/lab/Pagination';
 import { useState, useEffect, useCallback, useContext } from "react";
 import AuthContext from "../../store/auth-context";
@@ -237,11 +238,14 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].expireDate.slice(5, 7) + '/' + availableObjects.content[i].expireDate.slice(2, 4)}</td>
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].cardType.typeName}</td>
                                 <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'}
-                                        onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><GiSwipeCard /><br />
-                                        View
-                                    </button>
+                                <Link to={'/cards/' + availableObjects.content[i].id}>
+                                    <Button
+                                        className={'btn-sm'}
+                                        variant={'success'}
+                                        type={'submit'}
+                                        id={'Review'}
+                                    >View</Button>
+                                </Link>
                                 </td>
                             </tr>)
                     }
