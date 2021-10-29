@@ -4,6 +4,7 @@ import ActionContext from "../../../store/action-context";
 import { ButtonGroup, Button, FormGroup, Form, FormLabel, Alert } from "react-bootstrap";
 import AuthContext from "../../../store/auth-context";
 import axios from "axios";
+import {GiReceiveMoney} from "react-icons/gi"
 
 const LoanRegistration = () => {
     const history = useHistory();
@@ -160,7 +161,7 @@ const LoanRegistration = () => {
                     }
                     {loanDisplay === true &&
                         <ButtonGroup>
-                            <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={acceptHandler}>Accept</Button>
+                            <Button title='registerButton' type={'submit'} className={'btn btn-primary mt-3'} onClick={acceptHandler}>Accept <GiReceiveMoney/></Button>
                             <Button title='registerButton' type={'submit'} className={'btn btn-secondary mt-3'} onClick={cancelHandler}>Cancel</Button>
                         </ButtonGroup>
                     }

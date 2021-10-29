@@ -3,7 +3,7 @@ import DefaultTable from '../../LayoutComponents/DefaultTable';
 function LoansOnOffer() {
     const url = 'http://localhost:9001/loantypes';
     const headers = ['Type', 'Description', 'APR']
-    const headerId = ['nickname', 'description',  'apr']
+    const headerId = ['typeName', 'description',  'apr']
     const titles = []
     console.log('loans on offer reached')
 
