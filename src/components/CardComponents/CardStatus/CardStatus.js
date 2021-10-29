@@ -88,7 +88,7 @@ function CardStatus(){
                 }
             }/>
 
-            <TransactionsList url={`${url}${process.env.REACT_APP_TRANSACTIONS_ENDPOINT}`} />
+            <TransactionsList assetId={cardId} />
 
         </section>
     );

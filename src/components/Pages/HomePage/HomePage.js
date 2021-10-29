@@ -4,7 +4,7 @@ import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
 import {useContext} from "react";
 import {useHistory} from "react-router-dom";
 
-function HomePage(props){
+function HomePage(){
     const authContext = useContext(AuthContext);
     const history = useHistory();
     return(
@@ -13,7 +13,7 @@ function HomePage(props){
                 <Centerpiece content={{
                     title: 'Welcome to BeardTrust',
                     lead: 'your bearded banking leader',
-                    body: 'Personal banking is fast, easy, and secure with a SimpleSaver savings account ' +
+                    body: 'Personal banking is fast, easy, and secure with a SuperSaver savings account ' +
                         ' or a CoolCash checking account from BeardTrust.',
                     image: '/images/bt-meme-sm.png',
                     alt: 'A bearded medieval warrior from northern Scotland wearing a helmet of mixed Pictish and ' +
