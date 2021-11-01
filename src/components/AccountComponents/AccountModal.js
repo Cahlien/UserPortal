@@ -1,13 +1,21 @@
 import { Modal, Button } from "react-bootstrap"
 import { CurrencyValue } from "../../models/currencyvalue.model"
 import TransactionsList from "../TransactionComponents/TransactionsList"
-
+import AuthContext from "../../store/auth-context"
+import { useState, useContext } from "react"
+import { useHistory } from "react-router-dom"
 
 function AccountModal(props) {
     console.log('account modal rcvd: ', props)
+    const [errorMessage, setErrorMessage] = useState();
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+
+
     return (
         <section>
                 <Modal.Body>
+                {errorMessage && <div className={'alert-danger mt-5'}>{errorMessage}</div>}
                     <div className="form-group">
                         <div className="input-group mb-2">
                             <label id="typeLabel" className="input-group-text">Type:</label>
@@ -38,13 +46,22 @@ function AccountModal(props) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary">
+                    <Button 
+                    variant="primary"
+                    onClick={(event) => {
+                        event.preventDefault();
+                        if (authContext.userIsLoggedIn) {
+                            setErrorMessage("Payments not implemented yet...")
+                        } else {
+                            history.push('/auth');
+                        }
+                    }}>
                         Payment Features Here
                     </Button>
                 </Modal.Footer>
                 <TransactionsList />
-            <div class="input-Group">
-                <label class="input-group-text" >Transaction Features Coming Soon</label>
+            <div className="input-Group">
+                <label className="input-group-text" >Transaction Features Coming Soon</label>
             </div>
         </section>)
 }

@@ -8,7 +8,7 @@ import { CurrencyValue } from "../../models/currencyvalue.model";
 import AccountModal from "../AccountComponents/AccountModal";
 import LoanModal from "../Loans Components/LoanModal";
 import LoanOfferModal from "../Loans Components/LoanOfferModal";
-import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer, FcCurrencyExchange } from "react-icons/fc"
+import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer, FcCurrencyExchange, FcSimCardChip } from "react-icons/fc"
 import { GiMoneyStack, GiSwipeCard } from "react-icons/gi"
 import Style from './style.css'
 import CardStatus from "../CardComponents/CardStatus/CardStatus";
@@ -241,8 +241,8 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>
                                 <button className={'btn btn-primary btn mx-3'}
                                         onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><FcMoneyTransfer />
-                                        Review
+                                        id={'reviewBtn'}><FcSimCardChip /> <br />
+                                        View
                                     </button>
                                 </td>
                             </tr>)

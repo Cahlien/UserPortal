@@ -89,7 +89,7 @@ function CardStatus(props) {
                     </div>
                     <div className="input-group mb-2">
                         <label id="interestLabel" className="input-group-text">Interest:</label>
-                        <input id="interestText" className="form-control" type="text" disabled={true} value={props.card.interest + '%'}></input>
+                        <input id="interestText" className="form-control" type="text" disabled={true} value={props.card.interestRate + '%'}></input>
                     </div>
                     <div className="input-group mb-2">
                         <label id="amountLabel" className="input-group-text">Amount:</label>
