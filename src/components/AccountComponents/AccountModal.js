@@ -1,5 +1,6 @@
 import { Modal, Button } from "react-bootstrap"
 import { CurrencyValue } from "../../models/currencyvalue.model"
+import TransactionsList from "../TransactionComponents/TransactionsList"
 
 
 function AccountModal(props) {
@@ -8,30 +9,30 @@ function AccountModal(props) {
         <section>
                 <Modal.Body>
                     <div className="form-group">
-                        <div className="mb-2">
-                            <label id="typeLabel" className="form-label">Type:</label>
+                        <div className="input-group mb-2">
+                            <label id="typeLabel" className="input-group-text">Type:</label>
                             <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.type.name}></input>
                         </div>
-                        <div className="mb-2">
-                            <label id="typeLabel" className="form-label">Nickname:</label>
+                        <div className="input-group mb-2">
+                            <label id="typeLabel" className="input-group-text">Nickname:</label>
                             <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.nickname}></input>
                         </div>
-                        <div className="mb-2">
-                            <label id="descriptionLabel" className="form-label">Description:</label>
-                            <p id="descriptionText" className="form-body">
+                        <div className="input-group mb-2">
+                            <label id="descriptionLabel" className="input-group-text">Description:</label>
+                            <textarea value={props.account.type.description} id="descriptionText" className="form-control" readOnly="readonly">
                                 {props.account.type.description}
-                            </p>
+                            </textarea>
                         </div>
-                        <div className="mb-2">
-                            <label id="interestLabel" className="form-label">Interest:</label>
+                        <div className="input-group mb-2">
+                            <label id="interestLabel" className="input-group-text">Interest:</label>
                             <input id="interestText" className="form-control" type="text" disabled={true} value={props.account.interest + '%'}></input>
                         </div>
-                        <div className="mb-2">
-                            <label id="amountLabel" className="form-label">Amount:</label>
+                        <div className="input-group mb-2">
+                            <label id="amountLabel" className="input-group-text">Amount:</label>
                             <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(props.account.balance).toString()}></input>
                         </div>
-                        <div className="mb-2">
-                            <label id="createDateLabel" className="form-label">Date Created:</label>
+                        <div className="input-group mb-2">
+                            <label id="createDateLabel" className="input-group-text">Date Created:</label>
                             <input id="createDateText" className="form-control" type="text" disabled={true} value={props.account.createDate}></input>
                         </div>
                     </div>
@@ -41,6 +42,10 @@ function AccountModal(props) {
                         Payment Features Here
                     </Button>
                 </Modal.Footer>
+                <TransactionsList />
+            <div class="input-Group">
+                <label class="input-group-text" >Transaction Features Coming Soon</label>
+            </div>
         </section>)
 }
 export default AccountModal

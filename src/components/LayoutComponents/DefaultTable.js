@@ -11,6 +11,7 @@ import LoanOfferModal from "../Loans Components/LoanOfferModal";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer, FcCurrencyExchange } from "react-icons/fc"
 import { GiMoneyStack, GiSwipeCard } from "react-icons/gi"
 import Style from './style.css'
+import CardStatus from "../CardComponents/CardStatus/CardStatus";
 
 const DefaultTable = (props) => {
     const authContext = useContext(AuthContext);
@@ -238,14 +239,11 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].expireDate.slice(5, 7) + '/' + availableObjects.content[i].expireDate.slice(2, 4)}</td>
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].cardType.typeName}</td>
                                 <td className={'align-middle text-center'}>
-                                <Link to={'/cards/' + availableObjects.content[i].id}>
-                                    <Button
-                                        className={'btn-sm'}
-                                        variant={'success'}
-                                        type={'submit'}
-                                        id={'Review'}
-                                    >View</Button>
-                                </Link>
+                                <button className={'btn btn-primary btn mx-3'}
+                                        onClick={() => openModal(availableObjects.content[i])}
+                                        id={'reviewBtn'}><FcMoneyTransfer />
+                                        Review
+                                    </button>
                                 </td>
                             </tr>)
                     }
@@ -274,6 +272,7 @@ const DefaultTable = (props) => {
         }
 
     }
+
     return (
         <section style={Style} className={'container'}>
             <h1 className={'text-center mt-5'}>{pageTitle}</h1>
@@ -323,6 +322,17 @@ const DefaultTable = (props) => {
                                     </Modal.Title>
                                 </Modal.Header>
                                 <LoanModal loan={currentObject} />
+                            </Modal>
+                        </>}
+                        {show === true && pageTitle === 'Your Cards' &&
+                        <>
+                            <Modal style={Style} show={show} onHide={handleClose} contentClassName="modal-style">
+                                <Modal.Header closeButton>
+                                    <Modal.Title>
+                                        Your {currentObject.typeName} Card:
+                                    </Modal.Title>
+                                </Modal.Header>
+                                <CardStatus card={currentObject} />
                             </Modal>
                         </>}
                     {show === true && pageTitle === 'Your Accounts' &&

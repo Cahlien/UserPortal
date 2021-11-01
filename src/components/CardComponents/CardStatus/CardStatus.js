@@ -1,8 +1,11 @@
 import axios from "axios";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-context";
-import {useHistory, useParams} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
+import TransactionsList from "../../TransactionComponents/TransactionsList";
+import { Modal, Button } from "react-bootstrap";
+import { CurrencyValue } from "../../../models/currencyvalue.model";
 
 /**
  * This function returns a page showing the details and status of a
@@ -13,9 +16,10 @@ import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
  * @returns {JSX.Element} the page displaying the card details
  * @constructor
  */
-function CardStatus(){
+function CardStatus(props) {
+    console.log('props rcvd: ', props)
     const history = useHistory();
-    const {cardId} = useParams();
+    const [cardId, setCardId] = useState(props.card.id);
     const authContext = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState();
     const [cardStatus, setCardStatus] = useState();
@@ -25,15 +29,16 @@ function CardStatus(){
     const url = 'http://localhost:9001/cards/' + userId + '/' + cardId;
 
     useEffect(() => {
-        if(!hasLoaded){
+        setCardId(props.card.id)
+        if (!hasLoaded) {
             /**
              * This function retrieves the card details and updates the state of the
              * card status page.
              *
              * @returns {Promise<void>}
              */
-            async function fetchCardStatus(){
-                if(!hasLoaded){
+            async function fetchCardStatus() {
+                if (!hasLoaded) {
                     const results = await axios.get(url, {
                         headers: {
                             'Authorization': token,
@@ -41,7 +46,7 @@ function CardStatus(){
                         }
                     });
 
-                    if(results){
+                    if (results) {
                         setCardStatus(results.data);
                         setHasLoaded(true);
                     }
@@ -65,29 +70,52 @@ function CardStatus(){
 
     return (
         <section className={'container'}>
-            {errorMessage && <div className={'alert-danger mt-5'}>{errorMessage}</div>}
-            <Centerpiece content={
-                {
-                    title: cardStatus?.nickname + '   ...' + cardStatus?.cardNumber?.slice(15,19),
-                    lead: 'Current Balance: $' + cardStatus?.balance?.dollars + '.' + (cardStatus?.balance?.cents > 10 ?
-                        cardStatus?.balance?.cents : '0' + cardStatus?.balance?.cents),
-                    body: 'TODO: add transactions, minimum payment, due date, and write user\'s name and card number' +
-                        ' on card image',
-                    imageText: cardStatus?.nickname,
-                    image: '/images/GenericCard.png',
-                    alt: 'Generic credit card image',
-                    buttonText: 'Make Payment',
-                    buttonClasses: 'btn-secondary',
-                    clickHandler: (event) => {
+            <Modal.Body >
+                {errorMessage && <div className={'alert-danger mt-5'}>{errorMessage}</div>}
+                <div className="form-group">
+                    <div className="input-group mb-2">
+                        <label id="typeLabel" className="input-group-text">Card Number</label>
+                        <input id="typeText" type="text" disabled={true} className="form-control" value={props.card.cardNumber}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="typeLabel" className="input-group-text">Nickname:</label>
+                        <input id="typeText" type="text" disabled={true} className="form-control" value={props.card.nickname}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="descriptionLabel" className="input-group-text">Description:</label>
+                        <textarea value={props.card.cardType.description} id="descriptionText" className="form-control" readOnly="readonly">
+                            {props.card.cardType.description}
+                        </textarea>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="interestLabel" className="input-group-text">Interest:</label>
+                        <input id="interestText" className="form-control" type="text" disabled={true} value={props.card.interest + '%'}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="amountLabel" className="input-group-text">Amount:</label>
+                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(props.card.balance).toString()}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="createDateLabel" className="input-group-text">Date Created:</label>
+                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.card.createDate}></input>
+                    </div>
+                </div>
+                <TransactionsList />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    variant="primary"
+                    onClick={(event) => {
                         event.preventDefault();
-                        if(authContext.userIsLoggedIn){
+                        if (authContext.userIsLoggedIn) {
                             setErrorMessage("Payments not implemented yet...")
                         } else {
                             history.push('/auth');
                         }
-                    }
-                }
-            }/>
+                    }}>
+                    Make Payment
+                </Button>
+            </Modal.Footer>
         </section>
 
     );
