@@ -115,7 +115,7 @@ const DefaultTable = (props) => {
                 window.alert('503 error! Either our servers are down or your connection was interrupted. The page will refresh until connection is established.')
                 window.setTimeout(() => {
                     window.location.reload();
-                }, 10000)
+                }, 5000)
             }
         })
         console.log("default outbound url: ", url);
