@@ -19,6 +19,8 @@ const DefaultTable = (props) => {
     const userId = authContext.userId;
     const url = props.url
     const pageTitle = props.title
+    const [errorPresent, setErrorPresent] = useState(false);
+    const [errorTitle, setErrorTitle] = useState(props.errorTitle);
     const [availableObjects, setAvailableObjects] = useState([]);
     const [currentObject, setCurrentObject] = useState();
     const [numberOfPages, setNumberOfPages] = useState(5);
@@ -95,40 +97,40 @@ const DefaultTable = (props) => {
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => {
-            console.log('response: ', res)
-            if (res.data.content !== availableObjects) {
-                console.log('list data found: ', res.data);
-                if (searchCriteriaChanged) {
-                    setCurrentPage(1);
-                    setSearchCriteriaChanged(false);
+            .then(res => {
+                console.log('response: ', res)
+                if (res.data.content !== availableObjects) {
+                    console.log('list data found: ', res.data);
+                    if (searchCriteriaChanged) {
+                        setCurrentPage(1);
+                        setSearchCriteriaChanged(false);
+                    }
+                    setAvailableObjects(res.data);
+                    setObjectsDisplayed(true);
+                    setNumberOfPages(res.data.totalPages);
+                    setCurrentObject(availableObjects[0]);
                 }
-                setAvailableObjects(res.data);
-                setObjectsDisplayed(true);
-                setNumberOfPages(res.data.totalPages);
-                setCurrentObject(availableObjects[0]);
-            }
-        })
-        .catch((e) => {
-            console.log('error: ', e.response)
-            if (e.response !== undefined && e.response.status === 503) {
-                window.alert('503 error! Either our servers are down or your connection was interrupted. The page will refresh until connection is established.')
-                window.setTimeout(() => {
-                    window.location.reload();
-                }, 5000)
-            }
-        })
+            })
+            .catch((e) => {
+                console.log('error: ', e.response)
+                if (e.response !== undefined && e.response.status === 503) {
+                    window.setTimeout(() => {
+                        window.alert('[503 ERROR: ' + errorTitle + '] \nEither our servers are down or your connection was interrupted. The page will refresh until connection is established.')
+                        window.location.reload();
+                    }, 5000)
+                }
+            })
         console.log("default outbound url: ", url);
         console.log('available objects: ', availableObjects);
     },
-        [availableObjects, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows],
+        [errorPresent, availableObjects, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows],
     )
 
     useEffect(() => {
         if (!objectsDisplayed) {
             getList();
         }
-    }, [getList, availableObjects, objectsDisplayed, titles, url, rows, pageSize, currentPage]);
+    }, [getList, errorPresent, availableObjects, objectsDisplayed, titles, url, rows, pageSize, currentPage]);
 
     function addToSort(event) {
         console.log('add to sort...')
@@ -251,7 +253,7 @@ const DefaultTable = (props) => {
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].expireDate.slice(5, 7) + '/' + availableObjects.content[i].expireDate.slice(2, 4)}</td>
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].cardType.typeName}</td>
                                 <td className={'align-middle text-center'}>
-                                <button className={'btn btn-primary btn mx-3'}
+                                    <button className={'btn btn-primary btn mx-3'}
                                         onClick={() => openModal(availableObjects.content[i])}
                                         id={'reviewBtn'}><FcSimCardChip /> <br />
                                         View
@@ -279,8 +281,10 @@ const DefaultTable = (props) => {
                     return rows;
             }
         } catch (e) {
-            console.log('error: ', e)
-            return (<div><p>There was an error with your data. Please contact customer support for more information.</p></div>)
+            console.log('error: ', e);
+            if (!errorPresent){
+            setErrorPresent(true);
+            }
         }
 
     }
@@ -336,7 +340,7 @@ const DefaultTable = (props) => {
                                 <LoanModal loan={currentObject} />
                             </Modal>
                         </>}
-                        {show === true && pageTitle === 'Your Cards' &&
+                    {show === true && pageTitle === 'Your Cards' &&
                         <>
                             <Modal style={Style} show={show} onHide={handleClose} contentClassName="modal-style">
                                 <Modal.Header closeButton>
@@ -368,6 +372,11 @@ const DefaultTable = (props) => {
                                 <LoanOfferModal history={props.history} applyLoan={currentObject} /></Modal>
                         </>}
                 </Table>
+                {errorPresent === true && 
+                <div className={'alert-danger mt-5'}>
+                    <p>There was an error getting your data. There may be any number of reasons for this and it is likely not your fault. Please contact customer support for more information.</p>
+                </div>
+                }
                 <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
                     boundaryCount={1} onChange={handlePageChange} />
             </div>

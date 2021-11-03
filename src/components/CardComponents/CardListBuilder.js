@@ -25,7 +25,7 @@ function ViewCardStatus() {
 
     return (
         <>
-            <DefaultTable headers={titles} title='Your Cards' url={url} />
+            <DefaultTable headers={titles} title='Your Cards' url={url} errorTitle='CARDSERVICE' />
         </>
     );
 }

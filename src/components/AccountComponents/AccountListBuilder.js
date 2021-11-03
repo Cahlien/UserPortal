@@ -20,7 +20,7 @@ for (var i = 0; i < headers.length; i++) {
 
 return (
     <>
-    <DefaultTable headers={titles} title='Your Accounts' url={url}/>
+    <DefaultTable headers={titles} title='Your Accounts' url={url} errorTitle='ACCOUNTSERVICE'/>
     </>
 );
 }
