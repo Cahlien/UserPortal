@@ -6,6 +6,7 @@ import axios from "axios";
 import AuthContext from "../../store/auth-context";
 import { GiPayMoney } from "react-icons/gi"
 import TransactionsList from "../TransactionComponents/TransactionsList";
+import { LoanTransactionModel } from "../../models/loanTransactionModel";
 
 function LoanModal(props) {
     const authContext = useContext(AuthContext);
@@ -22,9 +23,9 @@ function LoanModal(props) {
     console.log('loan modal reached with: ', props.loan);
 
     useEffect(() => {
+        setCurrentLoan(props.loan);
         if (availableAccounts.length === 0) {
             getAccounts();
-            setCurrentLoan(props.loan);
         }
 
     }, [pay, availableAccounts, currentLoan, paymentAccount]);
@@ -64,6 +65,21 @@ function LoanModal(props) {
         setTitle(availableAccounts[dropInput].nickname + ': ' + CurrencyValue.from(availableAccounts[dropInput].balance).toString())
         console.log('payment account set to: ', paymentAccount)
         console.log('max payment set: ', maxPayment)
+    }
+
+    async function processTransaction(type, amount) {
+        const t = new LoanTransactionModel('', type, 'LOAN', amount, 'PENDING', paymentAccount.id, currentLoan.id, Date.now(), "A transaction from account " + paymentAccount.nickname + " to your " + currentLoan.loanType.typeName + " loan with an amount of " + amount)
+        console.log('transaction made: ', t)
+        const res = await axios.post(('http://localhost:9001/transactions'),
+            t,
+            {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        console.log('transaction response: ', res)
     }
 
     async function makePayment(event) {
@@ -114,6 +130,7 @@ function LoanModal(props) {
         console.log('confirm payment: ', confirmPayment)
         console.log('canPay: ', canPay)
         if (canPay && confirmPayment) {
+            processTransaction('PAYMENT', cv);
             console.log('canPay true')
             const res = await axios.post(('http://localhost:9001/accounts/' + userId + '/' + paymentAccount.id),
                 cv,
@@ -184,7 +201,7 @@ function LoanModal(props) {
                         <input id="createDateText" className="form-control" type="text" disabled={true} value={props.loan.createDate}></input>
                     </div>
                     {pay === true &&
-                        <div class="input-group mb-2">
+                        <div className="input-group mb-2">
                             <label id="paySourceLabel" className="input-group-text mb-2">Source Account:</label>
                             <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
                                 <Dropdown.Toggle variant="success" id="dropdown-basic" data-toggle="dropdown">
@@ -194,12 +211,12 @@ function LoanModal(props) {
                                     {availableAccounts.map((account, index) => (
                                         <Dropdown.Item eventKey={index}>{account.nickname}: {CurrencyValue.from(account.balance).toString()}</Dropdown.Item>
                                     ))}
-                                    <div role="separator" class="dropdown-divider"></div>
+                                    <div role="separator" className="dropdown-divider"></div>
                                     <Dropdown.Item disabled="true">Select an account to make a payment from</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             {maxPayment !== null &&
-                                <div class="input-group mb-2">
+                                <div className="input-group mb-2">
                                     <label id="paymentAmountDateLabel" className="input-group-text">Payment Amount:</label>
                                     <label id="PayDollarSignLabel" className="input-group-text">$</label>
                                     <input className="form-control" type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
@@ -207,6 +224,10 @@ function LoanModal(props) {
                             }
                         </div>}
                 </div>
+                <div className="input-Group">
+                    <label className="input-group-text" >Transaction Features Coming Soon</label>
+                </div>
+                <TransactionsList url={'http://localhost:9001/transactions/' + props.loan.id} loan={props.loan} search={props.loan.id}/>
             </Modal.Body>
             <Modal.Footer>
                 {pay === true &&
@@ -224,10 +245,6 @@ function LoanModal(props) {
                     </Button>
                 }
             </Modal.Footer>
-            <TransactionsList />
-            <div class="input-Group">
-                <label class="input-group-text" >Transaction Features Coming Soon</label>
-            </div>
         </section>)
 }
 export default LoanModal

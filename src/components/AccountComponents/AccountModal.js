@@ -14,39 +14,43 @@ function AccountModal(props) {
 
     return (
         <section>
-                <Modal.Body>
+            <Modal.Body>
                 {errorMessage && <div className={'alert-danger mt-5'}>{errorMessage}</div>}
-                    <div className="form-group">
-                        <div className="input-group mb-2">
-                            <label id="typeLabel" className="input-group-text">Type:</label>
-                            <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.type.name}></input>
-                        </div>
-                        <div className="input-group mb-2">
-                            <label id="typeLabel" className="input-group-text">Nickname:</label>
-                            <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.nickname}></input>
-                        </div>
-                        <div className="input-group mb-2">
-                            <label id="descriptionLabel" className="input-group-text">Description:</label>
-                            <textarea value={props.account.type.description} id="descriptionText" className="form-control" readOnly="readonly">
-                                {props.account.type.description}
-                            </textarea>
-                        </div>
-                        <div className="input-group mb-2">
-                            <label id="interestLabel" className="input-group-text">Interest:</label>
-                            <input id="interestText" className="form-control" type="text" disabled={true} value={props.account.interest + '%'}></input>
-                        </div>
-                        <div className="input-group mb-2">
-                            <label id="amountLabel" className="input-group-text">Amount:</label>
-                            <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(props.account.balance).toString()}></input>
-                        </div>
-                        <div className="input-group mb-2">
-                            <label id="createDateLabel" className="input-group-text">Date Created:</label>
-                            <input id="createDateText" className="form-control" type="text" disabled={true} value={props.account.createDate}></input>
-                        </div>
+                <div className="form-group">
+                    <div className="input-group mb-2">
+                        <label id="typeLabel" className="input-group-text">Type:</label>
+                        <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.type.name}></input>
                     </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button 
+                    <div className="input-group mb-2">
+                        <label id="typeLabel" className="input-group-text">Nickname:</label>
+                        <input id="typeText" type="text" disabled={true} className="form-control" value={props.account.nickname}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="descriptionLabel" className="input-group-text">Description:</label>
+                        <textarea value={props.account.type.description} id="descriptionText" className="form-control" readOnly="readonly">
+                            {props.account.type.description}
+                        </textarea>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="interestLabel" className="input-group-text">Interest:</label>
+                        <input id="interestText" className="form-control" type="text" disabled={true} value={props.account.interest + '%'}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="amountLabel" className="input-group-text">Amount:</label>
+                        <input id="amountText" className="form-control" type="text" disabled={true} value={CurrencyValue.from(props.account.balance).toString()}></input>
+                    </div>
+                    <div className="input-group mb-2">
+                        <label id="createDateLabel" className="input-group-text">Date Created:</label>
+                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.account.createDate}></input>
+                    </div>
+                </div>
+                <div className="input-Group">
+                    <label className="input-group-text" >Transaction Features Coming Soon</label>
+                </div>
+                <TransactionsList url={'http://localhost:9001/transactions/' + props.account.id} search={props.account.id} />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
                     variant="primary"
                     onClick={(event) => {
                         event.preventDefault();
@@ -56,13 +60,9 @@ function AccountModal(props) {
                             history.push('/auth');
                         }
                     }}>
-                        Payment Features Here
-                    </Button>
-                </Modal.Footer>
-                <TransactionsList />
-            <div className="input-Group">
-                <label className="input-group-text" >Transaction Features Coming Soon</label>
-            </div>
+                    Payment Features Here
+                </Button>
+            </Modal.Footer>
         </section>)
 }
 export default AccountModal

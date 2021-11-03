@@ -87,27 +87,39 @@ const DefaultTable = (props) => {
 
         console.log('params: ', params);
         console.log('outbound url: ', url)
-        const list = await axios.get(url, {
+        const list = '';
+        await axios.get(url, {
             params: params,
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
-        });
-        console.log("default outbound url: ", url);
-        console.log('inbound response: ', list);
-
-        if (list.data.content !== availableObjects) {
-            console.log('list data found: ', list.data);
-            if (searchCriteriaChanged) {
-                setCurrentPage(1);
-                setSearchCriteriaChanged(false);
+        })
+        .then(res => {
+            console.log('response: ', res)
+            if (res.data.content !== availableObjects) {
+                console.log('list data found: ', res.data);
+                if (searchCriteriaChanged) {
+                    setCurrentPage(1);
+                    setSearchCriteriaChanged(false);
+                }
+                setAvailableObjects(res.data);
+                setObjectsDisplayed(true);
+                setNumberOfPages(res.data.totalPages);
+                setCurrentObject(availableObjects[0]);
             }
-            setAvailableObjects(list.data);
-            setObjectsDisplayed(true);
-            setNumberOfPages(list.data.totalPages);
-            setCurrentObject(availableObjects[0]);
-        }
+        })
+        .catch((e) => {
+            console.log('error: ', e.response)
+            if (e.response !== undefined && e.response.status === 503) {
+                window.alert('503 error! Either our servers are down or your connection was interrupted. The page will refresh until connection is established.')
+                window.setTimeout(() => {
+                    window.location.reload();
+                }, 10000)
+            }
+        })
+        console.log("default outbound url: ", url);
+        console.log('available objects: ', availableObjects);
     },
         [availableObjects, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows],
     )
