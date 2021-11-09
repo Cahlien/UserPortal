@@ -7,6 +7,7 @@ import AuthContext from "../../store/auth-context";
 import { GiPayMoney } from "react-icons/gi"
 import TransactionsList from "../TransactionComponents/TransactionsList";
 import { LoanTransactionModel } from "../../models/loanTransactionModel";
+import PaymentCluster from "../TransactionComponents/PaymentCluster";
 
 function LoanModal(props) {
     const authContext = useContext(AuthContext);
@@ -165,8 +166,8 @@ function LoanModal(props) {
                         <input id="typeText" type="text" disabled={true} className="form-control" value={props.loan.loanType.typeName}></input>
                     </div>
                     <div className="input-group mb-2">
-                        <label id="descriptionLabel" className="input-group-text">Description:</label>
-                        <textarea value={props.loan.loanType.description} id="descriptionText" className="form-body" readOnly="readonly">
+                        <span id="descriptionLabel" className="input-group-text">Description:</span>
+                        <textarea value={props.loan.loanType.description} id="descriptionText" className="form-control" aria-label="Description" disabled={true}>
                             {props.loan.loanType.description}
                         </textarea>
                     </div>
@@ -194,13 +195,14 @@ function LoanModal(props) {
                     </div>
                     <div className="input-group mb-2">
                         <label id="nextDueDateLabel" className="input-group-text">Next Payment Due Date:</label>
-                        <input id="nextDueDateText" className="form-control" type="text" disabled={true} value={props.loan.nextDueDate}></input>
+                        <input id="nextDueDateText" className="form-control" type="text" disabled={true} value={props.loan.nextDueDate.slice(8, 10) + '/' + props.loan.nextDueDate.slice(5, 7) + '/' + props.loan.nextDueDate.slice(0, 4)}></input>
                     </div>
                     <div className="input-group mb-2">
                         <label id="createDateLabel" className="input-group-text">Date Created:</label>
-                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.loan.createDate}></input>
+                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.loan.createDate.slice(8, 10) + '/' + props.loan.createDate.slice(5, 7) + '/' + props.loan.createDate.slice(0, 4)}></input>
                     </div>
                     {pay === true &&
+                    // <PaymentCluster object={currentLoan} endpoint={'/loans/' + userId + '/' + currentLoan.id}/>
                         <div className="input-group mb-2">
                             <label id="paySourceLabel" className="input-group-text mb-2">Source Account:</label>
                             <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
@@ -222,12 +224,13 @@ function LoanModal(props) {
                                     <input className="form-control" type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
                                 </div>
                             }
-                        </div>}
+                        </div>
+                        }
                 </div>
                 <div className="input-Group">
                     <label className="input-group-text" >Transaction Features Coming Soon</label>
                 </div>
-                <TransactionsList url={'http://localhost:9001/transactions/' + props.loan.id} loan={props.loan} search={props.loan.id}/>
+                <TransactionsList url={'http://localhost:9001/transactions/' + props.loan.id} loan={props.loan} search={props.loan.id} />
             </Modal.Body>
             <Modal.Footer>
                 {pay === true &&

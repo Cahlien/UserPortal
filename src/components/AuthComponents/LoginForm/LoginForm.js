@@ -5,7 +5,7 @@ import AuthContext from '../../../store/auth-context';
 import Form from 'react-bootstrap/Form';
 import './LoginForm.css';
 
-const url = 'http://localhost:9001/users/login';
+const url = `${process.env.REACT_APP_BASE_URL}${process.env.REACT_APP_USER_SERVICE}${process.env.REACT_APP_LOGIN_ENDPOINT}`;
 
 /**
  * The login form component.

@@ -8,6 +8,7 @@ function ViewCardStatus() {
     const token = authContext.token;
     const url = 'http://localhost:9001/cards/' + userId + "/all";
     const headers = ['Nickname', 'Balance', 'Interest Rate', 'Expires', 'Type']
+    const maxWidths = [0, 0, 1050, 900, 0]
     const headerId = ['nickname', '', 'balance', 'interest', 'expireDate', 'cardType_typeName']
     const titles = []
 
@@ -18,6 +19,7 @@ function ViewCardStatus() {
             active: false,
             sorting: false,
             id: headerId[i],
+            maxWidth: maxWidths[i],
             sequence: i
         }
         titles.push(title);

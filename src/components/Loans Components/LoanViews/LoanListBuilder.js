@@ -2,7 +2,8 @@ import DefaultTable from '../../LayoutComponents/DefaultTable';
 
 function ViewLoanStatus() {
     const url = 'http://localhost:9001/loans/me';
-    const headers = ['Loan Type', 'Description', 'APR', 'Principal', 'Balance', 'Next Payment Due', 'Paid Status', 'Minimum Due', 'Late Fee', 'Date Created']
+    const headers = ['Loan Type', 'Description', 'APR', 'Principal', 'Balance', 'Next Payment Due\n(DD/MM/YYYY)', 'Paid Status', 'Minimum Due', 'Late Fee', 'Date Created\n(DD/MM/YYYY)']
+    const maxWidths = [0, 1050, 750, 0, 0, 900, 1000, 850, 800, 950]
     const headerId = ['loanType_typeName', 'loanType_description', 'loanType_apr', 'principal_dollars', 'balance_dollars', 'nextDueDate', 'hasPaid', 'minDue_dollars', 'lateFee_dollars', 'createDate']
     const titles = []
 
@@ -13,6 +14,7 @@ function ViewLoanStatus() {
             active: false,
             sorting: false,
             id: headerId[i],
+            maxWidth: maxWidths[i],
             sequence: i
         }
         titles.push(title);

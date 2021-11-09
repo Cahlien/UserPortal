@@ -41,7 +41,7 @@ function AccountModal(props) {
                     </div>
                     <div className="input-group mb-2">
                         <label id="createDateLabel" className="input-group-text">Date Created:</label>
-                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.account.createDate}></input>
+                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.account.createDate.slice(8, 10) + '/' + props.account.createDate.slice(5, 7) + '/' + props.account.createDate.slice(0, 4)}></input>
                     </div>
                 </div>
                 <div className="input-Group">

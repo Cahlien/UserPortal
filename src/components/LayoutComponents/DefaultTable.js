@@ -9,9 +9,11 @@ import AccountModal from "../AccountComponents/AccountModal";
 import LoanModal from "../Loans Components/LoanModal";
 import LoanOfferModal from "../Loans Components/LoanOfferModal";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcRefresh, FcSearch, FcMoneyTransfer, FcCurrencyExchange, FcSimCardChip } from "react-icons/fc"
-import { GiMoneyStack, GiSwipeCard } from "react-icons/gi"
+import { GiMoneyStack } from "react-icons/gi"
 import Style from './style.css'
 import CardStatus from "../CardComponents/CardStatus/CardStatus";
+import useWindowDimensions from "./useWindowSize";
+
 
 const DefaultTable = (props) => {
     const authContext = useContext(AuthContext);
@@ -35,7 +37,19 @@ const DefaultTable = (props) => {
     const sortArry = [props.headers.size]
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const titles = props.headers
+    const { width } = useWindowDimensions();
+    const [isMobile, setIsMobile] = useState(false)
+    const [titles, setTitles] = useState(props.headers)
+
+    function checkMobile() {
+        if (width < 1050) {
+            console.log('is mobile')
+            setIsMobile(true);
+        }
+        else {
+            setIsMobile(false);
+        }
+    }
 
     function handlePageChange(event, value) {
         event.preventDefault();
@@ -110,6 +124,9 @@ const DefaultTable = (props) => {
                     setNumberOfPages(res.data.totalPages);
                     setCurrentObject(availableObjects[0]);
                 }
+                if (errorPresent) {
+                    setErrorPresent(false)
+                }
             })
             .catch((e) => {
                 console.log('error: ', e.response)
@@ -123,14 +140,15 @@ const DefaultTable = (props) => {
         console.log("default outbound url: ", url);
         console.log('available objects: ', availableObjects);
     },
-        [errorPresent, availableObjects, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows],
+        [availableObjects, searchCriteriaChanged, token, pageSize, currentPage, searchCriteria, sortBy, rows],
     )
 
     useEffect(() => {
+        checkMobile();
         if (!objectsDisplayed) {
             getList();
         }
-    }, [getList, errorPresent, availableObjects, objectsDisplayed, titles, url, rows, pageSize, currentPage]);
+    }, [getList, availableObjects, objectsDisplayed, titles, url, rows, pageSize, currentPage]);
 
     function addToSort(event) {
         console.log('add to sort...')
@@ -192,6 +210,22 @@ const DefaultTable = (props) => {
         return field;
     }
 
+    function titleBuilder() {
+        const outTitles = []
+        const title = [] 
+        for (let i = 0; i < titles.length; i++) {
+            if (titles[i].maxWidth < width) {
+                title.push(
+                    <th style={Style} className={'align-middle text-center'} data-sortable={'true'}
+                                    scope={'col'} onClick={addToSort} name={title.id}
+                                    id={titles[i].sequence}>{titles[i].title}<br></br>{titles[i].active === true && (titles[i].direction === 'asc' ? <FcAlphabeticalSortingAz /> : <FcAlphabeticalSortingZa />)}</th>
+                )
+            }
+        }title.push(<th style={Style} className={'align-middle text-center'}>Details</th>)
+        outTitles.push(<tr>{title}</tr>)
+        return outTitles
+    }
+
     function typeSelector() {
         const rows = []
         const row = []
@@ -199,67 +233,67 @@ const DefaultTable = (props) => {
             switch (pageTitle) {
                 case 'Your Accounts':
                     for (let i = 0; i < availableObjects.content.length; i++) {
-                        row.push(
-                            <tr>
-                                <td className={'align-middle text-center'} >{availableObjects.content[i].type.name}</td>
-                                <td className={'align-middle text-center'} >{availableObjects.content[i].nickname}</td>
-                                <td className={'align-middle text-center'} >{availableObjects.content[i].interest}%</td>
-                                <td className={'align-middle text-center'} >{CurrencyValue.from(availableObjects.content[i].balance).toString()}</td>
-                                <td className={'align-middle text-center'} >{availableObjects.content[i].type.description}</td>
-                                <td className={'align-middle text-center'} >{availableObjects.content[i].createDate}</td>
-                                <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'}
-                                        onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><GiMoneyStack />
-                                        Review
-                                    </button>
-                                </td>
-                            </tr>)
+                            row.push(
+                                <tr>
+                                    {titles[0].maxWidth < width && <td className={'align-middle text-center'} >{availableObjects.content[i].type.name}</td>}
+                                    {titles[1].maxWidth < width && <td className={'align-middle text-center'} >{availableObjects.content[i].nickname}</td>}
+                                    {titles[2].maxWidth < width && <td className={'align-middle text-center'} >{availableObjects.content[i].interest}%</td>}
+                                    {titles[3].maxWidth < width && <td className={'align-middle text-center'} >{CurrencyValue.from(availableObjects.content[i].balance).toString()}</td>}
+                                    {titles[4].maxWidth < width && <td className={'align-middle text-center'} >{availableObjects.content[i].type.description}</td>}
+                                    {titles[5].maxWidth < width && <td className={'align-middle text-center'} >{availableObjects.content[i].createDate.slice(8, 10) + '/' + availableObjects.content[i].createDate.slice(5, 7) + '/' + availableObjects.content[i].createDate.slice(0, 4)}</td>}
+                                    <td className={'align-middle text-center'}>
+                                        <button className={'btn btn-primary btn mx-3'}
+                                            onClick={() => openModal(availableObjects.content[i])}
+                                            id={'reviewBtn'}><GiMoneyStack />
+                                            Review
+                                        </button>
+                                    </td>
+                                </tr>)
                     }
                     rows.push(<tbody>{row}</tbody>)
                     return rows;
                 case 'Your Loans':
                     for (let i = 0; i < availableObjects.content.length; i++) {
-                        row.push(
-                            <tr>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].loanType.typeName}</td>
-                                <td className={'align-middle'}>{availableObjects.content[i].loanType.description}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].loanType.apr + '%'}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].principal).toString()}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].balance).toString()}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].nextDueDate}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].hasPaid === true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].minDue).toString()}</td>
-                                <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].lateFee).toString()}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].createDate}</td>
-                                <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'}
-                                        onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><FcMoneyTransfer />
-                                        Review
-                                    </button>
-                                </td>
-                            </tr>)
+                            row.push(
+                                <tr>
+                                    <td className={'align-middle text-center'}>{availableObjects.content[i].loanType.typeName}</td>
+                                    {width > 1050 && <td className={'align-middle'}>{availableObjects.content[i].loanType.description}</td>}
+                                    {width > 950 && <td className={'align-middle text-center'}>{availableObjects.content[i].loanType.apr + '%'}</td>}
+                                    <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].principal).toString()}</td>
+                                    <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].balance).toString()}</td>
+                                    {width > 900 && <td className={'align-middle text-center'}>{availableObjects.content[i].nextDueDate.slice(8, 10) + '/' + availableObjects.content[i].nextDueDate.slice(5, 7) + '/' + availableObjects.content[i].nextDueDate.slice(0, 4)}</td>}
+                                    {width > 850 && <td className={'align-middle text-center'}>{availableObjects.content[i].hasPaid === true ? 'You\'ve paid!' : 'Yet to Pay.'}</td>}
+                                    <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].minDue).toString()}</td>
+                                    {width > 800 && <td className={'align-middle text-center'}>{CurrencyValue.from(availableObjects.content[i].lateFee).toString()}</td>}
+                                    {width > 1000 && <td className={'align-middle text-center'}>{availableObjects.content[i].createDate.slice(8, 10) + '/' + availableObjects.content[i].createDate.slice(5, 7) + '/' + availableObjects.content[i].createDate.slice(0, 4)}</td>}
+                                    <td className={'align-middle text-center'}>
+                                        <button className={'btn btn-primary btn mx-3'}
+                                            onClick={() => openModal(availableObjects.content[i])}
+                                            id={'reviewBtn'}><FcMoneyTransfer />
+                                            Review
+                                        </button>
+                                    </td>
+                                </tr>)
                     }
                     rows.push(<tbody>{row}</tbody>)
                     return rows;
                 case 'Your Cards':
                     for (let i = 0; i < availableObjects.content.length; i++) {
-                        row.push(
-                            <tr>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].nickname}</td>
-                                <td className={'align-middle'}>{availableObjects.content[i].balance.dollars}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].interestRate.toFixed(1) + '%'}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].expireDate.slice(5, 7) + '/' + availableObjects.content[i].expireDate.slice(2, 4)}</td>
-                                <td className={'align-middle text-center'}>{availableObjects.content[i].cardType.typeName}</td>
-                                <td className={'align-middle text-center'}>
-                                    <button className={'btn btn-primary btn mx-3'}
-                                        onClick={() => openModal(availableObjects.content[i])}
-                                        id={'reviewBtn'}><FcSimCardChip /> <br />
-                                        View
-                                    </button>
-                                </td>
-                            </tr>)
+                            row.push(
+                                <tr>
+                                    <td className={'align-middle text-center'}>{availableObjects.content[i].nickname}</td>
+                                    <td className={'align-middle'}>{availableObjects.content[i].balance.dollars}</td>
+                                    {width > 1050 && <td className={'align-middle text-center'}>{availableObjects.content[i].interestRate.toFixed(1) + '%'}</td>}
+                                    {width > 900 && <td className={'align-middle text-center'}>{availableObjects.content[i].expireDate.slice(5, 7) + '/' + availableObjects.content[i].expireDate.slice(2, 4)}</td>}
+                                    <td className={'align-middle text-center'}>{availableObjects.content[i].cardType.typeName}</td>
+                                    <td className={'align-middle text-center'}>
+                                        <button className={'btn btn-primary btn mx-3'}
+                                            onClick={() => openModal(availableObjects.content[i])}
+                                            id={'reviewBtn'}><FcSimCardChip /> <br />
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>)
                     }
                     rows.push(<tbody>{row}</tbody>)
                     return rows;
@@ -268,7 +302,7 @@ const DefaultTable = (props) => {
                         row.push(
                             <tr>
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].typeName}</td>
-                                <td className={'align-middle'}>{availableObjects.content[i].description}</td>
+                                {width > 900 && <td className={'align-middle'}>{availableObjects.content[i].description}</td>}
                                 <td className={'align-middle text-center'}>{availableObjects.content[i].apr + '%'}</td>
                                 <td className={'align-middle text-center'}>
                                     <button className={'btn btn-primary btn mx-3'} onClick={() => openModal(availableObjects.content[i])}
@@ -282,8 +316,8 @@ const DefaultTable = (props) => {
             }
         } catch (e) {
             console.log('error: ', e);
-            if (!errorPresent){
-            setErrorPresent(true);
+            if (!errorPresent) {
+                setErrorPresent(true);
             }
         }
 
@@ -304,26 +338,32 @@ const DefaultTable = (props) => {
                         ))}
                     </select>
                 </div>
-                <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
-                <button className={'btn btn-outline-secondary'} type="submit" id="reset" title="Reset Sort" onClick={resetSearch}><FcRefresh /></button>
-                <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
-                    onChange={handleSearchCriteriaChange} title="Search" />
-                <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
-                    id={'searchBar'}><FcSearch />Search
-                </button>
+                {isMobile === false && <>
+                    <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
+                    <button className={'btn btn-outline-secondary'} type="submit" id="reset" title="Reset Sort" onClick={resetSearch}><FcRefresh /></button>
+                    <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
+                        onChange={handleSearchCriteriaChange} title="Search" />
+                    <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
+                        id={'searchBar'}><FcSearch />Search
+                    </button></>}
             </div>
+            {isMobile === true &&
+                <div className='input-group'>
+                    <span className={'text-center col-sm-0 col-md-4 col-lg-6'} />
+                    <button className={'btn btn-outline-secondary'} type="submit" id="reset" title="Reset Sort" onClick={resetSearch}><FcRefresh /></button>
+                    <input type={'text'} className={'form-control'} placeholder={'Search'} value={searchCriteria}
+                        onChange={handleSearchCriteriaChange} title="Search" />
+                    <button className={'btn btn-outline-secondary'} type={'button'} onClick={getList}
+                        id={'searchBar'}><FcSearch />Search
+                    </button>
+                </div>}
             <div className={'mt-5'}>
                 <Table striped bordered hover className={'me-3 table-responsive'} data-sortable={'true'}
                     data-toggle={'table'} id={'table'}>
                     <thead>
-                        <tr>
-                            {titles && titles.map(title => (
-                                <th style={Style} className={'align-middle text-center'} data-sortable={'true'}
-                                    scope={'col'} onClick={addToSort} name={title.id}
-                                    id={title.sequence}>{title.title}<br></br>{titles[title.sequence].active === true && (titles[title.sequence].direction === 'asc' ? <FcAlphabeticalSortingAz /> : <FcAlphabeticalSortingZa />)}</th>
-                            ))}
-                            <th className={'align-middle text-center'}>Details</th>
-                        </tr>
+                        {
+                            titleBuilder()
+                        }
                     </thead>
                     {
                         typeSelector()
@@ -372,10 +412,10 @@ const DefaultTable = (props) => {
                                 <LoanOfferModal history={props.history} applyLoan={currentObject} /></Modal>
                         </>}
                 </Table>
-                {errorPresent === true && 
-                <div className={'alert-danger mt-5'}>
-                    <p>There was an error getting your data. There may be any number of reasons for this and it is likely not your fault. Please contact customer support for more information.</p>
-                </div>
+                {errorPresent === true &&
+                    <div className={'alert-danger mt-5'}>
+                        <p>There was an error getting your data. There may be any number of reasons for this and it is likely not your fault. Please contact customer support for more information.</p>
+                    </div>
                 }
                 <Pagination className={'my-3'} count={numberOfPages} page={currentPage} siblingCount={1}
                     boundaryCount={1} onChange={handlePageChange} />

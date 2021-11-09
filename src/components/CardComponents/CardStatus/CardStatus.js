@@ -3,6 +3,7 @@ import { useContext, useEffect, useState, useRef } from "react";
 import AuthContext from "../../../store/auth-context";
 import { useHistory, useParams } from "react-router-dom";
 import Centerpiece from "../../LayoutComponents/Centerpiece/Centerpiece";
+import PaymentCluster from "../../TransactionComponents/PaymentCluster";
 import TransactionsList from "../../TransactionComponents/TransactionsList";
 import { Modal, Button, Dropdown } from "react-bootstrap";
 import { CurrencyValue } from "../../../models/currencyvalue.model";
@@ -215,10 +216,11 @@ function CardStatus(props) {
                     </div>
                     <div className="input-group mb-2">
                         <label id="createDateLabel" className="input-group-text">Date Created:</label>
-                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.card.createDate}></input>
+                        <input id="createDateText" className="form-control" type="text" disabled={true} value={props.card.createDate.slice(8, 10) + '/' + props.card.createDate.slice(5, 7) + '/' + props.card.createDate.slice(0, 4)}></input>
                     </div>
                 </div>
                 {pay === true &&
+                // <PaymentCluster object={props.card} endpoint={'/cards/' + userId + '/' + props.card.id}/>
                         <div class="input-group mb-2">
                             <label id="paySourceLabel" className="input-group-text mb-2">Source Account:</label>
                             <Dropdown onSelect={function (evt) { dropHandler(evt) }} required>
@@ -240,7 +242,8 @@ function CardStatus(props) {
                                     <input className="form-control" type="number" step="0.01" min="0" max={maxPayment} ref={enteredValue} ></input>
                                 </div>
                             }
-                        </div>}
+                        </div>
+                    }
                         <TransactionsList url={'http://localhost:9001/transactions/cards'} object={props.card.id} search={props.card.id} />
             </Modal.Body>
             <Modal.Footer>
