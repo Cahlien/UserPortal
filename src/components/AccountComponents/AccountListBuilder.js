@@ -3,7 +3,7 @@ import DefaultTable from '../LayoutComponents/DefaultTable';
 const AccountList = () => {
 const url = 'http://localhost:9001/accounts'
 const headers = ['Account Type', 'Nickname', 'Interest Rate', 'Balance', 'Description', 'Date Created\n(DD/MM/YYYY)']
-const maxWidths = [0, 0, 900, 0, 1050, 1000]
+const maxWidths = [400, 0, 900, 0, 1050, 1000]
 const headerId = ['type_name', 'nickname', 'interest', 'balance_dollars', 'type_description', 'createDate']
 const titles = []
 const mobileTitles = []
