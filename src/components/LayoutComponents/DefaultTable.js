@@ -162,7 +162,10 @@ const DefaultTable = (props) => {
             field = toggleDirection(title);
             for (let i = 0; i < titles.length; i++) {
                 if (titles[i].sorting) {
-                    sort += titles[i].id + ',' + titles[i].direction + ',';
+                    sort += titles[i].id + ',' + titles[i].direction;
+                    if (i < titles.length - 1 && titles[i + 1].sorting) {
+                        sort += ',';
+                    }
                 }
 
             }
